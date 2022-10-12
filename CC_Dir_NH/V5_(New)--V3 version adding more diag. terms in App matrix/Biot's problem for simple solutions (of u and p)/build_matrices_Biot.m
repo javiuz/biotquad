@@ -144,17 +144,22 @@ for i=2:N
     JE1r2=abs(x3*(y1 - y2) + x1*(y2 - y3) + x2*(-y1 + y3));
     denom_elas1=coef_denom*JE1r2;
     denom_d1=coef_d/JE1r2;
+    denom_p1_2=coef_p/JE1r2;
     JE2r1=abs(x5*(-y2 + y3) + x3*(y2 - y5) + x2*(-y3 + y5));
     denom_elas2=coef_denom*JE2r1;
     denom_d2=coef_d/JE2r1;
-    denom_p_1=coef_p/JE2r1;
+    denom_p2_1=coef_p/JE2r1;
+    
+    JE1r1=
+    JE1r3=
+    JE1r4=
 
     JE2r2=abs(x6*(y2 - y5) + x2*(y5 - y6) + x5*(-y2 + y6));
-    denom_p_2=coef_p/JE2r2;
+    denom_p2_2=coef_p/JE2r2;
     JE2r3=abs(x6*(y3 - y5) + x3*(y5 - y6) + x5*(-y3 + y6));
-    denom_p_3=coef_p/JE2r3;
+    denom_p2_3=coef_p/JE2r3;
     JE2r4=abs(x6*(-y2 + y3) + x3*(y2 - y6) + x2*(-y3 + y6));
-    denom_p_4=coef_p/JE2r4;
+    denom_p2_4=coef_p/JE2r4;
     
     a(1,1)=((lambda + 2*mu)*(x2 - x3)^2 + 2*(lambda + mu)*(y2 - y3)^2)/denom_elas2;
     a(1,2)=-((lambda*(x2 - x3)*(y2 - y3))/denom_elas2);
