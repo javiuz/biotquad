@@ -49,8 +49,7 @@ App=build_matrix_p_p;
 A11=Asu*inv(Ass)*AsuT - Asu*inv(Ass)*AsgT*inv(Asg*inv(Ass)*AsgT)*Asg*inv(Ass)*AsuT;
 % A12=Asu*(Ass\AspT)-((Asu*(Ass\AsgT))*((Asg*(Ass\AsgT))\(Asg*(Ass\AspT))));
 A12=Asu*inv(Ass)*AspT - Asu*inv(Ass)*AsgT*inv(Asg*inv(Ass)*AsgT)*Asg*inv(Ass)*AspT;
-% A21=-A12';
-A21=-Asp*inv(Ass)*AsuT + Asp*inv(Ass)*AsgT*inv(Asg*inv(Ass)*AsgT)*Asg*inv(Ass)*AsuT;
+A21=-A12';
 % A22=App-Asp*(Ass\AspT)+Azp*(Azz\AzpT)+((Asp*(Ass\AsgT))*((Asg*(Ass\AsgT))\(Asg*(Ass\AspT))));
 A22=App - Asp*inv(Ass)*AspT + Azp*inv(Azz)*AzpT + Asp*inv(Ass)*AsgT*inv(Asg*inv(Ass)*AsgT)*Asg*inv(Ass)*AspT;
 
@@ -112,8 +111,8 @@ q_indep=build_indep_q(t+delta_t);           % Source term q
 [Pgu,Pgp]=compute_bc(t+delta_t);   
 % gDu=(Asu-(Asu*(Ass\AsgT))*((Asg*(Ass\AsgT))\Asg))*(Ass\Pgu);
 gDu=(Asu - Asu*inv(Ass)*AsgT*inv(Asg*inv(Ass)*AsgT)*Asg)*inv(Ass)*Pgu;
-% gDp=Azp*(Azz\Pgp)+(-Asp+(Asp*(Ass\AsgT)*((Asg*(Ass\AsgT))\Asg)))*(Ass\Pgu);
-gDp=Azp*inv(Azz)*Pgp + (-Asp + Asp*inv(Ass)*AsgT*inv(Asg*inv(Ass)*AsgT)*Asg)*inv(Ass)*Pgu;
+gDp=Azp*(Azz\Pgp)+(-Asp+(Asp*(Ass\AsgT)*((Asg*(Ass\AsgT))\Asg)))*(Ass\Pgu);
+gDp=Azp*inv(Azz)*Pgp + (-Asp + Asp)
 f_hat= -f_indep + gDu; 
 q_hat= delta_t*q_indep + gTp + gDp;
     
@@ -135,8 +134,7 @@ gamma=inv(Asg*inv(Ass)*AsgT)*(Asg*inv(Ass)*Pgu - Asg*inv(Ass)*AsuT*u - Asg*inv(A
 % sigma=Ass\(Pgu-AsuT*u-AsgT*gamma-AspT*p);
 sigma=inv(Ass)*(Pgu - AsuT*u - AsgT*gamma - AspT*p);
         % velocity
-% z=Azz\(Pgp-AzpT*p);
-z=inv(Azz)*(Pgp-AzpT*p);
+z=Azz\(Pgp-AzpT*p);
 
     % We reorder the variables to compute the errors and some contourplots
 gamma_n=reshape(gamma,N+1,N+1);
