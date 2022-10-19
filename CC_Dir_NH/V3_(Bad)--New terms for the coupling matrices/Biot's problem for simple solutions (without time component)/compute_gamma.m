@@ -1,4 +1,4 @@
-function gamma=compute_gamma(u,p)
+function gamma=compute_gamma(u,p,tt)
 
 global NN x y alpha lambda mu 
 
@@ -67,11 +67,11 @@ d=denom_d*d;
 
 % CC.D en el nodo S-W, fórmula de cuadratura para los término Pg1 y Pg2 de u en:
     % frontera Sur
-        Pg1u_L1=int_dir_simpson(i,j,i+1,j,1);
-        Pg2u_L1=int_dir_simpson(i,j,i+1,j,2);
+        Pg1u_L1=int_dir_simpson(i,j,i+1,j,tt,1);
+        Pg2u_L1=int_dir_simpson(i,j,i+1,j,tt,2);
     % frontera Oeste
-        Pg1u_L4=int_dir_simpson(i,j,i,j+1,1);
-        Pg2u_L4=int_dir_simpson(i,j,i,j+1,2);
+        Pg1u_L4=int_dir_simpson(i,j,i,j+1,tt,1);
+        Pg2u_L4=int_dir_simpson(i,j,i,j+1,tt,2);
 Pgu=(1/2)*[-Pg1u_L1;-Pg2u_L1;-Pg1u_L4;-Pg2u_L4];  
     
 % Non-homogeneous Dir.BC
@@ -173,11 +173,11 @@ for i=2:N
     
     % CC.D en el nodo Sur, fórmula de cuadratura para los término Pg1 y Pg2 de u en:
         % frontera Sur 1
-            Pg1u_L2=int_dir_simpson(i,j,i+1,j,1);
-            Pg2u_L2=int_dir_simpson(i,j,i+1,j,2);
+            Pg1u_L2=int_dir_simpson(i,j,i+1,j,tt,1);
+            Pg2u_L2=int_dir_simpson(i,j,i+1,j,tt,2);
         % frontera Sur 2
-            Pg1u_L1=int_dir_simpson(i-1,j,i,j,1);
-            Pg2u_L1=int_dir_simpson(i-1,j,i,j,2);
+            Pg1u_L1=int_dir_simpson(i-1,j,i,j,tt,1);
+            Pg2u_L1=int_dir_simpson(i-1,j,i,j,tt,2);
         Pgu=(1/2)*[-Pg1u_L2;-Pg2u_L2;0;0;-Pg1u_L1;-Pg2u_L1];
     
     % Non-homogeneous Dir.BC
@@ -237,11 +237,11 @@ d=denom_d*d;
 
 % CC.D en el nodo S-E, fórmula de cuadratura para los término Pg1 y Pg2 de u en:
     % frontera Este
-        Pg1u_L7=int_dir_simpson(i,j,i,j+1,1);
-        Pg2u_L7=int_dir_simpson(i,j,i,j+1,2);
+        Pg1u_L7=int_dir_simpson(i,j,i,j+1,tt,1);
+        Pg2u_L7=int_dir_simpson(i,j,i,j+1,tt,2);
     % frontera Sur
-        Pg1u_L3=int_dir_simpson(i-1,j,i,j,1);
-        Pg2u_L3=int_dir_simpson(i-1,j,i,j,2);
+        Pg1u_L3=int_dir_simpson(i-1,j,i,j,tt,1);
+        Pg2u_L3=int_dir_simpson(i-1,j,i,j,tt,2);
     Pgu=(1/2)*[Pg1u_L7;Pg2u_L7;-Pg1u_L3;-Pg2u_L3];
 
 % Non-homogeneous Dir.BC
@@ -343,11 +343,11 @@ for j=2:N
     
     % CC.D en el nodo Oeste, fórmula de cuadratura para los término Pg1 y Pg2 de u en:
         % frontera Oeste 1
-            Pg1u_L4=int_dir_simpson(i,j,i,j-1,1);
-            Pg2u_L4=int_dir_simpson(i,j,i,j-1,2);
+            Pg1u_L4=int_dir_simpson(i,j,i,j-1,tt,1);
+            Pg2u_L4=int_dir_simpson(i,j,i,j-1,tt,2);
         % frontera Oeste 2
-            Pg1u_L11=int_dir_simpson(i,j,i,j+1,1);
-            Pg2u_L11=int_dir_simpson(i,j,i,j+1,2);
+            Pg1u_L11=int_dir_simpson(i,j,i,j+1,tt,1);
+            Pg2u_L11=int_dir_simpson(i,j,i,j+1,tt,2);
         Pgu=(1/2)*[-Pg1u_L4;-Pg2u_L4;0;0;-Pg1u_L11;-Pg2u_L11];
     
     % Non-homogeneous Dir.BC
@@ -629,11 +629,11 @@ for j=2:N
     
     % CC.D en el nodo Este, fórmula de cuadratura para los término Pg1 y Pg2 de u en:
         % frontera Este 1
-            Pg1u_L7=int_dir_simpson(i,j,i,j-1,1);
-            Pg2u_L7=int_dir_simpson(i,j,i,j-1,2);
+            Pg1u_L7=int_dir_simpson(i,j,i,j-1,tt,1);
+            Pg2u_L7=int_dir_simpson(i,j,i,j-1,tt,2);
         % frontera Este 2
-            Pg1u_L14=int_dir_simpson(i,j,i,j+1,1);
-            Pg2u_L14=int_dir_simpson(i,j,i,j+1,2);
+            Pg1u_L14=int_dir_simpson(i,j,i,j+1,tt,1);
+            Pg2u_L14=int_dir_simpson(i,j,i,j+1,tt,2);
         Pgu=(1/2)*[Pg1u_L7;Pg2u_L7;Pg1u_L14;Pg2u_L14;0;0];
     
     % Non-homogeneous Dir.BC
@@ -694,11 +694,11 @@ d=denom_d*d;
 
 % CC.D en el nodo N-W, fórmula de cuadratura para los término Pg1 y Pg2 en:
     % frontera Oeste
-        Pg1u_L18=int_dir_simpson(i,j,i,j-1,1);
-        Pg2u_L18=int_dir_simpson(i,j,i,j-1,2);
+        Pg1u_L18=int_dir_simpson(i,j,i,j-1,tt,1);
+        Pg2u_L18=int_dir_simpson(i,j,i,j-1,tt,2);
     % frontera Norte
-        Pg1u_L22=int_dir_simpson(i,j,i+1,j,1);
-        Pg2u_L22=int_dir_simpson(i,j,i+1,j,2);
+        Pg1u_L22=int_dir_simpson(i,j,i+1,j,tt,1);
+        Pg2u_L22=int_dir_simpson(i,j,i+1,j,tt,2);
     Pgu=(1/2)*[-Pg1u_L18;-Pg2u_L18;Pg1u_L22;Pg2u_L22];
     
 % Non-homogeneous Dir.BC
@@ -801,11 +801,11 @@ for i=2:N
     
     % CC.D en el nodo Norte, fórmula de cuadratura para los términos Pg1 y Pg2 de u en:
         % frontera Norte 1
-            Pg1u_L23=int_dir_simpson(i,j,i+1,j,1);
-            Pg2u_L23=int_dir_simpson(i,j,i+1,j,2);
+            Pg1u_L23=int_dir_simpson(i,j,i+1,j,tt,1);
+            Pg2u_L23=int_dir_simpson(i,j,i+1,j,tt,2);
         % frontera Norte 2
-            Pg1u_L22=int_dir_simpson(i-1,j,i,j,1);
-            Pg2u_L22=int_dir_simpson(i-1,j,i,j,2);
+            Pg1u_L22=int_dir_simpson(i-1,j,i,j,tt,1);
+            Pg2u_L22=int_dir_simpson(i-1,j,i,j,tt,2);
         Pgu=(1/2)*[0;0;Pg1u_L23;Pg2u_L23;Pg1u_L22;Pg2u_L22];
         
     % Non-homogeneous Dir.BC
@@ -865,11 +865,11 @@ d=denom_d*d;
 
 % CC.D en el nodo N-E, fórmula de cuadratura para los términos Pg1 y Pg2 de u en:
     % frontera Este
-        Pg1u_L21=int_dir_simpson(i,j,i,j-1,1);
-        Pg2u_L21=int_dir_simpson(i,j,i,j-1,2);
+        Pg1u_L21=int_dir_simpson(i,j,i,j-1,tt,1);
+        Pg2u_L21=int_dir_simpson(i,j,i,j-1,tt,2);
     % frontera Norte
-        Pg1u_L24=int_dir_simpson(i-1,j,i,j,1);
-        Pg2u_L24=int_dir_simpson(i-1,j,i,j,2);
+        Pg1u_L24=int_dir_simpson(i-1,j,i,j,tt,1);
+        Pg2u_L24=int_dir_simpson(i-1,j,i,j,tt,2);
     Pgu=(1/2)*[Pg1u_L21;Pg2u_L21;Pg1u_L24;Pg2u_L24];
 
 % Non-homogeneous Dir.BC

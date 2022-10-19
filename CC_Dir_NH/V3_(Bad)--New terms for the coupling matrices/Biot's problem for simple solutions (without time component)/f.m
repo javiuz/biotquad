@@ -1,8 +1,8 @@
-function ff=f(xx,yy,k)
+function ff=f(xx,yy,k,~)
 
 global alpha
 
-%       ff(xx,yy,t) = {f1,f2}'
+%       ff(xx,yy) = {f1,f2}'
     
 if k==1     % Primera componente del vector ff (f1)          
     ff=alpha*yy;

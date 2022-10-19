@@ -1,4 +1,4 @@
-function sol=sol_exactaxy(xx,yy)
+function sol=sol_exactaxy(xx,yy,~)
 
 %       u(xx,yy,tt) = {xx, 
 %                    yy}

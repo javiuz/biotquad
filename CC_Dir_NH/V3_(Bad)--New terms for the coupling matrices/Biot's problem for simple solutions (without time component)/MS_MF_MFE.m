@@ -31,55 +31,151 @@ perm=1;
 % % Final time
 % Tf=1e-03;
 
+% initial time
+t=0;
+% Time step
+delta_t=1;
+
+% %  Matrices del sistema de Biot: A11, A12, A21 y A22
+%     % Asp y App las utilizaremos después
+% [A11,A12,A22,AspT,App]=build_matrices_Biot(delta_t);
+% A21=-A12';
+% Asp=AspT';
+
 %  Matrices del sistema de Biot: A11, A12, A21 y A22
     % Asp y App las utilizaremos después
-[A11,A12,A22]=build_matrices_Biot;
+[A11,A12,A22,~,~]=build_matrices_Biot(delta_t);
 A21=zeros(N*N,2*N*N);
+% Asp=AspT';
 
 % Matriz del sistema reducido de Biot
 Biot_matrix=[A11 A12;A21 A22];
 
-% Source terms of the MFMFE-MSMFE discretization at t+delta_t
-f_indep=build_indep_f;  % Source term f
-% q_indep=zeros(N*N,1);   % Source term q
+%% Terms involving time
 
-    % Non-homogeneous Dir. B.C. for u and p
-[gDu,gDp]=dir_bc_Pg;
+% % Initial solution of the variables at t=0 
+% u=zeros(2*N*N,1);
+% p=zeros(N*N,1);
+% 
+% for j=1:N
+%     for i=1:N
+%         ind2u=(i+(j-1)*N)*2;
+%         ind1u=ind2u-1;
+%         ind1p=ind2u/2;
+%         
+%         xx=(x(i,j)+x(i+1,j)+x(i+1,j+1)+x(i,j+1))/4;
+%         yy=(y(i,j)+y(i+1,j)+y(i+1,j+1)+y(i,j+1))/4;
+%         
+%         u(ind1u)=sol_exactax(xx,yy,t,1);
+%         u(ind2u)=sol_exactax(xx,yy,t,2);
+%         p(ind1p)=sol_exactax(xx,yy,t,3);
+%     end
+% end
+% 
+% gamma=compute_gamma(u,p,t);
+% [sigma,~,~,~,~]=compute_tensors(u,p,gamma,t);
+% 
+% % Initialize errors
+% erroru_L2_inf=0;
+% erroru_3_inf=erroru_L2_inf;
+% errorg_L2_inf=erroru_L2_inf;
+% error_sigma_sigmah_inf=erroru_L2_inf;
+% errorp_L2_inf=erroru_L2_inf;
+% errorp_3_inf=erroru_L2_inf;
+% error_z_zh_inf=erroru_L2_inf;
+
+% We solve Biot's system: NO NEED FOR Time loop
+
+% while t < Tf
+
+%     % Initial time terms affecting q
+% gTp=Asp*sigma + App*p;
+
+    % Source terms of the MFMFE-MSMFE discretization at t+delta_t
+f_indep=build_indep_f(t+delta_t);        % Source term f
+% q_indep=build_indep_q(t+delta_t);           % Source term q
+
+     % For homogeneous Dir. B.C.
+% f_hat=-f_indep;          
+% q_hat=delta_t*q_indep + gTp;    
+
+    % For non-homogeneous Dir. B.C.
+[gDu,gDp]=dir_bc_Pg(delta_t,t+delta_t);   
 f_hat= -f_indep + gDu; 
+% q_hat= delta_t*q_indep + gTp + gDp;
+% q_hat= gTp + gDp;
 q_hat= gDp;
-
-% Right-hand side of the Biot system
+    
+    % Right-hand side of the Biot system
 indep_term=[f_hat;q_hat];
-
-% We solve Biot's system
+    
+% Solution of the Biot system for the displacement and pressure vectors
 sol_vec=Biot_matrix\indep_term; 
 u=sol_vec(1:2*N*N);
 p=sol_vec(2*N*N+1:2*N*N+N*N);
 
-% We compute the rest of the variables:
-    % rotation 
-gamma=compute_gamma(u,p);  % Computed solution for the rotation term
-    % stress
-[sigma,~,~,~,~]=compute_tensors(u,p,gamma);
-    % velocity
-[z,zx,zy]=compute_fluxes(p); 
+t=t+delta_t;
 
-% We reorder the variables to compute the errors and some contourplots
+    % Now we compute the rest of the variables at the new time step t:
+        % rotation 
+gamma=compute_gamma(u,p,t);  % Computed solution for the rotation term
+        % stress
+[sigma,~,~,~,~]=compute_tensors(u,p,gamma,t);
+        % velocity
+[z,zx,zy]=compute_fluxes(p,t); 
+
+    % We reorder the variables to compute the errors and some contourplots
 gamma_n=reshape(gamma,N+1,N+1);
 sigma_n=build_sigma_n_2(sigma);
 vel_n=build_vel_n(z);
 
-% L2 norms of the different variables
-    % Displacement
-[erroru_L2,erroru_3]=compute_error_displacements(u)
-    % Pressure
-[errorp_L2,errorp_3]=compute_error_pressures(p)
-    % Rotation
-errorg_L2=compute_error_rotations(gamma_n)
-    % Stress
-error_sigma_sigmah=compute_error_stress(sigma_n,nu)
-    % Velocity
-error_z_zh=compute_error_velocities(vel_n)
+    % L2 norms of the different variables
+% t
+        % Displacement
+[erroru_L2,erroru_3]=compute_error_displacements(u,t);
+        % Pressure
+[errorp_L2,errorp_3]=compute_error_pressures(p,t);
+        % Rotation
+errorg_L2=compute_error_rotations(gamma_n,t);
+        % Stress
+error_sigma_sigmah=compute_error_stress(sigma_n,nu,t);
+        % Velocity
+error_z_zh=compute_error_velocities(vel_n,t);
+
+%     % Infinity norm of the L2 errors of the variables
+% erroru_L2_inf=max(erroru_L2_inf,erroru_L2);
+% erroru_3_inf=max(erroru_3_inf,erroru_3);
+% errorp_L2_inf=max(errorp_L2_inf,errorp_L2);
+% errorp_3_inf=max(errorp_3_inf,errorp_3);
+% errorg_L2_inf=max(errorg_L2_inf,errorg_L2);
+% error_sigma_sigmah_inf=max(error_sigma_sigmah_inf,error_sigma_sigmah);
+% error_z_zh_inf=max(error_z_zh_inf,error_z_zh);
+% % end
+% 
+% % We display the infinity norms of the errors of the variables at final time step
+% erroru_L2_inf
+% erroru_3_inf
+% errorp_L2_inf
+% errorp_3_inf
+% errorg_L2_inf
+% error_sigma_sigmah_inf
+% error_z_zh_inf
+
+% We display the L2 norms of the errors of the variables at final time step
+t
+erroru_L2
+erroru_3
+errorp_L2
+errorp_3
+errorg_L2
+error_sigma_sigmah
+error_z_zh
+
+% disp(Biot_matrix)
+% disp(indep_term)
+
+% We compute the variable z of velocity at the final time step Tf(t):
+% [z,zx,zy]=compute_fluxes(p,t); 
 
 % Components of the displacement vector: u1 and u2
 % u1=u(1:2:2*N*N);
@@ -113,17 +209,17 @@ for j=1:N
     for i=1:N
         ind2u=(i+(j-1)*N)*2;
         ind1u=ind2u-1;
-%         ind1p=ind2u/2;
+        ind1p=ind2u/2;
         xx=(x(i,j)+x(i+1,j)+x(i+1,j+1)+x(i,j+1))/4;
         yy=(y(i,j)+y(i+1,j)+y(i+1,j+1)+y(i,j+1))/4;
         Xc(i,j)=xx;
         Yc(i,j)=yy;
-        U_ex(i,j)=sqrt(sol_exactax(xx,yy,1)^(2)+sol_exactax(xx,yy,2)^(2));
-        P_ex(i,j)=sol_exactax(xx,yy,3);
-        Z_ex(i,j)=sqrt(sol_exactax(xx,yy,4)^(2)+sol_exactax(xx,yy,5)^(2));
-        G_ex(i,j)=sol_exactax(xx,yy,6);
-        S_ex1(i,j)=sqrt(sol_exactax_sigma(xx,yy,nu,1,1)^(2)+sol_exactax_sigma(xx,yy,nu,1,2)^(2));
-        S_ex2(i,j)=sqrt(sol_exactax_sigma(xx,yy,nu,2,1)^(2)+sol_exactax_sigma(xx,yy,nu,2,2)^(2));
+        U_ex(i,j)=sqrt(sol_exactax(xx,yy,t,1)^(2)+sol_exactax(xx,yy,t,2)^(2));
+        P_ex(i,j)=sol_exactax(xx,yy,t,3);
+        Z_ex(i,j)=sqrt(sol_exactax(xx,yy,t,4)^(2)+sol_exactax(xx,yy,t,5)^(2));
+        G_ex(i,j)=sol_exactax(xx,yy,t,6);
+        S_ex1(i,j)=sqrt(sol_exactax_sigma(xx,yy,t,nu,1,1)^(2)+sol_exactax_sigma(xx,yy,t,nu,1,2)^(2));
+        S_ex2(i,j)=sqrt(sol_exactax_sigma(xx,yy,t,nu,2,1)^(2)+sol_exactax_sigma(xx,yy,t,nu,2,2)^(2));
         Uc(i,j)=sqrt((u(ind1u))^(2)+(u(ind2u))^(2));
         Gc(i,j)=(gamma_n(i,j)+gamma_n(i+1,j)+gamma_n(i+1,j+1)+gamma_n(i,j+1))/4;
         Sc1(i,j)=(sqrt(stress_flux1(i,j,1)^2+stress_flux1(i,j,2)^2)+...

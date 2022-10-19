@@ -1,8 +1,8 @@
-function sol=sol_exactax_sigma(xx,yy,~,row,col)
+function sol=sol_exactax_sigma(xx,yy,~,~,row,col)
 
 global alpha lambda mu
 
-%       sigma(xx,yy,~) = [sigma(1,1) sigma(1,2);sigma(2,1) sigma(2,2)]
+%       sigma(xx,yy) = [sigma(1,1) sigma(1,2);sigma(2,1) sigma(2,2)]
 
  if row==1 && col==1       % Solución analítica de sigma (1,1) (xx,yy,tt)
      sol=-alpha*yy*xx + 2*(lambda + mu);     

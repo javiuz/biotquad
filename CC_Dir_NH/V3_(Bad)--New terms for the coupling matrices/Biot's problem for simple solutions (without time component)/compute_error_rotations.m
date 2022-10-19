@@ -1,4 +1,4 @@
-function errorg_L2=compute_error_rotations(g)
+function errorg_L2=compute_error_rotations(g,t)
 
 global NN
 
@@ -12,7 +12,7 @@ for j=1:N
         g2=g(i+1,j);
         g3=g(i+1,j+1);
         g4=g(i,j+1);
-        errorg_L2=errorg_L2+norma_2_gauss_lobatto_rot(g1,g2,g3,g4,i,j);
+        errorg_L2=errorg_L2+norma_2_gauss_lobatto_rot(g1,g2,g3,g4,i,j,t);
     end
 end
 

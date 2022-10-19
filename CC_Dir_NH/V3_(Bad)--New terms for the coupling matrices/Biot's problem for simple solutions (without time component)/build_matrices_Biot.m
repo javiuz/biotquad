@@ -1,4 +1,4 @@
-function [M1,M2,M3]=build_matrices_Biot
+function [M1,M2,M3,AspT,App]=build_matrices_Biot(delta_t)
 
 global NN x y alpha lambda mu %c0
 
@@ -7,9 +7,12 @@ N=NN;
 M1=sparse(2*N*N,2*N*N);
 M2=sparse(2*N*N,N*N);
 M3=sparse(N*N,N*N);
+AspT=sparse(8*N*(N+1),N*N);
+App=sparse(N*N,N*N);
 
 coef_denom=16*mu*(lambda + mu);
 coef_d=alpha/coef_denom;
+coef_p=coef_d*alpha;
 
 % South-West corner node
 i=1;
@@ -24,15 +27,22 @@ x1=x(i,j);
 y1=y(i,j);            
 x2=x(i+1,j);
 y2=y(i+1,j);
-% x3=x(i+1,j+1);
-% y3=y(i+1,j+1);
+x3=x(i+1,j+1);
+y3=y(i+1,j+1);
 x4=x(i,j+1);
 y4=y(i,j+1);
 
 Jer1=abs(x4*(y1 - y2) + x1*(y2 - y4) + x2*(-y1 + y4));
+Jer2=abs(x3*(y1 - y2) + x1*(y2 - y3) + x2*(-y1 + y3));
+Jer3=abs(x4*(y2 - y3) + x2*(y3 - y4) + x3*(-y2 + y4));
+Jer4=abs(x4*(y1 - y3) + x1*(y3 - y4) + x3*(-y1 + y4));
 
 denom_elas=coef_denom*Jer1;
 denom_d=coef_d/Jer1;
+denom_p_1=coef_p/Jer1;
+denom_p_2=coef_p/Jer2;
+denom_p_3=coef_p/Jer3;
+denom_p_4=coef_p/Jer4;
 
 % Matriz local (A sigma, sigma)
 a=zeros(vdim,vdim);
@@ -80,18 +90,23 @@ t(2,2)=kinv(1,1,i,j,i,j);
 t=(1/4)*t;
 
 % Matriz local (A p, p)
-% In this problem is equal to zero (as well as matrix (A sigma, p)).
+k=term_App_matrix(x1,y1,x2,y2,x3,y3,x4,y4,denom_p_1,denom_p_2,denom_p_3,denom_p_4);
          
          % It's the same without simplifying the expressions
        
 localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
 localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-localm3=f'*(t\f);
+% localm3=k-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+localm3=(delta_t*f')*(t\f);
 
 M1(ind1u:ind2u,ind1u:ind2u)=M1(ind1u:ind2u,ind1u:ind2u)+localm1;
 M2(ind1u:ind2u,ind1p)=M2(ind1u:ind2u,ind1p)+localm2;
 M3(ind1p,ind1p)=M3(ind1p,ind1p)+localm3;
 
+indr=1:vdim;
+AspT(indr,ind1p)=d;
+ld=vdim;
+App(ind1p,ind1p)=k;
 
 % South nodes (j=1)
 vdim=6;
@@ -124,8 +139,8 @@ for i=2:N
 %     y4=y(i-1,j+1);
     x5=x(i+1,j);
     y5=y(i+1,j);
-%     x6=x(i+1,j+1);
-%     y6=y(i+1,j+1);
+    x6=x(i+1,j+1);
+    y6=y(i+1,j+1);
     
     JE1r2=abs(x3*(y1 - y2) + x1*(y2 - y3) + x2*(-y1 + y3));
     denom_elas1=coef_denom*JE1r2;
@@ -133,6 +148,14 @@ for i=2:N
     JE2r1=abs(x5*(-y2 + y3) + x3*(y2 - y5) + x2*(-y3 + y5));
     denom_elas2=coef_denom*JE2r1;
     denom_d2=coef_d/JE2r1;
+    denom_p_1=coef_p/JE2r1;
+
+    JE2r2=abs(x6*(y2 - y5) + x2*(y5 - y6) + x5*(-y2 + y6));
+    denom_p_2=coef_p/JE2r2;
+    JE2r3=abs(x6*(y3 - y5) + x3*(y5 - y6) + x5*(-y3 + y6));
+    denom_p_3=coef_p/JE2r3;
+    JE2r4=abs(x6*(-y2 + y3) + x3*(y2 - y6) + x2*(-y3 + y6));
+    denom_p_4=coef_p/JE2r4;
     
     a(1,1)=((lambda + 2*mu)*(x2 - x3)^2 + 2*(lambda + mu)*(y2 - y3)^2)/denom_elas2;
     a(1,2)=-((lambda*(x2 - x3)*(y2 - y3))/denom_elas2);
@@ -203,18 +226,23 @@ for i=2:N
     t=(1/4)*t;
     
 %     k1=coef1_p;
-%     k2=term_App_matrix(x2,y2,x5,y5,x6,y6,x3,y3,denom_p_1,denom_p_2,denom_p_3,denom_p_4);
-%     k=[0 0;0 k2];
+    k2=term_App_matrix(x2,y2,x5,y5,x6,y6,x3,y3,denom_p_1,denom_p_2,denom_p_3,denom_p_4);
+    k=[0 0;0 k2];
 
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-    localm3=f'*(t\f);
+%     localm3=k-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+    localm3=(delta_t*f')*(t\f);
     
     M1(ind1u:ind4u,ind1u:ind4u)=M1(ind1u:ind4u,ind1u:ind4u)+localm1;   
     M2(ind1u:ind4u,ind1p:ind2p)=M2(ind1u:ind4u,ind1p:ind2p)+localm2;
-    M3(ind1p:ind2p,ind1p:ind2p)=M3(ind1p:ind2p,ind1p:ind2p)+localm3;   
+    M3(ind1p:ind2p,ind1p:ind2p)=M3(ind1p:ind2p,ind1p:ind2p)+localm3;
+    
+    indr=ld+1:ld+vdim;
+    AspT(indr,ind1p:ind2p)=d;
+    ld=ld+vdim;
+    App(ind2p,ind2p)=k2;
 end
-
 
 % South-East corner node (j=1)
 i=N+1;
@@ -280,12 +308,16 @@ t=(1/4)*t;
 
 localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
 localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-localm3=f'*(t\f);
+% localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+localm3=(delta_t*f')*(t\f);
 
 M1(ind1u:ind2u,ind1u:ind2u)=M1(ind1u:ind2u,ind1u:ind2u)+localm1;
 M2(ind1u:ind2u,ind1p)=M2(ind1u:ind2u,ind1p)+localm2;
 M3(ind1p,ind1p)=M3(ind1p,ind1p)+localm3;
 
+indr=ld+1:ld+vdim;
+AspT(indr,ind1p)=d;
+ld=ld+vdim;
 
 for j=2:N
 
@@ -310,8 +342,8 @@ for j=2:N
     y3=y(i+1,j);
     x4=x(i,j);
     y4=y(i,j);
-%     x5=x(i+1,j+1);
-%     y5=y(i+1,j+1);
+    x5=x(i+1,j+1);
+    y5=y(i+1,j+1);
     x6=x(i,j+1);
     y6=y(i,j+1);
     
@@ -321,6 +353,14 @@ for j=2:N
     JE2r1=abs(x6*(-y3 + y4) + x4*(y3 - y6) + x3*(-y4 + y6));
     denom_elas2=coef_denom*JE2r1;
     denom_d2=coef_d/JE2r1;
+    denom_p_1=coef_p/JE2r1;
+    
+    JE2r2=abs(x5*(-y3 + y4) + x4*(y3 - y5) + x3*(-y4 + y5));
+    denom_p_2=coef_p/JE2r2;
+    JE2r3=abs(x6*(y3 - y5) + x3*(y5 - y6) + x5*(-y3 + y6));
+    denom_p_3=coef_p/JE2r3;
+    JE2r4=abs(x6*(y4 - y5) + x4*(y5 - y6) + x5*(-y4 + y6));
+    denom_p_4=coef_p/JE2r4;
     
     a=zeros(vdim,vdim);    
     a(1,1)=((lambda + 2*mu)*(x3 - x4)^2 + 2*(lambda + mu)*(y3 - y4)^2)/denom_elas1;
@@ -398,17 +438,22 @@ for j=2:N
     t=(1/4)*t;
     
 %     k1=coef1_p;
-%     k2=term_App_matrix(x4,y4,x3,y3,x5,y5,x6,y6,denom_p_1,denom_p_2,denom_p_3,denom_p_4);
-%     k=[0 0;0 k2];
+    k2=term_App_matrix(x4,y4,x3,y3,x5,y5,x6,y6,denom_p_1,denom_p_2,denom_p_3,denom_p_4);
+    k=[0 0;0 k2];
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-    localm3=f'*(t\f);
+%     localm3=k-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+    localm3=(delta_t*f')*(t\f);
     
     M1([ind1u:ind2u,ind3u:ind4u],[ind1u:ind2u,ind3u:ind4u])=M1([ind1u:ind2u,ind3u:ind4u],[ind1u:ind2u,ind3u:ind4u])+localm1;    
     M2([ind1u:ind2u,ind3u:ind4u],[ind1p,ind2p])=M2([ind1u:ind2u,ind3u:ind4u],[ind1p,ind2p])+localm2;    
     M3([ind1p,ind2p],[ind1p,ind2p])=M3([ind1p,ind2p],[ind1p,ind2p])+localm3;
-
+    
+    indr=ld+1:ld+vdim;
+    AspT(indr,[ind1p,ind2p])=d;
+    ld=ld+vdim;
+    App(ind2p,ind2p)=k2;
     
     % Central nodes 
     vdim=8;
@@ -450,8 +495,8 @@ for j=2:N
 %     y5=y(i+1,j-1);
     x6=x(i+1,j);
     y6=y(i+1,j);
-%     x7=x(i+1,j+1);
-%     y7=y(i+1,j+1);
+    x7=x(i+1,j+1);
+    y7=y(i+1,j+1);
     x8=x(i,j+1);
     y8=y(i,j+1);
 %     x9=x(i-1,j+1);
@@ -466,9 +511,17 @@ for j=2:N
     JE3r1=abs(x8*(y3 - y6) + x3*(y6 - y8) + x6*(-y3 + y8));
     denom_elas3=coef_denom*JE3r1;
     denom_d3=coef_d/JE3r1;
+    denom_p_1=coef_p/JE3r1;
     JE4r2=abs(x8*(-y3 + y4) + x4*(y3 - y8) + x3*(-y4 + y8));
     denom_elas4=coef_denom*JE4r2;
     denom_d4=coef_d/JE4r2;
+    
+    JE3r2=abs(x7*(y3 - y6) + x3*(y6 - y7) + x6*(-y3 + y7));
+    denom_p_2=coef_p/JE3r2;
+    JE3r3=abs(x8*(y6 - y7) + x6*(y7 - y8) + x7*(-y6 + y8));
+    denom_p_3=coef_p/JE3r3;
+    JE3r4=abs(x8*(y3 - y7) + x3*(y7 - y8) + x7*(-y3 + y8));
+    denom_p_4=coef_p/JE3r4;
     
     a(1,1)=((lambda + 2*mu)*(x3 - x4)^2 + 2*(lambda + mu)*(y3 - y4)^2)/denom_elas1 + ...
            ((lambda + 2*mu)*(x3 - x6)^2 + 2*(lambda + mu)*(y3 - y6)^2)/denom_elas2;
@@ -612,18 +665,23 @@ for j=2:N
 %     k2=coef2_p;
 %     SIGUE EL ORDEN DE LAS PRESIONES EN EL SISTEMA: p4 va antes que p3
 %     k4=coef4_p;
-%     k3=term_App_matrix(x3,y3,x6,y6,x7,y7,x8,y8,denom_p_1,denom_p_2,denom_p_3,denom_p_4);
-%     k=[0 0 0 0;0 0 0 0;0 0 0 0;0 0 0 k3];
+    k3=term_App_matrix(x3,y3,x6,y6,x7,y7,x8,y8,denom_p_1,denom_p_2,denom_p_3,denom_p_4);
+    k=[0 0 0 0;0 0 0 0;0 0 0 0;0 0 0 k3];
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-    localm3=f'*(t\f);
+%     localm3=k-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+    localm3=(delta_t*f')*(t\f);
     
     M1([ind1u:ind4u,ind5u:ind8u],[ind1u:ind4u,ind5u:ind8u])=M1([ind1u:ind4u,ind5u:ind8u],[ind1u:ind4u,ind5u:ind8u])+localm1;    
     M2([ind1u:ind4u,ind5u:ind8u],[ind1p:ind2p,ind3p:ind4p])=M2([ind1u:ind4u,ind5u:ind8u],[ind1p:ind2p,ind3p:ind4p])+localm2;    
     M3([ind1p:ind2p,ind3p:ind4p],[ind1p:ind2p,ind3p:ind4p])=M3([ind1p:ind2p,ind3p:ind4p],[ind1p:ind2p,ind3p:ind4p])+localm3;
-    end
     
+    indr=ld+1:ld+vdim;
+    AspT(indr,[ind1p:ind2p,ind3p:ind4p])=d;
+    ld=ld+vdim;
+    App(ind4p,ind4p)=k3;
+    end
     
     % East nodes
     i=N+1;
@@ -739,13 +797,17 @@ for j=2:N
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-    localm3=f'*(t\f);
+%     localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+    localm3=(delta_t*f')*(t\f);
     
     M1([ind1u:ind2u,ind3u:ind4u],[ind1u:ind2u,ind3u:ind4u])=M1([ind1u:ind2u,ind3u:ind4u],[ind1u:ind2u,ind3u:ind4u])+localm1; 
     M2([ind1u:ind2u,ind3u:ind4u],[ind1p,ind2p])=M2([ind1u:ind2u,ind3u:ind4u],[ind1p,ind2p])+localm2;
     M3([ind1p,ind2p],[ind1p,ind2p])=M3([ind1p,ind2p],[ind1p,ind2p])+localm3;
+    
+    indr=ld+1:ld+vdim;
+    AspT(indr,[ind1p,ind2p])=d;
+    ld=ld+vdim;
 end
-
 
 % North-West corner node
 i=1;
@@ -812,12 +874,16 @@ t=(1/4)*t;
 
 localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
 localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-localm3=f'*(t\f);
+% localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+localm3=(delta_t*f')*(t\f);
 
 M1(ind1u:ind2u,ind1u:ind2u)=M1(ind1u:ind2u,ind1u:ind2u)+localm1;
 M2(ind1u:ind2u,ind1p)=M2(ind1u:ind2u,ind1p)+localm2;
 M3(ind1p,ind1p)=M3(ind1p,ind1p)+localm3;
 
+indr=ld+1:ld+vdim;
+AspT(indr,ind1p)=d;
+ld=ld+vdim;
 
 % North nodes (j=N+1)
 vdim=6;
@@ -934,13 +1000,17 @@ for i=2:N
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-    localm3=f'*(t\f);
+%     localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+    localm3=(delta_t*f')*(t\f);
     
     M1(ind1u:ind4u,ind1u:ind4u)=M1(ind1u:ind4u,ind1u:ind4u)+localm1;
     M2(ind1u:ind4u,ind1p:ind2p)=M2(ind1u:ind4u,ind1p:ind2p)+localm2;  
     M3(ind1p:ind2p,ind1p:ind2p)=M3(ind1p:ind2p,ind1p:ind2p)+localm3;
+    
+    indr=ld+1:ld+vdim;
+    AspT(indr,ind1p:ind2p)=d;
+    ld=ld+vdim;
 end
-
 
 % North-East corner node (j=N+1)
 i=N+1;
@@ -1006,11 +1076,14 @@ t=(1/4)*t;
 
 localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
 localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-localm3=f'*(t\f);
+% localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+localm3=(delta_t*f')*(t\f);
 
 M1(ind1u:ind2u,ind1u:ind2u)=M1(ind1u:ind2u,ind1u:ind2u)+localm1;
 M2(ind1u:ind2u,ind1p)=M2(ind1u:ind2u,ind1p)+localm2;
 M3(ind1p,ind1p)=M3(ind1p,ind1p)+localm3;
 
+indr=ld+1:ld+vdim;
+AspT(indr,ind1p)=d;
 return
 end

@@ -1,4 +1,4 @@
-function sol=sol_exacta(i,j,comp)
+function sol=sol_exacta(i,j,~,comp)
 
 global x y
 

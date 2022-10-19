@@ -1,4 +1,4 @@
-function norm=norma_2_gaussian_stress(i,j,sigma,nu)
+function norm=norma_2_gaussian_stress(i,j,sigma,nu,t)
 
 % sigma is a vector with 16 components
 
@@ -8,16 +8,16 @@ x3=(5+sqrt(15))/10;
 w1=5/18;
 w2=4/9;
 
-norm=w1*(w1*g_gaussian_stress(i,j,sigma,x1,x1,nu)+w2*g_gaussian_stress(i,j,sigma,x2,x1,nu)+...
-    w1*g_gaussian_stress(i,j,sigma,x3,x1,nu))+w2*(w1*g_gaussian_stress(i,j,sigma,x1,x2,nu)+...
-    w2*g_gaussian_stress(i,j,sigma,x2,x2,nu)+w1*g_gaussian_stress(i,j,sigma,x3,x2,nu))+...
-    w1*(w1*g_gaussian_stress(i,j,sigma,x1,x3,nu)+w2*g_gaussian_stress(i,j,sigma,x2,x3,nu)+...
-    w1*g_gaussian_stress(i,j,sigma,x3,x3,nu));
+norm=w1*(w1*g_gaussian_stress(i,j,sigma,x1,x1,nu,t)+w2*g_gaussian_stress(i,j,sigma,x2,x1,nu,t)+...
+    w1*g_gaussian_stress(i,j,sigma,x3,x1,nu,t))+w2*(w1*g_gaussian_stress(i,j,sigma,x1,x2,nu,t)+...
+    w2*g_gaussian_stress(i,j,sigma,x2,x2,nu,t)+w1*g_gaussian_stress(i,j,sigma,x3,x2,nu,t))+...
+    w1*(w1*g_gaussian_stress(i,j,sigma,x1,x3,nu,t)+w2*g_gaussian_stress(i,j,sigma,x2,x3,nu,t)+...
+    w1*g_gaussian_stress(i,j,sigma,x3,x3,nu,t));
 
 return
 end 
 
-function gg=g_gaussian_stress(i,j,sigma,xx,yy,nu)
+function gg=g_gaussian_stress(i,j,sigma,xx,yy,nu,tt)
 
 global x y 
 
@@ -44,7 +44,7 @@ sol_nca_12=a2*xx+b2*yy+g2-2*r*xx*yy-s*yy^2;
 sol_nca_21=a1*xx+b1*yy+g1+r*xx^2+2*s*xx*yy;
 sol_nca_22=a2*xx+b2*yy+g2-2*r*xx*yy-s*yy^2;
 
-sg=[sol_exactax_sigma(xg,yg,nu,1,1) sol_exactax_sigma(xg,yg,nu,1,2);sol_exactax_sigma(xg,yg,nu,2,1) sol_exactax_sigma(xg,yg,nu,2,2)];
+sg=[sol_exactax_sigma(xg,yg,tt,nu,1,1) sol_exactax_sigma(xg,yg,tt,nu,1,2);sol_exactax_sigma(xg,yg,tt,nu,2,1) sol_exactax_sigma(xg,yg,tt,nu,2,2)];
 shg=[sol_nca_11 sol_nca_12;sol_nca_21 sol_nca_22];
 
 

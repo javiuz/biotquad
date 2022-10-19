@@ -1,4 +1,4 @@
-function [z,zx,zy]=compute_fluxes(paux)
+function [z,zx,zy]=compute_fluxes(paux,tt)
 
 global NN 
 
@@ -38,9 +38,9 @@ t=(1/4)*t;
 
 % CC.D en el nodo S-W, fórmula de cuadratura para el término Pg de p en:
     % frontera Sur
-        Pgp_L1=int_dir_simpson(i,j,i+1,j,3);
+        Pgp_L1=int_dir_simpson(i,j,i+1,j,tt,3);
     % frontera Oeste
-        Pgp_L4=int_dir_simpson(i,j,i,j+1,3);
+        Pgp_L4=int_dir_simpson(i,j,i,j+1,tt,3);
     Pgp=(1/2)*[Pgp_L1;Pgp_L4];
 
 pp(1,1)=p(i,j);
@@ -77,9 +77,9 @@ for i=2:N
     
     % CC.D en los nodos Sur, fórmula de cuadratura para el término Pg de p en:
         % frontera Sur 1
-            Pgp_L2=int_dir_simpson(i,j,i+1,j,3); 
+            Pgp_L2=int_dir_simpson(i,j,i+1,j,tt,3); 
         % frontera Sur 2
-            Pgp_L1=int_dir_simpson(i-1,j,i,j,3); 
+            Pgp_L1=int_dir_simpson(i-1,j,i,j,tt,3); 
         Pgp=(1/2)*[Pgp_L2;0;Pgp_L1];
     
     pp(1,1)=p(i-1,j);
@@ -111,9 +111,9 @@ t=(1/4)*t;
 
 % CC.D en el nodo S-E, fórmula de cuadratura para el término Pg de p en:
     % frontera Este
-        Pgp_L7=int_dir_simpson(i,j,i,j+1,3);
+        Pgp_L7=int_dir_simpson(i,j,i,j+1,tt,3);
     % frontera Sur
-        Pgp_L3=int_dir_simpson(i-1,j,i,j,3);
+        Pgp_L3=int_dir_simpson(i-1,j,i,j,tt,3);
     Pgp=(1/2)*[-Pgp_L7;Pgp_L3];
 
 pp(1,1)=p(i-1,j);
@@ -149,9 +149,9 @@ for j=2:N
     
     % CC.D en el nodo Oeste, fórmula de cuadratura para el término Pg de p en:
         % frontera Oeste 1
-            Pgp_L4=int_dir_simpson(i,j,i,j-1,3);
+            Pgp_L4=int_dir_simpson(i,j,i,j-1,tt,3);
         % frontera Oeste 2
-            Pgp_L11=int_dir_simpson(i,j,i,j+1,3);
+            Pgp_L11=int_dir_simpson(i,j,i,j+1,tt,3);
         Pgp=(1/2)*[Pgp_L4;0;Pgp_L11];
         
     pp(1,1)=p(i,j-1);
@@ -231,9 +231,9 @@ for j=2:N
     
     % CC.D en el nodo Este, fórmula de cuadratura para el término Pg de p en:
         % frontera Este 1
-            Pgp_L7=int_dir_simpson(i,j,i,j-1,3);
+            Pgp_L7=int_dir_simpson(i,j,i,j-1,tt,3);
         % frontera Este 2
-            Pgp_L14=int_dir_simpson(i,j,i,j+1,3);
+            Pgp_L14=int_dir_simpson(i,j,i,j+1,tt,3);
         Pgp=(1/2)*[-Pgp_L7;-Pgp_L14;0];
 
     pp(1,1)=p(i-1,j-1);
@@ -267,9 +267,9 @@ t=(1/4)*t;
 
 % CC.D en el nodo N-W, fórmula de cuadratura para el término Pg de p en:
     % frontera Oeste
-        Pgp_L18=int_dir_simpson(i,j,i,j-1,3);
+        Pgp_L18=int_dir_simpson(i,j,i,j-1,tt,3);
     % frontera Norte
-        Pgp_L22=int_dir_simpson(i,j,i+1,j,3);
+        Pgp_L22=int_dir_simpson(i,j,i+1,j,tt,3);
     Pgp=(1/2)*[Pgp_L18;-Pgp_L22];
 
 pp(1,1)=p(i,j-1);
@@ -305,9 +305,9 @@ for i=2:N
     
     % CC.D en el nodo Norte, fórmula de cuadratura para el término Pg de p en:
         % frontera Norte 1
-            Pgp_L23=int_dir_simpson(i,j,i+1,j,3);
+            Pgp_L23=int_dir_simpson(i,j,i+1,j,tt,3);
         % frontera Norte 2
-            Pgp_L22=int_dir_simpson(i-1,j,i,j,3);
+            Pgp_L22=int_dir_simpson(i-1,j,i,j,tt,3);
         Pgp=(1/2)*[0;-Pgp_L23;-Pgp_L22];
   
     pp(1,1)=p(i-1,j-1);
@@ -339,9 +339,9 @@ t=(1/4)*t;
 
 % CC.D en el nodo N-E, fórmula de cuadratura para el término Pg de p en:
     % frontera Este
-        Pgp_L21=int_dir_simpson(i,j,i,j-1,3);
+        Pgp_L21=int_dir_simpson(i,j,i,j-1,tt,3);
     % frontera Norte
-        Pgp_L24=int_dir_simpson(i-1,j,i,j,3);
+        Pgp_L24=int_dir_simpson(i-1,j,i,j,tt,3);
     Pgp=(1/2)*[-Pgp_L21;-Pgp_L24];
 
 pp(1,1)=p(i-1,j-1);

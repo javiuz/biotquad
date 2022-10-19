@@ -1,4 +1,4 @@
-function norm=norma_2_gaussian_vel(i,j,vel)
+function norm=norma_2_gaussian_vel(i,j,vel,t)
 
 % sigma is a vector with 16 components
 
@@ -8,16 +8,16 @@ x3=(5+sqrt(15))/10;
 w1=5/18;
 w2=4/9;
 
-norm=w1*(w1*g_gaussian_vel(i,j,vel,x1,x1)+w2*g_gaussian_vel(i,j,vel,x2,x1)+...
-    w1*g_gaussian_vel(i,j,vel,x3,x1))+w2*(w1*g_gaussian_vel(i,j,vel,x1,x2)+...
-    w2*g_gaussian_vel(i,j,vel,x2,x2)+w1*g_gaussian_vel(i,j,vel,x3,x2))+...
-    w1*(w1*g_gaussian_vel(i,j,vel,x1,x3)+w2*g_gaussian_vel(i,j,vel,x2,x3)+...
-    w1*g_gaussian_vel(i,j,vel,x3,x3));
+norm=w1*(w1*g_gaussian_vel(i,j,vel,x1,x1,t)+w2*g_gaussian_vel(i,j,vel,x2,x1,t)+...
+    w1*g_gaussian_vel(i,j,vel,x3,x1,t))+w2*(w1*g_gaussian_vel(i,j,vel,x1,x2,t)+...
+    w2*g_gaussian_vel(i,j,vel,x2,x2,t)+w1*g_gaussian_vel(i,j,vel,x3,x2,t))+...
+    w1*(w1*g_gaussian_vel(i,j,vel,x1,x3,t)+w2*g_gaussian_vel(i,j,vel,x2,x3,t)+...
+    w1*g_gaussian_vel(i,j,vel,x3,x3,t));
 
 return
 end 
 
-function gg=g_gaussian_vel(i,j,vel,xx,yy)
+function gg=g_gaussian_vel(i,j,vel,xx,yy,tt)
 
 global x y 
 
@@ -40,7 +40,7 @@ df=[x(i+1,j)-x(i,j) x(i,j+1)-x(i,j);y(i+1,j)-y(i,j) y(i,j+1)-y(i,j)]+...
 sol_nca_1=a1*xx+b1*yy+g1+r*xx^2+2*s*xx*yy;
 sol_nca_2=a2*xx+b2*yy+g2-2*r*xx*yy-s*yy^2;
 
-zg=[sol_exactax(xg,yg,4);sol_exactax(xg,yg,5)];
+zg=[sol_exactax(xg,yg,tt,4);sol_exactax(xg,yg,tt,5)];
 zhg=[sol_nca_1;sol_nca_2];
 
 gg=jacob*(zg-(1/jacob)*df*zhg)'*(zg-(1/jacob)*df*zhg);

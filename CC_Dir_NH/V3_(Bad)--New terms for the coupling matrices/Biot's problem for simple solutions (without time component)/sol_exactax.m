@@ -1,4 +1,4 @@
-function sol=sol_exactax(xx,yy,comp)
+function sol=sol_exactax(xx,yy,~,comp)
 
 global perm
 
@@ -9,7 +9,7 @@ global perm
 
 %         p(xx,yy) = yy*xx
 
-%         z(tt)= {z1,z2}
+%         z(tt)= [z1,z2]'
 %           z1(tt)=-perm*yy
 %           z2=-perm*xx
 
