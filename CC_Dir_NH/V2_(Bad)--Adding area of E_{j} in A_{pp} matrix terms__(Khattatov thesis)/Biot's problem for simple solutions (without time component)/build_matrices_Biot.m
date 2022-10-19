@@ -92,10 +92,10 @@ M1(ind1u:ind2u,ind1u:ind2u)=M1(ind1u:ind2u,ind1u:ind2u)+localm1;
 M2(ind1u:ind2u,ind1p)=M2(ind1u:ind2u,ind1p)+localm2;
 M3(ind1p,ind1p)=M3(ind1p,ind1p)+localm3;
 
-% indr=1:vdim;
-% AspT(indr,ind1p)=d;
-% ld=vdim;
-% App(ind1p,ind1p)=k;
+indr=1:vdim;
+AspT(indr,ind1p)=d;
+ld=vdim;
+App(ind1p,ind1p)=k;
 
 % South nodes (j=1)
 vdim=6;
@@ -216,10 +216,10 @@ for i=2:N
     M2(ind1u:ind4u,ind1p:ind2p)=M2(ind1u:ind4u,ind1p:ind2p)+localm2;
     M3(ind1p:ind2p,ind1p:ind2p)=M3(ind1p:ind2p,ind1p:ind2p)+localm3;
     
-%     indr=ld+1:ld+vdim;
-%     AspT(indr,ind1p:ind2p)=d;
-%     ld=ld+vdim;
-%     App(ind2p,ind2p)=k2;
+    indr=ld+1:ld+vdim;
+    AspT(indr,ind1p:ind2p)=d;
+    ld=ld+vdim;
+    App(ind2p,ind2p)=k2;
 end
 
 % South-East corner node (j=1)
@@ -292,9 +292,9 @@ M1(ind1u:ind2u,ind1u:ind2u)=M1(ind1u:ind2u,ind1u:ind2u)+localm1;
 M2(ind1u:ind2u,ind1p)=M2(ind1u:ind2u,ind1p)+localm2;
 M3(ind1p,ind1p)=M3(ind1p,ind1p)+localm3;
 
-% indr=ld+1:ld+vdim;
-% AspT(indr,ind1p)=d;
-% ld=ld+vdim;
+indr=ld+1:ld+vdim;
+AspT(indr,ind1p)=d;
+ld=ld+vdim;
 
 for j=2:N
 
@@ -416,10 +416,10 @@ for j=2:N
     M2([ind1u:ind2u,ind3u:ind4u],[ind1p,ind2p])=M2([ind1u:ind2u,ind3u:ind4u],[ind1p,ind2p])+localm2;    
     M3([ind1p,ind2p],[ind1p,ind2p])=M3([ind1p,ind2p],[ind1p,ind2p])+localm3;
     
-%     indr=ld+1:ld+vdim;
-%     AspT(indr,[ind1p,ind2p])=d;
-%     ld=ld+vdim;
-%     App(ind2p,ind2p)=k2;
+    indr=ld+1:ld+vdim;
+    AspT(indr,[ind1p,ind2p])=d;
+    ld=ld+vdim;
+    App(ind2p,ind2p)=k2;
     
     % Central nodes 
     vdim=8;
@@ -627,10 +627,10 @@ for j=2:N
     M2([ind1u:ind4u,ind5u:ind8u],[ind1p:ind2p,ind3p:ind4p])=M2([ind1u:ind4u,ind5u:ind8u],[ind1p:ind2p,ind3p:ind4p])+localm2;    
     M3([ind1p:ind2p,ind3p:ind4p],[ind1p:ind2p,ind3p:ind4p])=M3([ind1p:ind2p,ind3p:ind4p],[ind1p:ind2p,ind3p:ind4p])+localm3;
     
-%     indr=ld+1:ld+vdim;
-%     AspT(indr,[ind1p:ind2p,ind3p:ind4p])=d;
-%     ld=ld+vdim;
-%     App(ind4p,ind4p)=k3;
+    indr=ld+1:ld+vdim;
+    AspT(indr,[ind1p:ind2p,ind3p:ind4p])=d;
+    ld=ld+vdim;
+    App(ind4p,ind4p)=k3;
     end
     
     % East nodes
@@ -751,9 +751,9 @@ for j=2:N
     M2([ind1u:ind2u,ind3u:ind4u],[ind1p,ind2p])=M2([ind1u:ind2u,ind3u:ind4u],[ind1p,ind2p])+localm2;
     M3([ind1p,ind2p],[ind1p,ind2p])=M3([ind1p,ind2p],[ind1p,ind2p])+localm3;
     
-%     indr=ld+1:ld+vdim;
-%     AspT(indr,[ind1p,ind2p])=d;
-%     ld=ld+vdim;
+    indr=ld+1:ld+vdim;
+    AspT(indr,[ind1p,ind2p])=d;
+    ld=ld+vdim;
 end
 
 % North-West corner node
@@ -827,9 +827,9 @@ M1(ind1u:ind2u,ind1u:ind2u)=M1(ind1u:ind2u,ind1u:ind2u)+localm1;
 M2(ind1u:ind2u,ind1p)=M2(ind1u:ind2u,ind1p)+localm2;
 M3(ind1p,ind1p)=M3(ind1p,ind1p)+localm3;
 
-% indr=ld+1:ld+vdim;
-% AspT(indr,ind1p)=d;
-% ld=ld+vdim;
+indr=ld+1:ld+vdim;
+AspT(indr,ind1p)=d;
+ld=ld+vdim;
 
 % North nodes (j=N+1)
 vdim=6;
@@ -950,9 +950,9 @@ for i=2:N
     M2(ind1u:ind4u,ind1p:ind2p)=M2(ind1u:ind4u,ind1p:ind2p)+localm2;  
     M3(ind1p:ind2p,ind1p:ind2p)=M3(ind1p:ind2p,ind1p:ind2p)+localm3;
     
-%     indr=ld+1:ld+vdim;
-%     AspT(indr,ind1p:ind2p)=d;
-%     ld=ld+vdim;
+    indr=ld+1:ld+vdim;
+    AspT(indr,ind1p:ind2p)=d;
+    ld=ld+vdim;
 end
 
 % North-East corner node (j=N+1)
@@ -1025,7 +1025,7 @@ M1(ind1u:ind2u,ind1u:ind2u)=M1(ind1u:ind2u,ind1u:ind2u)+localm1;
 M2(ind1u:ind2u,ind1p)=M2(ind1u:ind2u,ind1p)+localm2;
 M3(ind1p,ind1p)=M3(ind1p,ind1p)+localm3;
 
-% indr=ld+1:ld+vdim;
-% AspT(indr,ind1p)=d;
+indr=ld+1:ld+vdim;
+AspT(indr,ind1p)=d;
 return
 end
