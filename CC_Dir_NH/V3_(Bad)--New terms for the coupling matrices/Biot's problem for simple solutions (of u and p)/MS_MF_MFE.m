@@ -90,7 +90,8 @@ q_indep=build_indep_q(t+delta_t);           % Source term q
 
     % For non-homogeneous Dir. B.C.
 [gDu,gDp]=dir_bc_Pg(delta_t,t+delta_t);   
-f_hat= -f_indep + gDu; 
+% f_hat= -f_indep + gDu; 
+f_hat= f_indep + gDu; 
 q_hat= delta_t*q_indep + gTp + gDp;
     
     % Right-hand side of the Biot system
