@@ -101,7 +101,8 @@ f_indep=build_indep_f(t+delta_t);        % Source term f
 
     % For non-homogeneous Dir. B.C.
 [gDu,gDp]=dir_bc_Pg(delta_t,t+delta_t);   
-f_hat= -f_indep + gDu; 
+% f_hat= -f_indep + gDu; 
+f_hat= f_indep + gDu; 
 % q_hat= delta_t*q_indep + gTp + gDp;
 % q_hat= gTp + gDp;
 q_hat= gDp;
