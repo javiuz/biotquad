@@ -27,7 +27,7 @@ c0=1e-05;
 
 % Hydraulic conductivity: is inside the function 'kinv.m'
 % K=perm*[1 0;0 1]; with perm=1, 1e-03, 1e-06, 1e-09, 1e-12
-perm=1e-03;
+perm=1;
 
 % initial time
 t=0;
@@ -95,7 +95,8 @@ q_indep=build_indep_q(t+delta_t);           % Source term q
 
     % For non-homogeneous Dir. B.C.
 [gDu,gDp]=dir_bc_Pg(delta_t,t+delta_t);   
-f_hat= -f_indep + gDu; 
+% f_hat= -f_indep + gDu; 
+f_hat= f_indep + gDu; 
 q_hat= delta_t*q_indep + gTp + gDp;
     
     % Right-hand side of the Biot system
