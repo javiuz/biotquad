@@ -6,7 +6,7 @@ NN=N;       % Dimensión del problema discreto.
 
 % Generación de la malla: ¡OJO! Para la malla nº 3 tenemos que introducir 
 % el valor del nº de refinamientos de manera manual.
-mesh=3;                 
+mesh=0;                 
 [x,y]=init_mesh(mesh);  % coordenadas de los vértices de la malla.
 
 % Parámetros ecuación Biot
