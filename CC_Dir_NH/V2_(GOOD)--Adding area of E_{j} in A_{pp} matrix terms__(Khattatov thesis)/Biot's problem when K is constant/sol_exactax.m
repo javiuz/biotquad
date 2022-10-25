@@ -18,8 +18,7 @@ global perm
 %           r(xx,yy,tt)=1/2 (e^t (4 x^3 y^3 + (-1 + x) Cos[1 - y] Cos[(1 - x) (1 - y)] + Sin[1 - y] Sin[(1 - x) (1 - y)]) - e^t (-4 (1 - x)^3 (1 - y)^3 + Cos[x] Cos[x y] - y Sin[x] Sin[x y]))
 
  if comp==1         % Solución analítica de u1(xx,yy,tt)
-     sol=exp(tt)*(xx^2 + xx^3*yy^4 + cos(1-yy)*sin((1-xx)*(1-yy)));
-     
+     sol=exp(tt)*(xx^2 + xx^3*yy^4 + cos(1-yy)*sin((1-xx)*(1-yy)));    
  elseif comp==2     % Solución analítica de u2(xx,yy,tt)
      sol=exp(tt)*((1-yy)^2 + (1-xx)^4*(1-yy)^3 + cos(xx*yy)*sin(xx));
  elseif comp==3     % Solución analítica de p(xx,yy,tt)
