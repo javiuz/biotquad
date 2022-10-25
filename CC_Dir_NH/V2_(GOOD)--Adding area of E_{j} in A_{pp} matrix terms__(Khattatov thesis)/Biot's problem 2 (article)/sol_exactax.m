@@ -22,12 +22,12 @@ function sol=sol_exactax(xx,yy,tt,comp)
  elseif comp==3     % Solución analítica de p(xx,yy,tt)
      sol=exp(tt)*(10 + cos(pi*yy)*sin(pi*xx));
  elseif comp==4     % Solución analítica de z1(xx,yy,tt)
-     sol=-(exp(tt)*pi*((1 + xx)^2 + yy^2)*cos(pi*xx)*cos(pi*yy)) + exp(tt)*pi*sin(pi*xx)*sin(pi*yy)*sin(xx*yy);
+     sol=exp(tt)*pi*(-(((1+xx)^2 + yy^2)*cos(pi*xx)*cos(pi*yy)) + sin(pi*xx)*sin(pi*yy)*sin(xx*yy));
  elseif comp==5     % Solución analítica de z2(xx,yy,tt)
-     sol=exp(tt)*pi*(1 + xx)^2*sin(pi*xx)*sin(pi*yy) - exp(tt)*pi*cos(pi*xx)*cos(pi*yy)*sin(xx*yy);
+     sol=exp(tt)*pi*((1+xx)^2*sin(pi*xx)*sin(pi*yy) - cos(pi*xx)*cos(pi*yy)*sin(xx*yy));
  else               % Solución analítica de gamma(xx,yy,tt) (1st row & 2nd column)
-     sol=(exp(tt)*(4*xx^3*yy^3 + (-1 + xx)*cos(1 - yy)*cos((1 - xx)*(1 - yy)) + sin(1 - yy)*sin((1 - xx)*(1 - yy))) -...
-         exp(tt)*(-4*(1 - xx)^3*(1 - yy)^3 + cos(xx)*cos(xx*yy) - yy*sin(xx)*sin(xx*yy)))/2.;
+     sol=(exp(tt)*(4*(-1+xx)^3*(-1+yy)^3 + 4*xx^3*yy^3 + (-1+xx)*cos(1-yy)*cos((-1 + xx)*(-1 + yy)) - ...
+         cos(xx)*cos(xx*yy) + sin(1-yy)*sin((-1+xx)*(-1+yy)) + yy*sin(xx)*sin(xx*yy)))/2.;
  end
 
 return
