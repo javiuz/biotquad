@@ -27,7 +27,7 @@ c0=1e-05;
 
 % Hydraulic conductivity: is inside the function 'kinv.m'
 % K=perm*[1 0;0 1]; with perm=1, 1e-03, 1e-06, 1e-09, 1e-12
-perm=1e-12;
+perm=1;
 
 % initial time
 t=0;
@@ -35,6 +35,13 @@ t=0;
 delta_t=1e-04;
 % Final time
 Tf=1e-03;
+
+% % initial time
+% t=0;
+% % Time step
+% delta_t=1e-07;
+% % Final time
+% Tf=1e-06;
 
 %  Matrices del sistema de Biot: A11, A12, A21 y A22
     % Asp y App las utilizaremos después
