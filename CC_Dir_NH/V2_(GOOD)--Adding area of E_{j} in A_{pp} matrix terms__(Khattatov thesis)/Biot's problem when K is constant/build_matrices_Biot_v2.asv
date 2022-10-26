@@ -331,8 +331,8 @@ for j=2:N
     
     x1=x(i,j-1);
     y1=y(i,j-1);
-    x2=x(i+1,j-1);
-    y2=y(i+1,j-1);
+%     x2=x(i+1,j-1);
+%     y2=y(i+1,j-1);
     x3=x(i+1,j);
     y3=y(i+1,j);
     x4=x(i,j);
@@ -341,26 +341,16 @@ for j=2:N
     y5=y(i+1,j+1);
     x6=x(i,j+1);
     y6=y(i,j+1);
+
+    E=sin(5*pi*x4)*sin(5*pi*y4)+5;
     
-    xx1=(x1+x2+x3+x4)/4;
-    yy1=(y1+y2+y3+y4)/4;
-    E1=sin(5*pi*xx1)*sin(5*pi*yy1)+5;
+    lambda=E*c_lambda;
+    mu=E*c_mu;
     
-    lambda=E1*c_lambda;
-    mu=E1*c_mu;
+    coef_d=alpha/(8*(lambda+mu));
     
-    coef1_d=alpha/(8*(lambda+mu));
 %     coef1_p=c0+alpha^2/(lambda+mu);
-    
-    xx2=(x3+x4+x5+x6)/4;
-    yy2=(y3+y4+y5+y6)/4;
-    E2=sin(5*pi*xx2)*sin(5*pi*yy2)+5;
-    
-    lambda=E2*c_lambda;
-    mu=E2*c_mu;
-    
-    coef2_d=alpha/(8*(lambda+mu));
-    coef2_p=c0+alpha^2/(lambda+mu);
+    coef_p=c0+alpha^2/(lambda+mu);
     
     JE1r4=abs(x4*(y1 - y3) + x1*(y3 - y4) + x3*(-y1 + y4));
     denom1=(16.*mu*(lambda + mu))*JE1r4;
@@ -425,8 +415,7 @@ for j=2:N
     d(5,2)=(-x4 + x3);
     d(6,2)=(-y4 + y3);
     
-    d(:,1)=coef1_d*d(:,1);
-    d(:,2)=coef2_d*d(:,2);
+    d=coef_d*d;
     
     f=(1/2)*[1 0;-1 1;0 1];
     
@@ -443,7 +432,7 @@ for j=2:N
     t=(1/4)*t;
     
 %     k1=coef1_p;
-    k2=coef2_p*area_cuadrilatero(x4,y4,x3,y3,x5,y5,x6,y6);
+    k2=coef_p*area_cuadrilatero(x4,y4,x3,y3,x5,y5,x6,y6);
     k=[0 0;0 k2];
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
@@ -487,66 +476,34 @@ for j=2:N
         ind3p=ind6u/2;
         ind4p=ind8u/2;
         
-    x1=x(i-1,j-1);
-    y1=y(i-1,j-1);
+%     x1=x(i-1,j-1);
+%     y1=y(i-1,j-1);
     x2=x(i,j-1);
     y2=y(i,j-1);
     x3=x(i,j);
     y3=y(i,j);
     x4=x(i-1,j);
     y4=y(i-1,j);
-    x5=x(i+1,j-1);
-    y5=y(i+1,j-1);
+%     x5=x(i+1,j-1);
+%     y5=y(i+1,j-1);
     x6=x(i+1,j);
     y6=y(i+1,j);
     x7=x(i+1,j+1);
     y7=y(i+1,j+1);
     x8=x(i,j+1);
     y8=y(i,j+1);
-    x9=x(i-1,j+1);
-    y9=y(i-1,j+1);
+%     x9=x(i-1,j+1);
+%     y9=y(i-1,j+1);
+
+    E=sin(5*pi*x3)*sin(5*pi*y3)+5;
     
-    xx1=(x1+x2+x3+x4)/4;
-    yy1=(y1+y2+y3+y4)/4;
-    E1=sin(5*pi*xx1)*sin(5*pi*yy1)+5;
+    lambda=E*c_lambda;
+    mu=E*c_mu;
     
-    lambda=E1*c_lambda;
-    mu=E1*c_mu;
-    
-    coef1_d=alpha/(8*(lambda+mu));
-%     coef1_p=c0+alpha^2/(lambda+mu);
-    
-    xx2=(x5+x2+x3+x6)/4;
-    yy2=(y5+y2+y3+y6)/4;
-    E2=sin(5*pi*xx2)*sin(5*pi*yy2)+5;
-    
-    lambda=E2*c_lambda;
-    mu=E2*c_mu;
-    
-    coef2_d=alpha/(8*(lambda+mu));
-%     coef2_p=c0+alpha^2/(lambda+mu);
-    
-    % ¡OJO: Estos términos son de la sig.presión a P4!
-    xx3=(x7+x8+x3+x6)/4;
-    yy3=(y7+y8+y3+y6)/4;
-    E3=sin(5*pi*xx3)*sin(5*pi*yy3)+5;
-    
-    lambda=E3*c_lambda;
-    mu=E3*c_mu;
-    
-    coef3_d=alpha/(8*(lambda+mu));
-    coef3_p=c0+alpha^2/(lambda+mu);
-    
-    % ¡OJO: Estos términos van una posición antes que P3!
-    xx4=(x9+x8+x3+x4)/4;
-    yy4=(y9+y8+y3+y4)/4;
-    E4=sin(5*pi*xx4)*sin(5*pi*yy4)+5;
-    
-    lambda=E4*c_lambda;
-    mu=E4*c_mu;
-    
-    coef4_d=alpha/(8*(lambda+mu));
-%     coef4_p=c0+alpha^2/(lambda+mu);
+    coef_d=alpha/(8*(lambda+mu));
+     
+    % ¡OJO: Este término es posterior a P4!
+    coef_p=c0+alpha^2/(lambda+mu);
     
     JE1r3=abs(x4*(y2 - y3) + x2*(y3 - y4) + x3*(-y2 + y4));
     denom1=(16.*mu*(lambda + mu))*JE1r3;
@@ -671,11 +628,7 @@ for j=2:N
 %     d(7,4)=0;
 %     d(8,4)=0;
     
-    d(:,1)=coef1_d*d(:,1);
-    d(:,2)=coef2_d*d(:,2);    
-%     ¡OJO!: Índices 3 y 4 van intercalados    
-    d(:,3)=coef4_d*d(:,3);
-    d(:,4)=coef3_d*d(:,4);
+    d=coef_d*d;
     
     t(1,1)=kinv(1,1,i-1,j-1,i,j)+kinv(1,1,i,j-1,i,j);
     t(1,2)=kinv(1,2,i,j-1,i,j);
@@ -699,7 +652,7 @@ for j=2:N
 %     k2=coef2_p;
 %     SIGUE EL ORDEN DE LAS PRESIONES EN EL SISTEMA: p4 va antes que p3
 %     k4=coef4_p;
-    k3=coef3_p*area_cuadrilatero(x3,y3,x6,y6,x7,y7,x8,y8);
+    k3=coef_p*area_cuadrilatero(x3,y3,x6,y6,x7,y7,x8,y8);
     k=[0 0 0 0;0 0 0 0;0 0 0 0;0 0 0 k3];
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
@@ -729,8 +682,8 @@ for j=2:N
     vdim=6;
     vdim2=vdim/2;
     
-    x1=x(i-1,j-1);
-    y1=y(i-1,j-1);
+%     x1=x(i-1,j-1);
+%     y1=y(i-1,j-1);
     x2=x(i,j-1);
     y2=y(i,j-1);
     x3=x(i,j);
@@ -739,27 +692,17 @@ for j=2:N
     y4=y(i-1,j);
     x5=x(i,j+1);
     y5=y(i,j+1);
-    x6=x(i-1,j+1);
-    y6=y(i-1,j+1);   
+%     x6=x(i-1,j+1);
+%     y6=y(i-1,j+1);   
     
-    xx1=(x1+x2+x3+x4)/4;
-    yy1=(y1+y2+y3+y4)/4;
-    E1=sin(5*pi*xx1)*sin(5*pi*yy1)+5;
+    E=sin(5*pi*x3)*sin(5*pi*y3)+5;
     
-    lambda=E1*c_lambda;
-    mu=E1*c_mu;
+    lambda=E*c_lambda;
+    mu=E*c_mu;
     
-    coef1_d=alpha/(8*(lambda+mu));
+    coef_d=alpha/(8*(lambda+mu));
+    
 %     coef1_p=c0+alpha^2/(lambda+mu);
-    
-    xx2=(x3+x4+x5+x6)/4;
-    yy2=(y3+y4+y5+y6)/4;
-    E2=sin(5*pi*xx2)*sin(5*pi*yy2)+5;
-    
-    lambda=E2*c_lambda;
-    mu=E2*c_mu;
-    
-    coef2_d=alpha/(8*(lambda+mu));
 %     coef2_p=c0+alpha^2/(lambda+mu);
     
     JE1r3=abs(x4*(y2 - y3) + x2*(y3 - y4) + x3*(-y2 + y4));
@@ -825,8 +768,7 @@ for j=2:N
     d(5,2)=(-x3 + x5);
     d(6,2)=(-y3 + y5);
     
-    d(:,1)=coef1_d*d(:,1);
-    d(:,2)=coef2_d*d(:,2);
+    d=coef_d*d;
     
     f=(1/2)*[-1 0;0 -1;-1 1];
     
@@ -877,9 +819,7 @@ y3=y(i+1,j);
 x4=x(i,j);
 y4=y(i,j);
 
-xx=(x1+x2+x3+x4)/4;
-yy=(y1+y2+y3+y4)/4;
-E=sin(5*pi*xx)*sin(5*pi*yy)+5;
+E=sin(5*pi*x4)*sin(5*pi*y4)+5;
 
 lambda=E*c_lambda;
 mu=E*c_mu;
@@ -976,25 +916,15 @@ for i=2:N
     y5=y(i+1,j-1);
     x6=x(i+1,j);
     y6=y(i+1,j);   
+
+    E=sin(5*pi*x3)*sin(5*pi*y3)+5;
     
-    xx1=(x1+x2+x3+x4)/4;
-    yy1=(y1+y2+y3+y4)/4;
-    E1=sin(5*pi*xx1)*sin(5*pi*yy1)+5;
+    lambda=E*c_lambda;
+    mu=E*c_mu;
     
-    lambda=E1*c_lambda;
-    mu=E1*c_mu;
+    coef_d=alpha/(8*(lambda+mu));
     
-    coef1_d=alpha/(8*(lambda+mu));
 %     coef1_p=c0+alpha^2/(lambda+mu);
-    
-    xx2=(x5+x2+x3+x6)/4;
-    yy2=(y5+y2+y3+y6)/4;
-    E2=sin(5*pi*xx2)*sin(5*pi*yy2)+5;
-    
-    lambda=E2*c_lambda;
-    mu=E2*c_mu;
-    
-    coef2_d=alpha/(8*(lambda+mu));
 %     coef2_p=c0+alpha^2/(lambda+mu);
     
     JE1r3=abs(x4*(y2 - y3) + x2*(y3 - y4) + x3*(-y2 + y4));
