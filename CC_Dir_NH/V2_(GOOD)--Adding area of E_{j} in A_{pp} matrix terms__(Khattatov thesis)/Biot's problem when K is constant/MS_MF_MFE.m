@@ -104,7 +104,8 @@ q_indep=build_indep_q(t+delta_t);           % Source term q
 % q_hat=delta_t*q_indep + gTp;    
 
     % For non-homogeneous Dir. B.C.
-[gDu,gDp]=dir_bc_Pg(delta_t,t+delta_t);   
+% [gDu,gDp]=dir_bc_Pg(delta_t,t+delta_t);   
+[gDu,gDp]=dir_bc_Pg_v2(delta_t,t+delta_t);   
 f_hat= f_indep + gDu; 
 q_hat= delta_t*q_indep + gTp + gDp;
     
@@ -120,9 +121,11 @@ t=t+delta_t;
 
     % Now we compute the rest of the variables at the new time step t:
         % rotation 
-gamma=compute_gamma(u,p,t);  % Computed solution for the rotation term
+% gamma=compute_gamma(u,p,t);  % Computed solution for the rotation term
+gamma=compute_gamma_v2(u,p,t);  % Computed solution for the rotation term
         % stress
-[sigma,~,~,~,~]=compute_tensors(u,p,gamma,t);
+% [sigma,~,~,~,~]=compute_tensors(u,p,gamma,t);
+[sigma,~,~,~,~]=compute_tensors_v2(u,p,gamma,t);
         % velocity
 [z,zx,zy]=compute_fluxes(p,t); 
 
