@@ -1024,8 +1024,8 @@ ind1p=ind2u/2;
 vdim=4;
 vdim2=vdim/2;
 
-x1=x(i-1,j-1);  
-y1=y(i-1,j-1);            
+% x1=x(i-1,j-1);  
+% y1=y(i-1,j-1);            
 x2=x(i,j-1);
 y2=y(i,j-1);
 x3=x(i,j);
