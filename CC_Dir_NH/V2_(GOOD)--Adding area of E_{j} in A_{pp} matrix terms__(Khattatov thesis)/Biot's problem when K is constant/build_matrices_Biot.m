@@ -144,14 +144,14 @@ for i=2:N
     mu1=E1*c_mu;
     
     coef1_d=alpha/(8*(lambda1+mu1));
-%     coef1_p=c0+alpha^2/(lambda1+mu1);
+    coef1_p=c0+alpha^2/(lambda1+mu1);
     
     xx2=(x5+x2+x3+x6)/4;
     yy2=(y5+y2+y3+y6)/4;
     E2=sin(5*pi*xx2)*sin(5*pi*yy2)+5;
-    
-    lambda2=E2*c_lambda;
-    mu2=E2*c_mu;
+
+    lambda2=E*c_lambda;
+    mu2=E*c_mu;
     
     coef2_d=alpha/(8*(lambda2+mu2));
     coef2_p=c0+alpha^2/(lambda2+mu2);
