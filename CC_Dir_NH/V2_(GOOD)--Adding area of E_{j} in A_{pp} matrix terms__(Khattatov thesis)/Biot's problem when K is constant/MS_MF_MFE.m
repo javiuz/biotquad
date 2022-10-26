@@ -45,7 +45,8 @@ Tf=1e-03;
 
 %  Matrices del sistema de Biot: A11, A12, A21 y A22
     % Asp y App las utilizaremos después
-[A11,A12,A22,AspT,App]=build_matrices_Biot(delta_t);
+% [A11,A12,A22,AspT,App]=build_matrices_Biot(delta_t);
+[A11,A12,A22,AspT,App]=build_matrices_Biot_v2(delta_t);
 A21=-A12';
 Asp=AspT';
 
@@ -73,8 +74,10 @@ for j=1:N
     end
 end
 
-gamma=compute_gamma(u,p,t);
-[sigma,~,~,~,~]=compute_tensors(u,p,gamma,t);
+% gamma=compute_gamma(u,p,t);
+gamma=compute_gamma_v2(u,p,t);
+% [sigma,~,~,~,~]=compute_tensors(u,p,gamma,t);
+[sigma,~,~,~,~]=compute_tensors_v2(u,p,gamma,t);
 
 % Initialize errors
 erroru_L2_inf=0;
