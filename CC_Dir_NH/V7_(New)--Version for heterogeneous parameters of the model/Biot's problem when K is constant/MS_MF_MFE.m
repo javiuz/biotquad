@@ -1,6 +1,6 @@
 function MS_MF_MFE(N)
 
-global NN x y alpha c_lambda c_mu c0 perm
+global NN x y alpha c_lambda c_mu c0 perm nu
 
 NN=N;       % Dimensión del problema discreto.
 
