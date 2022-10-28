@@ -27,7 +27,7 @@ c0=1e-05;
 
 % Hydraulic conductivity: is inside the function 'kinv.m'
 % K=perm*[1 0;0 1]; with perm=1, 1e-03, 1e-06, 1e-09, 1e-12
-perm=1e-12;
+perm=1;
 
 % initial time
 t=0;
@@ -36,20 +36,9 @@ delta_t=1e-04;
 % Final time
 Tf=1e-03;
 
-% % initial time
-% t=0;
-% % Time step
-% delta_t=1e-07;
-% % Final time
-% Tf=1e-06;
-
 %  Matrices del sistema de Biot: A11, A12, A21 y A22
     % Asp y App las utilizaremos después
-% [A11,A12,A22,AspT,App]=build_matrices_Biot(delta_t);
-
-% In this version, we evaluate Young's Modulus E in the local nodes (but
-% the results seem to be worst than when we evaluate E at the cell centers)
-[A11,A12,A22,AspT,App]=build_matrices_Biot_v2(delta_t);
+[A11,A12,A22,AspT,App]=build_matrices_Biot(delta_t);
 A21=-A12';
 Asp=AspT';
 
