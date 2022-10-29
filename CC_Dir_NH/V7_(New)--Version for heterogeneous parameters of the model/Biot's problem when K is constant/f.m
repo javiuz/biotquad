@@ -1,6 +1,6 @@
-function ff=f(xx,yy,k,tt,nu)
+function ff=f(xx,yy,k,tt)
 
-global alpha
+global alpha nu
 
 %       ff(xx,yy,t) = {f1,f2}'
     
