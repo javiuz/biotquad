@@ -111,15 +111,9 @@ t=t+delta_t;
 
     % Now we compute the rest of the variables at the new time step t:
         % rotation 
-% gamma=compute_gamma(u,p,t);  % Computed solution for the rotation term
-
-% Young's Modulus E in the local nodes
-gamma=compute_gamma_v2(u,p,t);  % Computed solution for the rotation term
+gamma=compute_gamma(u,p,t);  % Computed solution for the rotation term
         % stress
-% [sigma,~,~,~,~]=compute_tensors(u,p,gamma,t);
-
-% Young's Modulus E in the local nodes
-[sigma,~,~,~,~]=compute_tensors_v2(u,p,gamma,t);
+[sigma,~,~,~,~]=compute_tensors(u,p,gamma,t);
         % velocity
 [z,zx,zy]=compute_fluxes(p,t); 
 
