@@ -66,15 +66,9 @@ for j=1:N
     end
 end
 
-% gamma=compute_gamma(u,p,t);
+gamma=compute_gamma(u,p,t);
 
-% Young's Modulus E in the local nodes
-gamma=compute_gamma_v2(u,p,t);
-
-% [sigma,~,~,~,~]=compute_tensors(u,p,gamma,t);
-
-% Young's Modulus E in the local nodes
-[sigma,~,~,~,~]=compute_tensors_v2(u,p,gamma,t);
+[sigma,~,~,~,~]=compute_tensors(u,p,gamma,t);
 
 % Initialize errors
 erroru_L2_inf=0;
