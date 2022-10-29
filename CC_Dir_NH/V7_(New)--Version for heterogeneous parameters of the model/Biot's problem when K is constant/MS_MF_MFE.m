@@ -1,6 +1,6 @@
 function MS_MF_MFE(N)
 
-global NN x y alpha c_lambda c_mu c0 perm nu
+global NN x y alpha c0 perm nu
 
 NN=N;       % Dimensión del problema discreto.
 
@@ -17,8 +17,8 @@ alpha=1;
     %%% está (matrices) ya que varía con la posición espacial y por tanto
     %%% con los nodos de las matrices
 nu=0.2;
-c_lambda=nu/((1+nu)*(1-2*nu));
-c_mu=1/(2*(1+nu));
+% c_lambda=nu/((1+nu)*(1-2*nu));
+% c_mu=1/(2*(1+nu));
 % lambda= (sin(5*pi*xx)*sin(5*pi*yy)+5)*c_lambda;
 % mu=(sin(5*pi*xx)*sin(5*pi*yy)+5)*c_mu;
 
