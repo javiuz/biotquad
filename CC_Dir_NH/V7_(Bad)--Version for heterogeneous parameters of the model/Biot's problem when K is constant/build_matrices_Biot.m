@@ -1,6 +1,6 @@
 function [M1,M2,M3,AspT,App]=build_matrices_Biot(delta_t)
 
-global NN x y c0 alpha nu 
+global NN x y c0 alpha nu c_lambda c_mu
 
 N=NN;
 
@@ -11,7 +11,7 @@ AspT=sparse(8*N*(N+1),N*N);
 App=sparse(N*N,N*N);
 
 coef_d=(alpha*(-1 + nu + 2*nu^2))/20;
-coef_p=(-alpha^2*(-1 + nu + 2*nu^2))/10;
+% coef_p=(-alpha^2*(-1 + nu + 2*nu^2))/10;
 
 % South-West corner node
 i=1;
@@ -31,10 +31,19 @@ y3=y(i+1,j+1);
 x4=x(i,j+1);
 y4=y(i,j+1);
 
+xx=(x1+x2+x3+x4)/4;
+yy=(y1+y2+y3+y4)/4;
+E=sin(5*pi*xx)*sin(5*pi*yy)+5;
+
+lambda=E*c_lambda;
+mu=E*c_mu;
+
+coef_p=c0+alpha^2/(lambda+mu);
+
 Jer1=abs(x4*(y1 - y2) + x1*(y2 - y4) + x2*(-y1 + y4));
-Jer2=abs(x3*(y1 - y2) + x1*(y2 - y3) + x2*(-y1 + y3));
-Jer3=abs(x4*(y2 - y3) + x2*(y3 - y4) + x3*(-y2 + y4));
-Jer4=abs(x4*(y1 - y3) + x1*(y3 - y4) + x3*(-y1 + y4));
+% Jer2=abs(x3*(y1 - y2) + x1*(y2 - y3) + x2*(-y1 + y3));
+% Jer3=abs(x4*(y2 - y3) + x2*(y3 - y4) + x3*(-y2 + y4));
+% Jer4=abs(x4*(y1 - y3) + x1*(y3 - y4) + x3*(-y1 + y4));
 
 denom=20*Jer1;
 coef_a=-1/denom;
@@ -85,8 +94,9 @@ t(2,2)=kinv(1,1,i,j,i,j);
 t=(1/4)*t;
 
 % Matriz local (A p, p)
-k=c0*area_cuadrilatero(x1,y1,x2,y2,x3,y3,x4,y4)+...
-  coef_p*(Jer1 + Jer2 + Jer3 + Jer4);
+% k=c0*area_cuadrilatero(x1,y1,x2,y2,x3,y3,x4,y4)+...
+%   coef_p*(Jer1 + Jer2 + Jer3 + Jer4);
+k=coef_p*area_cuadrilatero(x1,y1,x2,y2,x3,y3,x4,y4);
 
 localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
 localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
@@ -135,14 +145,23 @@ for i=2:N
     x6=x(i+1,j+1);
     y6=y(i+1,j+1);
     
+    xx2=(x5+x2+x3+x6)/4;
+    yy2=(y5+y2+y3+y6)/4;
+    E2=sin(5*pi*xx2)*sin(5*pi*yy2)+5;
+    
+    lambda2=E2*c_lambda;
+    mu2=E2*c_mu;
+
+    coef2_p=c0+alpha^2/(lambda2+mu2);
+    
     JE1r2=abs(x3*(y1 - y2) + x1*(y2 - y3) + x2*(-y1 + y3));
     denom1=20*JE1r2;
     JE2r1=abs(x5*(-y2 + y3) + x3*(y2 - y5) + x2*(-y3 + y5));
     denom2=20*JE2r1;
     
-    JE2r2=abs(x6*(y2 - y5) + x2*(y5 - y6) + x5*(-y2 + y6));
-    JE2r3=abs(x6*(y3 - y5) + x3*(y5 - y6) + x5*(-y3 + y6));
-    JE2r4=abs(x6*(-y2 + y3) + x3*(y2 - y6) + x2*(-y3 + y6));
+%     JE2r2=abs(x6*(y2 - y5) + x2*(y5 - y6) + x5*(-y2 + y6));
+%     JE2r3=abs(x6*(y3 - y5) + x3*(y5 - y6) + x5*(-y3 + y6));
+%     JE2r4=abs(x6*(-y2 + y3) + x3*(y2 - y6) + x2*(-y3 + y6));
     
     a(1,1)=(-((1 + nu)*((-1 + nu)*(x2 - x3)^2 - (y2 - y3)^2)))/denom2;
     a(1,2)=(-(nu*(1 + nu)*(x2 - x3)*(y2 - y3)))/denom2;
@@ -213,8 +232,9 @@ for i=2:N
     t=(1/4)*t;
     
 %     k1=coef1_p;
-    k2=c0*area_cuadrilatero(x2,y2,x5,y5,x6,y6,x3,y3)+...
-       coef_p*(JE2r1 + JE2r2 + JE2r3 + JE2r4);
+%     k2=c0*area_cuadrilatero(x2,y2,x5,y5,x6,y6,x3,y3)+...
+%        coef_p*(JE2r1 + JE2r2 + JE2r3 + JE2r4);
+    k2=coef2_p*area_cuadrilatero(x2,y2,x5,y5,x6,y6,x3,y3);
     k=[0 0;0 k2];
 
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
@@ -333,14 +353,23 @@ for j=2:N
     x6=x(i,j+1);
     y6=y(i,j+1);
     
+    xx2=(x3+x4+x5+x6)/4;
+    yy2=(y3+y4+y5+y6)/4;
+    E2=sin(5*pi*xx2)*sin(5*pi*yy2)+5;
+    
+    lambda2=E2*c_lambda;
+    mu2=E2*c_mu;
+    
+    coef2_p=c0+alpha^2/(lambda2+mu2);
+    
     JE1r4=abs(x4*(y1 - y3) + x1*(y3 - y4) + x3*(-y1 + y4));
     denom1=20*JE1r4;
     JE2r1=abs(x6*(-y3 + y4) + x4*(y3 - y6) + x3*(-y4 + y6));
     denom2=20*JE2r1;
     
-    JE2r2=abs(x5*(-y3 + y4) + x4*(y3 - y5) + x3*(-y4 + y5));
-    JE2r3=abs(x6*(y3 - y5) + x3*(y5 - y6) + x5*(-y3 + y6));
-    JE2r4=abs(x6*(y4 - y5) + x4*(y5 - y6) + x5*(-y4 + y6));
+%     JE2r2=abs(x5*(-y3 + y4) + x4*(y3 - y5) + x3*(-y4 + y5));
+%     JE2r3=abs(x6*(y3 - y5) + x3*(y5 - y6) + x5*(-y3 + y6));
+%     JE2r4=abs(x6*(y4 - y5) + x4*(y5 - y6) + x5*(-y4 + y6));
     
     a=zeros(vdim,vdim);    
     a(1,1)=(-((1 + nu)*((-1 + nu)*(x3 - x4)^2 - (y3 - y4)^2)))/denom1;
@@ -418,8 +447,9 @@ for j=2:N
     t=(1/4)*t;
     
 %     k1=coef1_p;
-    k2=c0*area_cuadrilatero(x4,y4,x3,y3,x5,y5,x6,y6)+...
-       coef_p*(JE2r1 + JE2r2 + JE2r3 + JE2r4);
+%     k2=c0*area_cuadrilatero(x4,y4,x3,y3,x5,y5,x6,y6)+...
+%        coef_p*(JE2r1 + JE2r2 + JE2r3 + JE2r4);
+    k2=coef2_p*area_cuadrilatero(x4,y4,x3,y3,x5,y5,x6,y6);
     k=[0 0;0 k2];
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
@@ -481,6 +511,16 @@ for j=2:N
     y8=y(i,j+1);
 %     x9=x(i-1,j+1);
 %     y9=y(i-1,j+1);
+
+    % ¡OJO: Estos términos son de la sig.presión a P4!
+    xx3=(x7+x8+x3+x6)/4;
+    yy3=(y7+y8+y3+y6)/4;
+    E3=sin(5*pi*xx3)*sin(5*pi*yy3)+5;
+    
+    lambda3=E3*c_lambda;
+    mu3=E3*c_mu;
+    
+    coef3_p=c0+alpha^2/(lambda3+mu3);
     
     JE1r3=abs(x4*(y2 - y3) + x2*(y3 - y4) + x3*(-y2 + y4));
     denom1=20*JE1r3;
@@ -491,9 +531,9 @@ for j=2:N
     JE4r2=abs(x8*(-y3 + y4) + x4*(y3 - y8) + x3*(-y4 + y8));
     denom4=20*JE4r2;
     
-    JE3r2=abs(x7*(y3 - y6) + x3*(y6 - y7) + x6*(-y3 + y7));
-    JE3r3=abs(x8*(y6 - y7) + x6*(y7 - y8) + x7*(-y6 + y8));
-    JE3r4=abs(x8*(y3 - y7) + x3*(y7 - y8) + x7*(-y3 + y8));
+%     JE3r2=abs(x7*(y3 - y6) + x3*(y6 - y7) + x6*(-y3 + y7));
+%     JE3r3=abs(x8*(y6 - y7) + x6*(y7 - y8) + x7*(-y6 + y8));
+%     JE3r4=abs(x8*(y3 - y7) + x3*(y7 - y8) + x7*(-y3 + y8));
     
     a(1,1)=(-((1 + nu)*((-1 + nu)*(x3 - x4)^2 - (y3 - y4)^2)))/denom1 + ...
            (-((1 + nu)*((-1 + nu)*(x3 - x6)^2 - (y3 - y6)^2)))/denom2;
@@ -637,8 +677,9 @@ for j=2:N
 %     k2=coef2_p;
 %     SIGUE EL ORDEN DE LAS PRESIONES EN EL SISTEMA: p4 va antes que p3
 %     k4=coef4_p;
-    k3=c0*area_cuadrilatero(x3,y3,x6,y6,x7,y7,x8,y8)+...
-       coef_p*(JE3r1 + JE3r2 + JE3r3 + JE3r4);
+%     k3=c0*area_cuadrilatero(x3,y3,x6,y6,x7,y7,x8,y8)+...
+%        coef_p*(JE3r1 + JE3r2 + JE3r3 + JE3r4);
+    k3=coef3_p*area_cuadrilatero(x3,y3,x6,y6,x7,y7,x8,y8);
     k=[0 0 0 0;0 0 0 0;0 0 0 0;0 0 0 k3];
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
