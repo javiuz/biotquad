@@ -1,10 +1,10 @@
-function qq=q(xx,~,~)
+function qq=q(~,~,~)
 
-global c0 
+% global c0 
 
 %       qq(xx,yy,tt) = q
     
-qq=c0*xx;
+qq=0;
        
 return
 end
