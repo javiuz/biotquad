@@ -13,7 +13,8 @@ tic
 % Parámetros ecuación Biot
 alpha=1;
 %E=1;
-nu=0.2;
+nu=0.2; % Este parámetro no sirve en este problema, solamente está para que
+% funcione la función 'sol_exactax_sigma.m'
 %lambda=(E*nu)/((1+nu)*(1-2*nu));
 %mu=E/(2*(1+nu));
 lambda=0;
