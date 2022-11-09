@@ -162,15 +162,15 @@ error_z_zh=compute_error_velocities(vel_n,t);
 % error_sigma_sigmah_inf
 % error_z_zh_inf
 
-% We display the L2 norms of the errors of the variables at final time step
-t
-erroru_L2
-erroru_3
-errorp_L2
-errorp_3
-errorg_L2
-error_sigma_sigmah
-error_z_zh
+% % We display the L2 norms of the errors of the variables at final time step
+% t
+% erroru_L2
+% erroru_3
+% errorp_L2
+% errorp_3
+% errorg_L2
+% error_sigma_sigmah
+% error_z_zh
 
 % disp(Biot_matrix)
 % disp(indep_term)
