@@ -88,14 +88,14 @@ gTp=Asp*sigma + App*p;
 f_indep=build_indep_f(t+delta_t);        % Source term f
 q_indep=build_indep_q(t+delta_t);           % Source term q
 
-     % For homogeneous Dir. B.C.
+%      % For homogeneous Dir. B.C.
 % f_hat=-f_indep;          
 % q_hat=delta_t*q_indep + gTp;    
 
     % For non-homogeneous Dir. B.C.
 [gDu,gDp]=dir_bc_Pg(delta_t,t+delta_t);   
-% f_hat= -f_indep + gDu; 
-f_hat= f_indep + gDu; 
+f_hat= -f_indep + gDu; 
+% f_hat= f_indep + gDu; 
 q_hat= delta_t*q_indep + gTp + gDp;
     
     % Right-hand side of the Biot system
@@ -174,15 +174,15 @@ errorg_L2_inf
 error_sigma_sigmah_inf
 error_z_zh_inf
 
-% We display the L2 norms of the errors of the variables at final time step
-t
-erroru_L2
-erroru_3
-errorp_L2
-errorp_3
-errorg_L2
-error_sigma_sigmah
-error_z_zh
+% % We display the L2 norms of the errors of the variables at final time step
+% t
+% erroru_L2
+% erroru_3
+% errorp_L2
+% errorp_3
+% errorg_L2
+% error_sigma_sigmah
+% error_z_zh
 
 % disp(Biot_matrix)
 % disp(indep_term)
