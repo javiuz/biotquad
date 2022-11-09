@@ -24,90 +24,79 @@ c0=1e-05;
 % K=perm*[1 0;0 1]; with perm=1, 1e-03, 1e-06, 1e-09, 1e-12
 perm=1;
 
-% % initial time
-% t=0;
-% % Time step
-% delta_t=1e-04;
-% % Final time
-% Tf=1e-03;
-
 % initial time
 t=0;
 % Time step
-delta_t=1;
-
-% %  Matrices del sistema de Biot: A11, A12, A21 y A22
-%     % Asp y App las utilizaremos después
-% [A11,A12,A22,AspT,App]=build_matrices_Biot(delta_t);
-% A21=-A12';
-% Asp=AspT';
+delta_t=1e-04;
+% Final time
+Tf=1e-03;
 
 %  Matrices del sistema de Biot: A11, A12, A21 y A22
     % Asp y App las utilizaremos después
-[A11,A12,A22,~,~]=build_matrices_Biot(delta_t);
-A21=zeros(N*N,2*N*N);
-% Asp=AspT';
+[A11,A12,A22,AspT,App]=build_matrices_Biot(delta_t);
+A21=-A12';
+Asp=AspT';
 
 % Matriz del sistema reducido de Biot
 Biot_matrix=[A11 A12;A21 A22];
 
 %% Terms involving time
 
-% % Initial solution of the variables at t=0 
-% u=zeros(2*N*N,1);
-% p=zeros(N*N,1);
-% 
-% for j=1:N
-%     for i=1:N
-%         ind2u=(i+(j-1)*N)*2;
-%         ind1u=ind2u-1;
-%         ind1p=ind2u/2;
-%         
-%         xx=(x(i,j)+x(i+1,j)+x(i+1,j+1)+x(i,j+1))/4;
-%         yy=(y(i,j)+y(i+1,j)+y(i+1,j+1)+y(i,j+1))/4;
-%         
-%         u(ind1u)=sol_exactax(xx,yy,t,1);
-%         u(ind2u)=sol_exactax(xx,yy,t,2);
-%         p(ind1p)=sol_exactax(xx,yy,t,3);
-%     end
-% end
-% 
-% gamma=compute_gamma(u,p,t);
-% [sigma,~,~,~,~]=compute_tensors(u,p,gamma,t);
-% 
-% % Initialize errors
-% erroru_L2_inf=0;
-% erroru_3_inf=erroru_L2_inf;
-% errorg_L2_inf=erroru_L2_inf;
-% error_sigma_sigmah_inf=erroru_L2_inf;
-% errorp_L2_inf=erroru_L2_inf;
-% errorp_3_inf=erroru_L2_inf;
-% error_z_zh_inf=erroru_L2_inf;
+% Initial solution of the variables at t=0 
+u=zeros(2*N*N,1);
+p=zeros(N*N,1);
 
-% We solve Biot's system: NO NEED FOR Time loop
+for j=1:N
+    for i=1:N
+        ind2u=(i+(j-1)*N)*2;
+        ind1u=ind2u-1;
+        ind1p=ind2u/2;
+        
+        xx=(x(i,j)+x(i+1,j)+x(i+1,j+1)+x(i,j+1))/4;
+        yy=(y(i,j)+y(i+1,j)+y(i+1,j+1)+y(i,j+1))/4;
+        
+        u(ind1u)=sol_exactax(xx,yy,t,1);
+        u(ind2u)=sol_exactax(xx,yy,t,2);
+        p(ind1p)=sol_exactax(xx,yy,t,3);
+    end
+end
 
-% while t < Tf
+gamma=compute_gamma(u,p,t);
+[sigma,~,~,~,~]=compute_tensors(u,p,gamma,t);
+
+% Initialize errors
+erroru_L2_inf=0;
+erroru_3_inf=erroru_L2_inf;
+errorg_L2_inf=erroru_L2_inf;
+error_sigma_sigmah_inf=erroru_L2_inf;
+errorp_L2_inf=erroru_L2_inf;
+errorp_3_inf=erroru_L2_inf;
+error_z_zh_inf=erroru_L2_inf;
+
+% We solve Biot's system: The time loop should give us the same solutions
+% in each time step.
+
+while t < Tf
     
-%     % Initial time terms affecting q
-% gTp=Asp*sigma + App*p;
+    % Initial time terms affecting q
+gTp=Asp*sigma + App*p;
 
-    % Source terms of the MFMFE-MSMFE discretization at t+delta_t
+%     Source terms of the MFMFE-MSMFE discretization at t+delta_t
 f_indep=build_indep_f(t+delta_t);        % Source term f
-% q_indep=build_indep_q(t+delta_t);           % Source term q
+% q_indep=build_indep_q(t+delta_t);        % Source term q (=0)
 
-     % For homogeneous Dir. B.C.
+% %      For homogeneous Dir. B.C.
 % f_hat=-f_indep;          
-% q_hat=delta_t*q_indep + gTp;    
+% % q_hat=delta_t*q_indep + gTp; 
+% q_hat=gTp; 
 
-    % For non-homogeneous Dir. B.C.
+%     For non-homogeneous Dir. B.C.
 [gDu,gDp]=dir_bc_Pg(delta_t,t+delta_t);   
-% f_hat= -f_indep + gDu; 
-f_hat= f_indep + gDu; 
+f_hat= -f_indep + gDu; 
 % q_hat= delta_t*q_indep + gTp + gDp;
-% q_hat= gTp + gDp;
-q_hat= gDp;
+q_hat= gTp + gDp;
     
-    % Right-hand side of the Biot system
+%     Right-hand side of the Biot system
 indep_term=[f_hat;q_hat];
     
 % Solution of the Biot system for the displacement and pressure vectors
@@ -117,60 +106,50 @@ p=sol_vec(2*N*N+1:2*N*N+N*N);
 
 t=t+delta_t;
 
-    % Now we compute the rest of the variables at the new time step t:
-        % rotation 
+%     Now we compute the rest of the variables at the new time step t:
+%         rotation 
 gamma=compute_gamma(u,p,t);  % Computed solution for the rotation term
-        % stress
+%         stress
 [sigma,~,~,~,~]=compute_tensors(u,p,gamma,t);
-        % velocity
+%         velocity
 [z,zx,zy]=compute_fluxes(p,t); 
 
-    % We reorder the variables to compute the errors and some contourplots
+%     We reorder the variables to compute the errors and some contourplots
 gamma_n=reshape(gamma,N+1,N+1);
 sigma_n=build_sigma_n_2(sigma);
 vel_n=build_vel_n(z);
 
-    % L2 norms of the different variables
+%     L2 norms of the different variables
 % t
-        % Displacement
+%         Displacement
 [erroru_L2,erroru_3]=compute_error_displacements(u,t);
-        % Pressure
+%         Pressure
 [errorp_L2,errorp_3]=compute_error_pressures(p,t);
-        % Rotation
+%         Rotation
 errorg_L2=compute_error_rotations(gamma_n,t);
-        % Stress
+%         Stress
 error_sigma_sigmah=compute_error_stress(sigma_n,nu,t);
-        % Velocity
+%         Velocity
 error_z_zh=compute_error_velocities(vel_n,t);
 
-%     % Infinity norm of the L2 errors of the variables
-% erroru_L2_inf=max(erroru_L2_inf,erroru_L2);
-% erroru_3_inf=max(erroru_3_inf,erroru_3);
-% errorp_L2_inf=max(errorp_L2_inf,errorp_L2);
-% errorp_3_inf=max(errorp_3_inf,errorp_3);
-% errorg_L2_inf=max(errorg_L2_inf,errorg_L2);
-% error_sigma_sigmah_inf=max(error_sigma_sigmah_inf,error_sigma_sigmah);
-% error_z_zh_inf=max(error_z_zh_inf,error_z_zh);
-% % end
-% 
-% % We display the infinity norms of the errors of the variables at final time step
-% erroru_L2_inf
-% erroru_3_inf
-% errorp_L2_inf
-% errorp_3_inf
-% errorg_L2_inf
-% error_sigma_sigmah_inf
-% error_z_zh_inf
+    % Infinity norm of the L2 errors of the variables
+erroru_L2_inf=max(erroru_L2_inf,erroru_L2);
+erroru_3_inf=max(erroru_3_inf,erroru_3);
+errorp_L2_inf=max(errorp_L2_inf,errorp_L2);
+errorp_3_inf=max(errorp_3_inf,errorp_3);
+errorg_L2_inf=max(errorg_L2_inf,errorg_L2);
+error_sigma_sigmah_inf=max(error_sigma_sigmah_inf,error_sigma_sigmah);
+error_z_zh_inf=max(error_z_zh_inf,error_z_zh);
+end
 
-% We display the L2 norms of the errors of the variables at final time step
-t
-erroru_L2
-erroru_3
-errorp_L2
-errorp_3
-errorg_L2
-error_sigma_sigmah
-error_z_zh
+% We display the infinity norms of the errors of the variables at final time step
+erroru_L2_inf
+erroru_3_inf
+errorp_L2_inf
+errorp_3_inf
+errorg_L2_inf
+error_sigma_sigmah_inf
+error_z_zh_inf
 
 % disp(Biot_matrix)
 % disp(indep_term)
