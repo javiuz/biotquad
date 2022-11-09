@@ -23,9 +23,9 @@ global perm
  elseif comp==3     % Solución analítica de p(xx,tt)
      sol=xx*(1-xx)*yy*(1-yy);
  elseif comp==4     % Solución analítica de z1(tt)
-     sol=yy*(-1 - 2* xx* (-1 + yy) + yy);
+     sol=-perm*(-1 + 2*xx)*(-1 + yy)*yy;
  elseif comp==5     % Solución analítica de z2
-     sol=xx* (-1 + xx + 2 *yy - 2* xx*yy);
+     sol=-perm*(-1 + xx)*xx*(-1 + 2 *yy);
  else               % Solución analítica de gamma (1st row & 2nd column)
      sol=0;
  end
