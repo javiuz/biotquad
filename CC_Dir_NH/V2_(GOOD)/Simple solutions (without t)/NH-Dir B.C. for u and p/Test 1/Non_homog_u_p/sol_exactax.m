@@ -23,7 +23,7 @@ global perm
  elseif comp==3     % Solución analítica de p(xx,tt)
      sol=xx;
  elseif comp==4     % Solución analítica de z1(tt)
-     sol=-1;
+     sol=-perm;
  elseif comp==5     % Solución analítica de z2
      sol=0;
  else               % Solución analítica de gamma (1st row & 2nd column)
