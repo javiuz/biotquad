@@ -83,7 +83,7 @@ t=(1/4)*t;
         Pg2u_L4=int_dir_simpson(i,j,i,j+1,tt,2);
         
     Pgu=(1/2)*[-Pg1u_L1;-Pg2u_L1;-Pg1u_L4;-Pg2u_L4];  
-    localv_u=(b'-(b'*(a\c))*((c'*(a\c))\c'))*(a\Pgu);
+    localv_u=(b'-((b'*(a\c))*((c'*(a\c))\c')))*(a\Pgu);
     gDu(ind1u:ind2u)=gDu(ind1u:ind2u)+localv_u;
    
 % CC.D en el nodo S-W, fórmula de cuadratura para el término Pg de p en:
@@ -93,7 +93,7 @@ t=(1/4)*t;
         Pgp_L4=int_dir_simpson(i,j,i,j+1,tt,3);
     
         Pgp=(1/2)*[Pgp_L1;Pgp_L4];  
-        localv_p=(delta_t*f')*(t\Pgp)+(-d'+(d'*(a\c))*((c'*(a\c))\c'))*(a\Pgu);
+        localv_p=((delta_t*f')*(t\Pgp))+((-d'+((d'*(a\c))*((c'*(a\c))\c')))*(a\Pgu));
         gDp(ind1p)=gDp(ind1p)+localv_p;
 
 % South nodes (j=1)
@@ -210,7 +210,7 @@ for i=2:N
             Pg2u_L1=int_dir_simpson(i-1,j,i,j,tt,2);
         Pgu=(1/2)*[-Pg1u_L2;-Pg2u_L2;0;0;-Pg1u_L1;-Pg2u_L1];
     
-        localv_u=(b'-(b'*(a\c))*((c'*(a\c))\c'))*(a\Pgu);
+        localv_u=(b'-((b'*(a\c))*((c'*(a\c))\c')))*(a\Pgu);
         gDu(ind1u:ind4u)=gDu(ind1u:ind4u)+localv_u;
         
     % CC.D en los nodos Sur, fórmula de cuadratura para el término Pg de p en:
@@ -220,7 +220,7 @@ for i=2:N
             Pgp_L1=int_dir_simpson(i-1,j,i,j,tt,3); 
         Pgp=(1/2)*[Pgp_L2;0;Pgp_L1];
         
-        localv_p=(delta_t*f')*(t\Pgp)+(-d'+(d'*(a\c))*((c'*(a\c))\c'))*(a\Pgu);
+        localv_p=((delta_t*f')*(t\Pgp))+((-d'+((d'*(a\c))*((c'*(a\c))\c')))*(a\Pgu));
         gDp(ind1p:ind2p)=gDp(ind1p:ind2p)+localv_p;
 end
 
@@ -292,7 +292,7 @@ t=(1/4)*t;
         Pg2u_L3=int_dir_simpson(i-1,j,i,j,tt,2);
     Pgu=(1/2)*[Pg1u_L7;Pg2u_L7;-Pg1u_L3;-Pg2u_L3];
     
-localv_u=(b'-(b'*(a\c))*((c'*(a\c))\c'))*(a\Pgu);
+localv_u=(b'-((b'*(a\c))*((c'*(a\c))\c')))*(a\Pgu);
 gDu(ind1u:ind2u)=gDu(ind1u:ind2u)+localv_u;
 
 % CC.D en el nodo S-E, fórmula de cuadratura para el término Pg de p en:
@@ -302,7 +302,7 @@ gDu(ind1u:ind2u)=gDu(ind1u:ind2u)+localv_u;
         Pgp_L3=int_dir_simpson(i-1,j,i,j,tt,3);
     Pgp=(1/2)*[-Pgp_L7;Pgp_L3];
     
-localv_p=(delta_t*f')*(t\Pgp)+(-d'+(d'*(a\c))*((c'*(a\c))\c'))*(a\Pgu);
+localv_p=((delta_t*f')*(t\Pgp))+((-d'+((d'*(a\c))*((c'*(a\c))\c')))*(a\Pgu));
 gDp(ind1p)=gDp(ind1p)+localv_p;
 
 for j=2:N
@@ -419,7 +419,7 @@ for j=2:N
             Pg2u_L11=int_dir_simpson(i,j,i,j+1,tt,2);
         Pgu=(1/2)*[-Pg1u_L4;-Pg2u_L4;0;0;-Pg1u_L11;-Pg2u_L11];
         
-    localv_u=(b'-(b'*(a\c))*((c'*(a\c))\c'))*(a\Pgu);
+    localv_u=(b'-((b'*(a\c))*((c'*(a\c))\c')))*(a\Pgu);
     gDu(ind1u:ind2u)=gDu(ind1u:ind2u)+localv_u(1:2);
     gDu(ind3u:ind4u)=gDu(ind3u:ind4u)+localv_u(3:4);
     
@@ -430,7 +430,7 @@ for j=2:N
             Pgp_L11=int_dir_simpson(i,j,i,j+1,tt,3);
         Pgp=(1/2)*[Pgp_L4;0;Pgp_L11];
         
-    localv_p=(delta_t*f')*(t\Pgp)+(-d'+(d'*(a\c))*((c'*(a\c))\c'))*(a\Pgu);
+    localv_p=((delta_t*f')*(t\Pgp))+((-d'+((d'*(a\c))*((c'*(a\c))\c')))*(a\Pgu));
     gDp(ind1p)=gDp(ind1p)+localv_p(1);
     gDp(ind2p)=gDp(ind2p)+localv_p(2);
     
@@ -549,7 +549,7 @@ for j=2:N
             Pg2u_L14=int_dir_simpson(i,j,i,j+1,tt,2);
         Pgu=(1/2)*[Pg1u_L7;Pg2u_L7;Pg1u_L14;Pg2u_L14;0;0];
     
-       localv_u=(b'-(b'*(a\c))*((c'*(a\c))\c'))*(a\Pgu);
+       localv_u=(b'-((b'*(a\c))*((c'*(a\c))\c')))*(a\Pgu);
        gDu(ind1u:ind2u)=gDu(ind1u:ind2u)+localv_u(1:2);
        gDu(ind3u:ind4u)=gDu(ind3u:ind4u)+localv_u(3:4);
        
@@ -560,7 +560,7 @@ for j=2:N
             Pgp_L14=int_dir_simpson(i,j,i,j+1,tt,3);
         Pgp=(1/2)*[-Pgp_L7;-Pgp_L14;0];
     
-       localv_p=(delta_t*f')*(t\Pgp)+(-d'+(d'*(a\c))*((c'*(a\c))\c'))*(a\Pgu);
+       localv_p=((delta_t*f')*(t\Pgp))+((-d'+((d'*(a\c))*((c'*(a\c))\c')))*(a\Pgu));
        gDp(ind1p)=gDp(ind1p)+localv_p(1);
        gDp(ind2p)=gDp(ind2p)+localv_p(2);
 end
@@ -634,7 +634,7 @@ t=(1/4)*t;
         Pg2u_L22=int_dir_simpson(i,j,i+1,j,tt,2);
     Pgu=(1/2)*[-Pg1u_L18;-Pg2u_L18;Pg1u_L22;Pg2u_L22];
     
-localv_u=(b'-(b'*(a\c))*((c'*(a\c))\c'))*(a\Pgu);
+localv_u=(b'-((b'*(a\c))*((c'*(a\c))\c')))*(a\Pgu);
 gDu(ind1u:ind2u)=gDu(ind1u:ind2u)+localv_u;
 
 % CC.D en el nodo N-W, fórmula de cuadratura para el término Pg de p en:
@@ -644,7 +644,7 @@ gDu(ind1u:ind2u)=gDu(ind1u:ind2u)+localv_u;
         Pgp_L22=int_dir_simpson(i,j,i+1,j,tt,3);
     Pgp=(1/2)*[Pgp_L18;-Pgp_L22];
     
-localv_p=(delta_t*f')*(t\Pgp)+(-d'+(d'*(a\c))*((c'*(a\c))\c'))*(a\Pgu);
+localv_p=((delta_t*f')*(t\Pgp))+((-d'+((d'*(a\c))*((c'*(a\c))\c')))*(a\Pgu));
 gDp(ind1p)=gDp(ind1p)+localv_p;
 
 % North nodes (j=N+1)
@@ -761,7 +761,7 @@ for i=2:N
             Pg2u_L22=int_dir_simpson(i-1,j,i,j,tt,2);
         Pgu=(1/2)*[0;0;Pg1u_L23;Pg2u_L23;Pg1u_L22;Pg2u_L22];
     
-    localv_u=(b'-(b'*(a\c))*((c'*(a\c))\c'))*(a\Pgu);
+    localv_u=(b'-((b'*(a\c))*((c'*(a\c))\c')))*(a\Pgu);
     gDu(ind1u:ind4u)=gDu(ind1u:ind4u)+localv_u;
     
     % CC.D en el nodo Norte, fórmula de cuadratura para el término Pg de p en:
@@ -771,7 +771,7 @@ for i=2:N
             Pgp_L22=int_dir_simpson(i-1,j,i,j,tt,3);
         Pgp=(1/2)*[0;-Pgp_L23;-Pgp_L22];
     
-    localv_p=(delta_t*f')*(t\Pgp)+(-d'+(d'*(a\c))*((c'*(a\c))\c'))*(a\Pgu);
+    localv_p=((delta_t*f')*(t\Pgp))+((-d'+((d'*(a\c))*((c'*(a\c))\c')))*(a\Pgu));
     gDp(ind1p:ind2p)=gDp(ind1p:ind2p)+localv_p;
 end
 
@@ -843,7 +843,7 @@ t=(1/4)*t;
         Pg2u_L24=int_dir_simpson(i-1,j,i,j,tt,2);
     Pgu=(1/2)*[Pg1u_L21;Pg2u_L21;Pg1u_L24;Pg2u_L24];
     
-localv_u=(b'-(b'*(a\c))*((c'*(a\c))\c'))*(a\Pgu);
+localv_u=(b'-((b'*(a\c))*((c'*(a\c))\c')))*(a\Pgu);
 gDu(ind1u:ind2u)=gDu(ind1u:ind2u)+localv_u;
 
 % CC.D en el nodo N-E, fórmula de cuadratura para el término Pg de p en:
@@ -853,7 +853,7 @@ gDu(ind1u:ind2u)=gDu(ind1u:ind2u)+localv_u;
         Pgp_L24=int_dir_simpson(i-1,j,i,j,tt,3);
     Pgp=(1/2)*[-Pgp_L21;-Pgp_L24];
     
-localv_p=(delta_t*f')*(t\Pgp)+(-d'+(d'*(a\c))*((c'*(a\c))\c'))*(a\Pgu);
+localv_p=((delta_t*f')*(t\Pgp))+((-d'+((d'*(a\c))*((c'*(a\c))\c')))*(a\Pgu));
 gDp(ind1p)=gDp(ind1p)+localv_p;
 return
 end
