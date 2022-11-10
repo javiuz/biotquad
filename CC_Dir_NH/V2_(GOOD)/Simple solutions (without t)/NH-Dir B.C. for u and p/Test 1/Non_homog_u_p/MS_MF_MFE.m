@@ -102,9 +102,9 @@ indep_term=[f_hat;q_hat];
     
 % Solution of the Biot system for the displacement and pressure vectors
 sol_vec=Biot_matrix\indep_term; 
-disp(indep_term)
-disp(' ')
-pause
+% disp(indep_term)
+% disp(' ')
+% pause
 u=sol_vec(1:2*N*N);
 p=sol_vec(2*N*N+1:2*N*N+N*N);
 
