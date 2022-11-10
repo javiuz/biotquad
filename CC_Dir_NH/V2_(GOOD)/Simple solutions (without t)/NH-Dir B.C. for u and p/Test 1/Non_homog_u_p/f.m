@@ -6,7 +6,7 @@ global alpha
     
 if k==1     % Primera componente del vector ff (f1)          
 %    ff=alpha*tt;
-    ff=1;
+    ff=alpha;
 else        % Segunda componente del vector ff (f2)   
     ff=0;
 end
