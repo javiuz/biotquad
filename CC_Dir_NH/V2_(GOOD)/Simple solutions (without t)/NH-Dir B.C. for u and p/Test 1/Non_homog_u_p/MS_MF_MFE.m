@@ -99,18 +99,15 @@ q_hat= delta_t*q_indep + gTp + gDp;
     
     % Right-hand side of the Biot system
 indep_term=[f_hat;q_hat];
-% disp(indep_term)
-% disp(' ')
-% pause
     
 % Solution of the Biot system for the displacement and pressure vectors
 sol_vec=Biot_matrix\indep_term; 
 % disp(full(Biot_matrix(2*N*N+1:2*N*N+N*N,2*N*N+1:2*N*N+N*N)))
-disp(indep_term)
-disp(' ')
-pause
-% u=sol_vec(1:2*N*N);
-% p=sol_vec(2*N*N+1:2*N*N+N*N);
+% disp(indep_term)
+% disp(' ')
+% pause
+u=sol_vec(1:2*N*N);
+p=sol_vec(2*N*N+1:2*N*N+N*N);
 
 t=t+delta_t;
 
