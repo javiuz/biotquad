@@ -70,7 +70,8 @@ d(4,1)=(-y1 + y2);
 d=coef_d*d;
 
 % Matriz local (A z, p)^T
-f=(1/2)*[1;1];
+% f=(1/2)*[1;1];
+f=delta_t*(1/2)*[1;1];
 
 % Matriz local (A z, z)^{-1}
 t=zeros(vdim2,vdim2);
@@ -78,14 +79,16 @@ t(1,1)=kinv(2,2,i,j,i,j);
 t(1,2)=kinv(2,1,i,j,i,j);
 t(2,1)=t(1,2);
 t(2,2)=kinv(1,1,i,j,i,j);
-t=(1/4)*t;
+% t=(1/4)*t;
+t=delta_t*(1/4)*t;
 
 % Matriz local (A p, p)
 k=coef_p*area_cuadrilatero(x1,y1,x2,y2,x3,y3,x4,y4);
 
 localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
 localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-localm3=k-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+% localm3=k-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+localm3=k-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
 
 M1(ind1u:ind2u,ind1u:ind2u)=M1(ind1u:ind2u,ind1u:ind2u)+localm1;
 M2(ind1u:ind2u,ind1p)=M2(ind1u:ind2u,ind1p)+localm2;
@@ -102,7 +105,8 @@ vdim2=vdim/2;
 
 % Matrices b and f are the same for every South node
 b=(1/2)*[0 0 -1 0;0 0 0 -1;1 0 -1 0;0 1 0 -1;-1 0 0 0;0 -1 0 0];
-f=(1/2)*[0 1;-1 1;1 0];
+% f=(1/2)*[0 1;-1 1;1 0];
+f=delta_t*(1/2)*[0 1;-1 1;1 0];
 
 a=zeros(vdim,vdim);
 d=zeros(vdim,2);
@@ -200,7 +204,8 @@ for i=2:N
     %t(3,1)=0
     t(3,2)=t(2,3);
     t(3,3)=kinv(2,2,i-1,j,i,j);
-    t=(1/4)*t;
+%     t=(1/4)*t;
+    t=delta_t*(1/4)*t;
     
 %     k1=coef1_p;
     k2=coef_p*area_cuadrilatero(x2,y2,x5,y5,x6,y6,x3,y3);
@@ -208,7 +213,8 @@ for i=2:N
 
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-    localm3=k-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+%     localm3=k-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+    localm3=k-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
     
     M1(ind1u:ind4u,ind1u:ind4u)=M1(ind1u:ind4u,ind1u:ind4u)+localm1;   
     M2(ind1u:ind4u,ind1p:ind2p)=M2(ind1u:ind4u,ind1p:ind2p)+localm2;
@@ -270,20 +276,23 @@ d(3,1)=(-x2 + x3);
 d(4,1)=(-y2 + y3);
 d=coef_d*d;
 
-f=(1/2)*[-1;1];
+% f=(1/2)*[-1;1];
+f=delta_t*(1/2)*[-1;1];
 
 t=zeros(vdim2,vdim2);
 t(1,1)=kinv(1,1,i-1,j,i,j);
 t(1,2)=kinv(1,2,i-1,j,i,j);
 t(2,1)=t(1,2);
 t(2,2)=kinv(2,2,i-1,j,i,j);
-t=(1/4)*t;
+% t=(1/4)*t;
+t=delta_t*(1/4)*t;
 
 % k=coef_p;
 
 localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
 localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+% localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+localm3=-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
 
 M1(ind1u:ind2u,ind1u:ind2u)=M1(ind1u:ind2u,ind1u:ind2u)+localm1;
 M2(ind1u:ind2u,ind1p)=M2(ind1u:ind2u,ind1p)+localm2;
@@ -386,7 +395,8 @@ for j=2:N
     
     d=coef_d*d;
     
-    f=(1/2)*[1 0;-1 1;0 1];
+%     f=(1/2)*[1 0;-1 1;0 1];
+    f=delta_t*(1/2)*[1 0;-1 1;0 1];
     
     t=zeros(vdim2,vdim2);  
     t(1,1)=kinv(1,1,i,j-1,i,j);
@@ -398,7 +408,8 @@ for j=2:N
     %t(3,1)=0;
     t(3,2)=t(2,3);
     t(3,3)=kinv(1,1,i,j,i,j);
-    t=(1/4)*t;
+%     t=(1/4)*t;
+    t=delta_t*(1/4)*t;
     
 %     k1=coef1_p;
     k2=coef_p*area_cuadrilatero(x4,y4,x3,y3,x5,y5,x6,y6);
@@ -406,7 +417,8 @@ for j=2:N
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-    localm3=k-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+%     localm3=k-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+    localm3=k-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
     
     M1([ind1u:ind2u,ind3u:ind4u],[ind1u:ind2u,ind3u:ind4u])=M1([ind1u:ind2u,ind3u:ind4u],[ind1u:ind2u,ind3u:ind4u])+localm1;    
     M2([ind1u:ind2u,ind3u:ind4u],[ind1p,ind2p])=M2([ind1u:ind2u,ind3u:ind4u],[ind1p,ind2p])+localm2;    
@@ -428,7 +440,8 @@ for j=2:N
     b=(1/2)*[1 0 -1 0 0 0 0 0;0 1 0 -1 0 0 0 0;0 0 1 0 0 0 -1 0;...
              0 0 0 1 0 0 0 -1;0 0 0 0 1 0 -1 0;0 0 0 0 0 1 0 -1;...
              1 0 0 0 -1 0 0 0;0 1 0 0 0 -1 0 0];
-    f=(1/2)*[-1 1 0 0;0 -1 0 1;0 0 -1 1;-1 0 1 0];
+%     f=(1/2)*[-1 1 0 0;0 -1 0 1;0 0 -1 1;-1 0 1 0];
+    f=delta_t*(1/2)*[-1 1 0 0;0 -1 0 1;0 0 -1 1;-1 0 1 0];
          
     for i=2:N
         ind2u=(i-1+(j-2)*N)*2;
@@ -605,7 +618,8 @@ for j=2:N
     %t(4,2)=0;
     t(4,3)=t(3,4);
     t(4,4)=kinv(2,2,i-1,j,i,j)+kinv(2,2,i-1,j-1,i,j);
-    t=(1/4)*t;
+%     t=(1/4)*t;
+    t=delta_t*(1/4)*t;
     
 %     k1=coef1_p;
 %     k2=coef2_p;
@@ -616,7 +630,8 @@ for j=2:N
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-    localm3=k-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+%     localm3=k-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+    localm3=k-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
     
     M1([ind1u:ind4u,ind5u:ind8u],[ind1u:ind4u,ind5u:ind8u])=M1([ind1u:ind4u,ind5u:ind8u],[ind1u:ind4u,ind5u:ind8u])+localm1;    
     M2([ind1u:ind4u,ind5u:ind8u],[ind1p:ind2p,ind3p:ind4p])=M2([ind1u:ind4u,ind5u:ind8u],[ind1p:ind2p,ind3p:ind4p])+localm2;    
@@ -719,7 +734,8 @@ for j=2:N
     
     d=coef_d*d;
     
-    f=(1/2)*[-1 0;0 -1;-1 1];
+%     f=(1/2)*[-1 0;0 -1;-1 1];
+    f=delta_t*(1/2)*[-1 0;0 -1;-1 1];
     
     t=zeros(vdim2,vdim2);
     t(1,1)=kinv(1,1,i-1,j-1,i,j);
@@ -731,7 +747,8 @@ for j=2:N
     t(3,1)=t(1,3);
     t(3,2)=t(2,3);
     t(3,3)=kinv(2,2,i-1,j-1,i,j)+kinv(2,2,i-1,j,i,j);
-    t=(1/4)*t;
+%     t=(1/4)*t;
+    t=delta_t*(1/4)*t;
     
 %     k1=coef1_p;
 %     k2=coef2_p;
@@ -739,7 +756,8 @@ for j=2:N
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-    localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+%     localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+    localm3=-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
     
     M1([ind1u:ind2u,ind3u:ind4u],[ind1u:ind2u,ind3u:ind4u])=M1([ind1u:ind2u,ind3u:ind4u],[ind1u:ind2u,ind3u:ind4u])+localm1; 
     M2([ind1u:ind2u,ind3u:ind4u],[ind1p,ind2p])=M2([ind1u:ind2u,ind3u:ind4u],[ind1p,ind2p])+localm2;
@@ -801,20 +819,23 @@ d(3,1)=(-x1 + x4);
 d(4,1)=(-y1 + y4);
 d=coef_d*d;
 
-f=(1/2)*[1;-1];
+% f=(1/2)*[1;-1];
+f=delta_t*(1/2)*[1;-1];
 
 t=zeros(vdim2,vdim2);
 t(1,1)=kinv(1,1,i,j-1,i,j);
 t(1,2)=kinv(1,2,i,j-1,i,j);
 t(2,1)=t(1,2);
 t(2,2)=kinv(2,2,i,j-1,i,j);
-t=(1/4)*t;
+% t=(1/4)*t;
+t=delta_t*(1/4)*t;
 
 % k=coef_p;
 
 localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
 localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+% localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+localm3=-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
 
 M1(ind1u:ind2u,ind1u:ind2u)=M1(ind1u:ind2u,ind1u:ind2u)+localm1;
 M2(ind1u:ind2u,ind1p)=M2(ind1u:ind2u,ind1p)+localm2;
@@ -830,7 +851,8 @@ vdim2=vdim/2;
 
 % Matrices b and f are the same for every North node
 b=(1/2)*[1 0 -1 0;0 1 0 -1;0 0 1 0;0 0 0 1;1 0 0 0;0 1 0 0];
-f=(1/2)*[-1 1;0 -1;-1 0];
+% f=(1/2)*[-1 1;0 -1;-1 0];
+f=delta_t*(1/2)*[-1 1;0 -1;-1 0];
 
 a=zeros(vdim,vdim);
 d=zeros(vdim,2);
@@ -928,7 +950,8 @@ for i=2:N
     t(3,1)=t(1,3);
     %t(3,2)=0;
     t(3,3)=kinv(2,2,i-1,j-1,i,j);
-    t=(1/4)*t;
+%     t=(1/4)*t;
+    t=delta_t*(1/4)*t;
 
 %     k1=coef1_p;
 %     k2=coef2_p;
@@ -936,7 +959,8 @@ for i=2:N
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-    localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+%     localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+    localm3=-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
     
     M1(ind1u:ind4u,ind1u:ind4u)=M1(ind1u:ind4u,ind1u:ind4u)+localm1;
     M2(ind1u:ind4u,ind1p:ind2p)=M2(ind1u:ind4u,ind1p:ind2p)+localm2;  
@@ -997,20 +1021,23 @@ d(3,1)=(-x2 + x3);
 d(4,1)=(-y2 + y3);
 d=coef_d*d;
 
-f=(1/2)*[-1;-1];
+% f=(1/2)*[-1;-1];
+f=delta_t*(1/2)*[-1;-1];
 
 t=zeros(vdim2,vdim2);
 t(1,1)=kinv(1,1,i-1,j-1,i,j);
 t(1,2)=kinv(1,2,i-1,j-1,i,j);
 t(2,1)=t(1,2);
 t(2,2)=kinv(2,2,i-1,j-1,i,j);
-t=(1/4)*t;
+% t=(1/4)*t;
+t=delta_t*(1/4)*t;
 
 % k=coef_p;
 
 localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
 localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+% localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+localm3=-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
 
 M1(ind1u:ind2u,ind1u:ind2u)=M1(ind1u:ind2u,ind1u:ind2u)+localm1;
 M2(ind1u:ind2u,ind1p)=M2(ind1u:ind2u,ind1p)+localm2;
