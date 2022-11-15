@@ -74,7 +74,8 @@ d=coef_d*d;
 Pgu=(1/2)*[-Pg1u_L1;-Pg2u_L1;-Pg1u_L4;-Pg2u_L4];  
     
 % Non-homogeneous Dir.BC
-gamma(pos)=(c'*(a\c))\(c'*(a\Pgu)-(c'*(a\b))*u(ind1u:ind2u)-(c'*(a\d))*p(ind1p));  
+% gamma(pos)=(c'*(a\c))\(c'*(a\Pgu)-(c'*(a\b))*u(ind1u:ind2u)-(c'*(a\d))*p(ind1p));  
+gamma(pos)=(c'*(a\c))\(c'*(a\Pgu)-((c'*(a\b))*u(ind1u:ind2u)+(c'*(a\d))*p(ind1p)));  
 pos=pos+1;
 
 % South nodes (j=1)
@@ -177,7 +178,8 @@ for i=2:N
         Pgu=(1/2)*[-Pg1u_L2;-Pg2u_L2;0;0;-Pg1u_L1;-Pg2u_L1];
     
     % Non-homogeneous Dir.BC
-    gamma(pos)=(c'*(a\c))\(c'*(a\Pgu)-(c'*(a\b))*u(ind1u:ind4u)-(c'*(a\d))*p(ind1p:ind2p)); 
+%     gamma(pos)=(c'*(a\c))\(c'*(a\Pgu)-(c'*(a\b))*u(ind1u:ind4u)-(c'*(a\d))*p(ind1p:ind2p));
+    gamma(pos)=(c'*(a\c))\(c'*(a\Pgu)-((c'*(a\b))*u(ind1u:ind4u)+(c'*(a\d))*p(ind1p:ind2p))); 
     pos=pos+1;
 end
 
@@ -240,7 +242,8 @@ d=coef_d*d;
     Pgu=(1/2)*[Pg1u_L7;Pg2u_L7;-Pg1u_L3;-Pg2u_L3];
 
 % Non-homogeneous Dir.BC
-gamma(pos)=(c'*(a\c))\(c'*(a\Pgu)-(c'*(a\b))*u(ind1u:ind2u)-(c'*(a\d))*p(ind1p)); 
+% gamma(pos)=(c'*(a\c))\(c'*(a\Pgu)-(c'*(a\b))*u(ind1u:ind2u)-(c'*(a\d))*p(ind1p));
+gamma(pos)=(c'*(a\c))\(c'*(a\Pgu)-((c'*(a\b))*u(ind1u:ind2u)+(c'*(a\d))*p(ind1p)));
 pos=pos+1;
 
 for j=2:N
@@ -343,7 +346,8 @@ for j=2:N
         Pgu=(1/2)*[-Pg1u_L4;-Pg2u_L4;0;0;-Pg1u_L11;-Pg2u_L11];
     
     % Non-homogeneous Dir.BC
-    gamma(pos)=(c'*(a\c))\(c'*(a\Pgu)-(c'*(a\b))*u([ind1u:ind2u,ind3u:ind4u],1)-(c'*(a\d))*p([ind1p,ind2p],1));
+%     gamma(pos)=(c'*(a\c))\(c'*(a\Pgu)-(c'*(a\b))*u([ind1u:ind2u,ind3u:ind4u],1)-(c'*(a\d))*p([ind1p,ind2p],1));
+    gamma(pos)=(c'*(a\c))\(c'*(a\Pgu)-((c'*(a\b))*u([ind1u:ind2u,ind3u:ind4u],1)+(c'*(a\d))*p([ind1p,ind2p],1)));
     pos=pos+1;
     
     % Central nodes 
@@ -515,7 +519,8 @@ for j=2:N
     d=coef_d*d;
     
     % NO Dir.BC
-    gamma(pos)=(c'*(a\c))\(-(c'*(a\b))*u([ind1u:ind4u,ind5u:ind8u],1)-(c'*(a\d))*p([ind1p:ind2p,ind3p:ind4p],1)); 
+%     gamma(pos)=(c'*(a\c))\(-(c'*(a\b))*u([ind1u:ind4u,ind5u:ind8u],1)-(c'*(a\d))*p([ind1p:ind2p,ind3p:ind4p],1));
+    gamma(pos)=(c'*(a\c))\(-((c'*(a\b))*u([ind1u:ind4u,ind5u:ind8u],1)+(c'*(a\d))*p([ind1p:ind2p,ind3p:ind4p],1))); 
     pos=pos+1;
     end
     
@@ -618,7 +623,8 @@ for j=2:N
         Pgu=(1/2)*[Pg1u_L7;Pg2u_L7;Pg1u_L14;Pg2u_L14;0;0];
     
     % Non-homogeneous Dir.BC
-    gamma(pos)=(c'*(a\c))\(c'*(a\Pgu)-(c'*(a\b))*u([ind1u:ind2u,ind3u:ind4u],1)-(c'*(a\d))*p([ind1p,ind2p],1)); 
+%     gamma(pos)=(c'*(a\c))\(c'*(a\Pgu)-(c'*(a\b))*u([ind1u:ind2u,ind3u:ind4u],1)-(c'*(a\d))*p([ind1p,ind2p],1));
+    gamma(pos)=(c'*(a\c))\(c'*(a\Pgu)-((c'*(a\b))*u([ind1u:ind2u,ind3u:ind4u],1)+(c'*(a\d))*p([ind1p,ind2p],1))); 
     pos=pos+1;
 end
 
@@ -682,7 +688,8 @@ d=coef_d*d;
     Pgu=(1/2)*[-Pg1u_L18;-Pg2u_L18;Pg1u_L22;Pg2u_L22];
     
 % Non-homogeneous Dir.BC
-gamma(pos)=(c'*(a\c))\(c'*(a\Pgu)-(c'*(a\b))*u(ind1u:ind2u)-(c'*(a\d))*p(ind1p)); 
+% gamma(pos)=(c'*(a\c))\(c'*(a\Pgu)-(c'*(a\b))*u(ind1u:ind2u)-(c'*(a\d))*p(ind1p)); 
+gamma(pos)=(c'*(a\c))\(c'*(a\Pgu)-((c'*(a\b))*u(ind1u:ind2u)+(c'*(a\d))*p(ind1p))); 
 pos=pos+1;
 
 % North nodes (j=N+1)
@@ -786,7 +793,8 @@ for i=2:N
         Pgu=(1/2)*[0;0;Pg1u_L23;Pg2u_L23;Pg1u_L22;Pg2u_L22];
         
     % Non-homogeneous Dir.BC
-    gamma(pos)=(c'*(a\c))\(c'*(a\Pgu)-(c'*(a\b))*u(ind1u:ind4u)-(c'*(a\d))*p(ind1p:ind2p));
+%     gamma(pos)=(c'*(a\c))\(c'*(a\Pgu)-(c'*(a\b))*u(ind1u:ind4u)-(c'*(a\d))*p(ind1p:ind2p));
+    gamma(pos)=(c'*(a\c))\(c'*(a\Pgu)-((c'*(a\b))*u(ind1u:ind4u)+(c'*(a\d))*p(ind1p:ind2p)));
     pos=pos+1;
 end
 
@@ -849,6 +857,7 @@ d=coef_d*d;
     Pgu=(1/2)*[Pg1u_L21;Pg2u_L21;Pg1u_L24;Pg2u_L24];
 
 % Non-homogeneous Dir.BC
-gamma(pos)=(c'*(a\c))\(c'*(a\Pgu)-(c'*(a\b))*u(ind1u:ind2u)-(c'*(a\d))*p(ind1p)); 
+% gamma(pos)=(c'*(a\c))\(c'*(a\Pgu)-(c'*(a\b))*u(ind1u:ind2u)-(c'*(a\d))*p(ind1p));
+gamma(pos)=(c'*(a\c))\(c'*(a\Pgu)-((c'*(a\b))*u(ind1u:ind2u)+(c'*(a\d))*p(ind1p)));
 return
 end
