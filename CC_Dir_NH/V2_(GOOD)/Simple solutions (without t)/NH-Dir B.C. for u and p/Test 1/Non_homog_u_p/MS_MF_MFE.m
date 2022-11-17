@@ -67,6 +67,8 @@ end
 gamma=compute_gamma(u,p,t);
 [sigma,~,~,~,~]=compute_tensors(u,p,gamma,t);
 
+% sigma=build_exact_sol_sigma(t);
+
 % Initialize errors
 erroru_L2_inf=0;
 erroru_3_inf=erroru_L2_inf;
@@ -82,6 +84,7 @@ while t < Tf
     
     % Initial time terms affecting q
 gTp=Asp*sigma + App*p;
+% gTp=zeros(N*N,1);
 
     % Source terms of the MFMFE-MSMFE discretization at t+delta_t
 f_indep=build_indep_f(t+delta_t);        % Source term f
