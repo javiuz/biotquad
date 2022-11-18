@@ -18,10 +18,10 @@ global perm
 
  if comp==1         % Solución analítica de u1(xx)
      sol=xx; 
-%      sol=tt*xx; 
+%      sol=0; 
  elseif comp==2     % Solución analítica de u2(yy)
      sol=yy;
-%      sol=tt*yy;
+%      sol=0;
  elseif comp==3     % Solución analítica de p(xx,tt)
      sol=xx;
 %      sol=yy;

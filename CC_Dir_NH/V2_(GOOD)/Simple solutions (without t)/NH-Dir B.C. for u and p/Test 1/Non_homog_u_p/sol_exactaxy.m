@@ -7,7 +7,7 @@ function sol=sol_exactaxy(xx,yy,tt)
 %         u2(xx,yy) = yy;
 
  sol=[xx,yy]';
-% sol=[tt*xx,tt*yy]';
+% sol=[0,0]';
 
 return
 end

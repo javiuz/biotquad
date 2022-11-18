@@ -6,14 +6,14 @@ global alpha lambda mu
 
  if row==1 && col==1       % Solución analítica de sigma (1,1) (xx,yy,tt)
      sol=2*(lambda+mu)-alpha*xx;
-%      sol=2*(lambda+mu)*tt-alpha*yy;
+%      sol=-alpha*yy;
  elseif row==1 && col==2   % Solución analítica de sigma (1,2) (xx,yy,tt)
      sol=0;
  elseif row==2 && col==1   % Solución analítica de sigma (2,1) (xx,yy,tt)
      sol=0;
  else                       % Solución analítica de sigma (2,2) (xx,yy,tt)
      sol=2*(lambda+mu)-alpha*xx;  
-%      sol=2*(lambda+mu)*tt-alpha*yy; 
+%      sol=-alpha*yy; 
  end
 
 return
