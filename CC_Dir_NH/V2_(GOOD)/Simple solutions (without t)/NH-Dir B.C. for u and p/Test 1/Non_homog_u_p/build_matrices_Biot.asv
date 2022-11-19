@@ -321,8 +321,8 @@ for j=2:N
     
     x1=x(i,j-1);
     y1=y(i,j-1);
-%     x2=x(i+1,j-1);
-%     y2=y(i+1,j-1);
+    x2=x(i+1,j-1);
+    y2=y(i+1,j-1);
     x3=x(i+1,j);
     y3=y(i+1,j);
     x4=x(i,j);
@@ -413,7 +413,7 @@ for j=2:N
 %     t=(1/4)*t;
     t=delta_t*(1/4)*t;
     
-%     k1=coef_p*area_cuadrilatero(x1,y1,x2,y2,x3,y3,x4,y4);
+    k1=coef_p*area_cuadrilatero(x1,y1,x2,y2,x3,y3,x4,y4);
     k2=coef_p*area_cuadrilatero(x4,y4,x3,y3,x5,y5,x6,y6);
     k=[0 0;0 k2];
 %     k=[k1 0;0 k2];
@@ -461,24 +461,24 @@ for j=2:N
         ind3p=ind6u/2;
         ind4p=ind8u/2;
         
-%     x1=x(i-1,j-1);
-%     y1=y(i-1,j-1);
+    x1=x(i-1,j-1);
+    y1=y(i-1,j-1);
     x2=x(i,j-1);
     y2=y(i,j-1);
     x3=x(i,j);
     y3=y(i,j);
     x4=x(i-1,j);
     y4=y(i-1,j);
-%     x5=x(i+1,j-1);
-%     y5=y(i+1,j-1);
+    x5=x(i+1,j-1);
+    y5=y(i+1,j-1);
     x6=x(i+1,j);
     y6=y(i+1,j);
     x7=x(i+1,j+1);
     y7=y(i+1,j+1);
     x8=x(i,j+1);
     y8=y(i,j+1);
-%     x9=x(i-1,j+1);
-%     y9=y(i-1,j+1);
+    x9=x(i-1,j+1);
+    y9=y(i-1,j+1);
     
     JE1r3=abs(x4*(y2 - y3) + x2*(y3 - y4) + x3*(-y2 + y4));
     denom1=coef_denom*JE1r3;
@@ -624,13 +624,13 @@ for j=2:N
 %     t=(1/4)*t;
     t=delta_t*(1/4)*t;
     
-%     k1=coef_p*area_cuadrilatero(x1,y1,x2,y2,x3,y3,x4,y4);
-%     k2=coef_p*area_cuadrilatero(x2,y2,x5,y5,x6,y6,x3,y3);
+    k1=coef_p*area_cuadrilatero(x1,y1,x2,y2,x3,y3,x4,y4);
+    k2=coef_p*area_cuadrilatero(x2,y2,x5,y5,x6,y6,x3,y3);
 %     SIGUE EL ORDEN DE LAS PRESIONES EN EL SISTEMA: p4 va antes que p3
-%     k4=coef_p*area_cuadrilatero(x4,y4,x3,y3,x8,y8,x9,y9);
+    k4=coef_p*area_cuadrilatero(x4,y4,x3,y3,x8,y8,x9,y9);
     k3=coef_p*area_cuadrilatero(x3,y3,x6,y6,x7,y7,x8,y8);
-    k=[0 0 0 0;0 0 0 0;0 0 0 0;0 0 0 k3];
-%     k=[k1 0 0 0;0 k2 0 0;0 0 k4 0;0 0 0 k3];
+%     k=[0 0 0 0;0 0 0 0;0 0 0 0;0 0 0 k3];
+    k=[k1 0 0 0;0 k2 0 0;0 0 k4 0;0 0 0 k3];
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
@@ -660,8 +660,8 @@ for j=2:N
     vdim=6;
     vdim2=vdim/2;
     
-%     x1=x(i-1,j-1);
-%     y1=y(i-1,j-1);
+    x1=x(i-1,j-1);
+    y1=y(i-1,j-1);
     x2=x(i,j-1);
     y2=y(i,j-1);
     x3=x(i,j);
@@ -670,8 +670,8 @@ for j=2:N
     y4=y(i-1,j);
     x5=x(i,j+1);
     y5=y(i,j+1);
-%     x6=x(i-1,j+1);
-%     y6=y(i-1,j+1);   
+    x6=x(i-1,j+1);
+    y6=y(i-1,j+1);   
     
     JE1r3=abs(x4*(y2 - y3) + x2*(y3 - y4) + x3*(-y2 + y4));
     denom1=coef_denom*JE1r3;
@@ -754,15 +754,15 @@ for j=2:N
 %     t=(1/4)*t;
     t=delta_t*(1/4)*t;
     
-%     k1=coef_p*area_cuadrilatero(x1,y1,x2,y2,x3,y3,x4,y4);
-%     k2=coef_p*area_cuadrilatero(x4,y4,x3,y3,x5,y5,x6,y6);
-%     k=[k1 0;0 k2];
+    k1=coef_p*area_cuadrilatero(x1,y1,x2,y2,x3,y3,x4,y4);
+    k2=coef_p*area_cuadrilatero(x4,y4,x3,y3,x5,y5,x6,y6);
+    k=[k1 0;0 k2];
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
 %     localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-    localm3=-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-%     localm3=k-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+%     localm3=-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+    localm3=k-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
     
     M1([ind1u:ind2u,ind3u:ind4u],[ind1u:ind2u,ind3u:ind4u])=M1([ind1u:ind2u,ind3u:ind4u],[ind1u:ind2u,ind3u:ind4u])+localm1; 
     M2([ind1u:ind2u,ind3u:ind4u],[ind1p,ind2p])=M2([ind1u:ind2u,ind3u:ind4u],[ind1p,ind2p])+localm2;
@@ -784,8 +784,8 @@ vdim2=vdim/2;
 
 x1=x(i,j-1);
 y1=y(i,j-1);           
-% x2=x(i+1,j-1);
-% y2=y(i+1,j-1);
+x2=x(i+1,j-1);
+y2=y(i+1,j-1);
 x3=x(i+1,j);
 y3=y(i+1,j);
 x4=x(i,j);
@@ -835,13 +835,13 @@ t(2,2)=kinv(2,2,i,j-1,i,j);
 % t=(1/4)*t;
 t=delta_t*(1/4)*t;
 
-% k=coef_p*area_cuadrilatero(x1,y1,x2,y2,x3,y3,x4,y4);
+k=coef_p*area_cuadrilatero(x1,y1,x2,y2,x3,y3,x4,y4);
 
 localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
 localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
 % localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-localm3=-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-% localm3=k-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+% localm3=-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+localm3=k-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
 
 M1(ind1u:ind2u,ind1u:ind2u)=M1(ind1u:ind2u,ind1u:ind2u)+localm1;
 M2(ind1u:ind2u,ind1p)=M2(ind1u:ind2u,ind1p)+localm2;
@@ -873,16 +873,16 @@ for i=2:N
     ind1p=ind2u/2;
     ind2p=ind4u/2;
     
-%     x1=x(i-1,j-1);
-%     y1=y(i-1,j-1);
+    x1=x(i-1,j-1);
+    y1=y(i-1,j-1);
     x2=x(i,j-1);
     y2=y(i,j-1);
     x3=x(i,j);
     y3=y(i,j);
     x4=x(i-1,j);
     y4=y(i-1,j);
-%     x5=x(i+1,j-1);
-%     y5=y(i+1,j-1);
+    x5=x(i+1,j-1);
+    y5=y(i+1,j-1);
     x6=x(i+1,j);
     y6=y(i+1,j);   
     
@@ -959,15 +959,15 @@ for i=2:N
 %     t=(1/4)*t;
     t=delta_t*(1/4)*t;
 
-%     k1=coef_p*area_cuadrilatero(x1,y1,x2,y2,x3,y3,x4,y4);
-%     k2=coef_p*area_cuadrilatero(x2,y2,x5,y5,x6,y6,x3,y3);
-%     k=[k1 0;0 k2];
+    k1=coef_p*area_cuadrilatero(x1,y1,x2,y2,x3,y3,x4,y4);
+    k2=coef_p*area_cuadrilatero(x2,y2,x5,y5,x6,y6,x3,y3);
+    k=[k1 0;0 k2];
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
 %     localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-    localm3=-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-%     localm3=k-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+%     localm3=-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+    localm3=k-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
     
     M1(ind1u:ind4u,ind1u:ind4u)=M1(ind1u:ind4u,ind1u:ind4u)+localm1;
     M2(ind1u:ind4u,ind1p:ind2p)=M2(ind1u:ind4u,ind1p:ind2p)+localm2;  
@@ -986,8 +986,8 @@ ind1p=ind2u/2;
 vdim=4;
 vdim2=vdim/2;
 
-% x1=x(i-1,j-1);  
-% y1=y(i-1,j-1);            
+x1=x(i-1,j-1);  
+y1=y(i-1,j-1);            
 x2=x(i,j-1);
 y2=y(i,j-1);
 x3=x(i,j);
@@ -1039,13 +1039,13 @@ t(2,2)=kinv(2,2,i-1,j-1,i,j);
 % t=(1/4)*t;
 t=delta_t*(1/4)*t;
 
-% k=coef_p*area_cuadrilatero(x1,y1,x2,y2,x3,y3,x4,y4);
+k=coef_p*area_cuadrilatero(x1,y1,x2,y2,x3,y3,x4,y4);
 
 localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
 localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
 % localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-localm3=-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-% localm3=k-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+% localm3=-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+localm3=k-d'*(a\d)+(f'*(t\f))+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
 
 M1(ind1u:ind2u,ind1u:ind2u)=M1(ind1u:ind2u,ind1u:ind2u)+localm1;
 M2(ind1u:ind2u,ind1p)=M2(ind1u:ind2u,ind1p)+localm2;
