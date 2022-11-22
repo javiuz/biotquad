@@ -11,7 +11,8 @@ mesh=0;
 tic
 
 % Parámetros ecuación Biot
-alpha=1;
+% alpha=1;
+alpha=0;
 %E=1;
 nu=0.2; % Este parámetro no sirve en este problema, solamente está para que
 % funcione la función 'sol_exactax_sigma.m'
