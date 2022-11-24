@@ -27,7 +27,7 @@ global perm
  elseif comp==5     % Solución analítica de z2
      sol=-perm*(-1 + xx)*xx*(-1 + 2 *yy);
  else               % Solución analítica de gamma (1st row & 2nd column)
-     sol=(1/2)*(yy + 2*xx*(-1 + yy)*yy - yy^2 + (-1 + xx)*xx*(-1 + 2*yy));
+     sol=(yy + 2*xx*(-1 + yy)*yy - yy^2 + (-1 + xx)*xx*(-1 + 2*yy))/2.;
  end
 
 return
