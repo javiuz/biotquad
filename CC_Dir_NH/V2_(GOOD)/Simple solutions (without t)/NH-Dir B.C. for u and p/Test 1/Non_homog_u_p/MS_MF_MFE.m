@@ -11,8 +11,8 @@ mesh=0;
 tic
 
 % Parámetros ecuación Biot
-% alpha=1;
-alpha=0;
+alpha=1;
+% alpha=0;
 %E=1;
 nu=0.2;
 %lambda=(E*nu)/((1+nu)*(1-2*nu));
