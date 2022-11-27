@@ -153,8 +153,10 @@ while t < Tf
 gTp=Asp*sigma + App*p;
 
     % Source terms of the MFMFE-MSMFE discretization at t+delta_t
-f_indep=build_indep_f(t+delta_t);        % Source term f
-q_indep=build_indep_q(t+delta_t);           % Source term q
+% f_indep=build_indep_f(t+delta_t);        % Source term f
+% q_indep=build_indep_q(t+delta_t);        % Source term q
+f_indep=build_indep_f_gauss_lobatto(t+delta_t);        % Source term f
+q_indep=build_indep_q_gauss_lobatto(t+delta_t);        % Source term q
 
      % For homogeneous Dir. B.C.
 f_hat=f_indep;          
