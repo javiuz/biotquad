@@ -4,7 +4,7 @@ global NN
 
 N=NN;
 
-indep2=zeros(2*N*N,1);
+indep2=zeros(N*N,1);
 
 for j=1:N
     for i=1:N
