@@ -6,9 +6,13 @@ N=NN;
 
 indep1=zeros(2*N*N,1);
 
+% 1st component of the source term f(f1)   
+
 fun1 = @(x,y) lambda + alpha*y -2*alpha*x.*y -alpha*y.^2 + 2*alpha*x.*y.^2 -...
               2*lambda*y.^2 -2*lambda*x + 4*lambda*x.*y + mu - 2*mu*x.^2 +...
               2*mu*y + 4*mu*x.*y - 4*mu*y.^2;
+          
+% 2nd component of the source term f(f2)   
           
 fun2 = @(x,y) -lambda + 2*lambda*x.^2 + 2*lambda*y - 4*lambda*x.*y -mu + ...
               2*mu*x - 4*mu*x.*y + 2*mu*y.^2 + alpha*x - 4*mu*x - ...
