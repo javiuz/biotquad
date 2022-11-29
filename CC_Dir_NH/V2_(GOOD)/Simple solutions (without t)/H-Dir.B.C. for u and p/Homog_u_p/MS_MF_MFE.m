@@ -44,6 +44,7 @@ Asp=AspT';
 
 % Matriz del sistema reducido de Biot
 Biot_matrix=[A11 A12;A21 A22];
+% dBM=decomposition(Biot_matrix);
 
 %% Terms involving time
 
@@ -78,73 +79,6 @@ errorp_L2_inf=erroru_L2_inf;
 errorp_3_inf=erroru_L2_inf;
 error_z_zh_inf=erroru_L2_inf;
 
-% % We solve Biot's system: Backslash
-% 
-%     % Initial time terms affecting q
-% gTp=Asp*sigma + App*p;
-% 
-%     % Source terms of the MFMFE-MSMFE discretization at t+delta_t
-% f_indep=build_indep_f(t+delta_t);        % Source term f
-% q_indep=build_indep_q(t+delta_t);           % Source term q
-% 
-%      % For homogeneous Dir. B.C.
-% f_hat=f_indep;          
-% q_hat=delta_t*q_indep + gTp;  
-% 
-% %     % For non-homogeneous Dir. B.C.
-% % [gDu,gDp]=dir_bc_Pg(delta_t,t+delta_t);   
-% % % f_hat= f_indep + gDu; 
-% % f_hat= f_indep + gDu; 
-% % q_hat= delta_t*q_indep + gTp + gDp;
-%     
-%     % Right-hand side of the Biot system
-% indep_term=[f_hat;q_hat];
-%     
-% % Solution of the Biot system for the displacement and pressure vectors
-% sol_vec=Biot_matrix\indep_term; 
-% % disp(indep_term)
-% % disp(' ')
-% % pause
-% u=sol_vec(1:2*N*N);
-% p=sol_vec(2*N*N+1:2*N*N+N*N);
-% 
-% t=t+delta_t;
-% 
-%     % Now we compute the rest of the variables at the new time step t:
-%         % rotation 
-% gamma=compute_gamma(u,p,t);  % Computed solution for the rotation term
-%         % stress
-% [sigma,~,~,~,~]=compute_tensors(u,p,gamma,t);
-%         % velocity
-% [z,zx,zy]=compute_fluxes(p,t); 
-% 
-%     % We reorder the variables to compute the errors and some contourplots
-% gamma_n=reshape(gamma,N+1,N+1);
-% sigma_n=build_sigma_n_2(sigma);
-% vel_n=build_vel_n(z);
-% 
-%     % L2 norms of the different variables
-% % t
-%         % Displacement
-% [erroru_L2,erroru_3]=compute_error_displacements(u,t);
-%         % Pressure
-% [errorp_L2,errorp_3]=compute_error_pressures(p,t);
-%         % Rotation
-% errorg_L2=compute_error_rotations(gamma_n,t);
-%         % Stress
-% error_sigma_sigmah=compute_error_stress(sigma_n,nu,t);
-%         % Velocity
-% error_z_zh=compute_error_velocities(vel_n,t);
-% 
-%     % Infinity norm of the L2 errors of the variables
-% erroru_L2_inf=max(erroru_L2_inf,erroru_L2);
-% erroru_3_inf=max(erroru_3_inf,erroru_3);
-% errorp_L2_inf=max(errorp_L2_inf,errorp_L2);
-% errorp_3_inf=max(errorp_3_inf,errorp_3);
-% errorg_L2_inf=max(errorg_L2_inf,errorg_L2);
-% error_sigma_sigmah_inf=max(error_sigma_sigmah_inf,error_sigma_sigmah);
-% error_z_zh_inf=max(error_z_zh_inf,error_z_zh);
-
 % We solve Biot's system: Time loop
 
 while t < Tf
@@ -153,10 +87,10 @@ while t < Tf
 gTp=Asp*sigma + App*p;
 
     % Source terms of the MFMFE-MSMFE discretization at t+delta_t
-% f_indep=build_indep_f(t+delta_t);        % Source term f
-% q_indep=build_indep_q(t+delta_t);        % Source term q
-f_indep=build_indep_f_integral2(t+delta_t);        % Source term f
-q_indep=build_indep_q_integral2(t+delta_t);        % Source term q
+f_indep=build_indep_f(t+delta_t);        % Source term f
+q_indep=build_indep_q(t+delta_t);        % Source term q
+% f_indep=build_indep_f_integral2(t+delta_t);        % Source term f
+% q_indep=build_indep_q_integral2(t+delta_t);        % Source term q
 
      % For homogeneous Dir. B.C.
 f_hat=f_indep;          
@@ -173,6 +107,8 @@ indep_term=[f_hat;q_hat];
     
 % Solution of the Biot system for the displacement and pressure vectors
 sol_vec=Biot_matrix\indep_term; 
+% sol_vec=linsolve(Biot_matrix,indep_term);
+% sol_vec=dBM\indep_term;
 % disp(indep_term)
 % disp(' ')
 % pause
