@@ -25,9 +25,9 @@ for j=1:N
         xmax=max(x2,x3);
         ymin=min(y1,y2);
         ymax=max(y3,y4);
-%         indep2(ind)=integral2(fun,xmin,xmax,ymin,ymax);
-        indep2(ind)=integral2(fun,xmin,xmax,ymin,ymax,...
-                              'AbsTol',1e-12,'RelTol',1e-10);
+        indep2(ind)=integral2(fun,xmin,xmax,ymin,ymax);
+%         indep2(ind)=integral2(fun,xmin,xmax,ymin,ymax,...
+%                               'AbsTol',1e-12,'RelTol',1e-10);
     end
 end
 return
