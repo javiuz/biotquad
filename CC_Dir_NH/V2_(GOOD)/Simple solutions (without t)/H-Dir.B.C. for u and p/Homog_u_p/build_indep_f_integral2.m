@@ -38,9 +38,9 @@ for j=1:N
 %         indep1(ind1)=integral2(fun1,xmin,xmax,ymin,ymax);
 %         indep1(ind2)=integral2(fun2,xmin,xmax,ymin,ymax);
         indep1(ind1)=integral2(fun1,xmin,xmax,ymin,ymax,...
-                               'AbsTol',1e-12,'RelTol',1e-9);
+                               'AbsTol',1e-12,'RelTol',1e-10);
         indep1(ind2)=integral2(fun2,xmin,xmax,ymin,ymax,...
-                               'AbsTol',1e-12,'RelTol',1e-9);
+                               'AbsTol',1e-12,'RelTol',1e-10);
     end
 end
 return
