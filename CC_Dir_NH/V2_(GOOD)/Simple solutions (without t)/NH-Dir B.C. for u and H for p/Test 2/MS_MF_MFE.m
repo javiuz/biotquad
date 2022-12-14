@@ -18,7 +18,7 @@ nu=0.2; % Este parámetro no sirve en este problema, solamente está para que
 % funcione la función 'sol_exactax_sigma.m'
 %lambda=(E*nu)/((1+nu)*(1-2*nu));
 %mu=E/(2*(1+nu));
-lambda=1;
+lambda=0;
 mu=1;
 
 % Storativity coefficient
@@ -100,8 +100,7 @@ q_indep=build_indep_q(t+delta_t);           % Source term q
 f_hat= f_indep + gDu; 
 q_hat= delta_t*q_indep + gTp + gDp;
 % aux_u=A11\f_hat;
-% aux_p=2*(lambda+mu)*ones(N*N,1);
-% q_hat= A21*aux_u + A22*aux_p;
+% q_hat= A21*aux_u;
     
     % Right-hand side of the Biot system
 indep_term=[f_hat;q_hat];

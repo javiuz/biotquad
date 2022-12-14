@@ -18,12 +18,12 @@ nu=0.2; % Este parámetro no sirve en este problema, solamente está para que
 % funcione la función 'sol_exactax_sigma.m'
 %lambda=(E*nu)/((1+nu)*(1-2*nu));
 %mu=E/(2*(1+nu));
-lambda=1;
+lambda=0;
 mu=1;
 
 % Storativity coefficient
 %c0=1e-05;
-c0=0;
+c0=1;
 
 % Hydraulic conductivity: is inside the function 'kinv.m'
 % K=perm*[1 0;0 1]; with perm=1, 1e-03, 1e-06, 1e-09, 1e-12
@@ -44,30 +44,50 @@ Asp=AspT';
 
 % Matriz del sistema reducido de Biot
 Biot_matrix=[A11 A12;A21 A22];
+% dBM=decomposition(Biot_matrix);
 
 %% Terms involving time
 
 % Initial solution of the variables at t=0 
-u=zeros(2*N*N,1);
+% u=zeros(2*N*N,1);
 p=zeros(N*N,1);
 
 for j=1:N
     for i=1:N
-        ind2u=(i+(j-1)*N)*2;
-        ind1u=ind2u-1;
-        ind1p=ind2u/2;
+%         ind2u=(i+(j-1)*N)*2;
+%         ind1u=ind2u-1;
+%         ind1p=ind2u/2;
+        ind1p=i+(j-1)*N;
         
         xx=(x(i,j)+x(i+1,j)+x(i+1,j+1)+x(i,j+1))/4;
         yy=(y(i,j)+y(i+1,j)+y(i+1,j+1)+y(i,j+1))/4;
         
-        u(ind1u)=sol_exactax(xx,yy,t,1);
-        u(ind2u)=sol_exactax(xx,yy,t,2);
+%         u(ind1u)=sol_exactax(xx,yy,t,1);
+%         u(ind2u)=sol_exactax(xx,yy,t,2);
         p(ind1p)=sol_exactax(xx,yy,t,3);
     end
 end
 
+q_indep=build_indep_q(t); 
+q_hat_old=delta_t*q_indep;
+
+f_indep=build_indep_f(t);
+f_hat_old=f_indep;
+
+indep_aux=build_indep_elas(p);
+
+indep_elas=f_indep+indep_aux;
+
+u=A11\indep_elas;
+
 gamma=compute_gamma(u,p,t);
 [sigma,~,~,~,~]=compute_tensors(u,p,gamma,t);
+
+sol_vec_old=[u;p];
+gamma_old=gamma;
+[z,zx,zy]=compute_fluxes(p,t); 
+z_old=z;
+sigma_old=sigma;
 
 % Initialize errors
 erroru_L2_inf=0;
@@ -83,34 +103,33 @@ error_z_zh_inf=erroru_L2_inf;
 while t < Tf
     
     % Initial time terms affecting q
-% gTp=Asp*sigma; %+ App*p;
 gTp=Asp*sigma + App*p;
 
     % Source terms of the MFMFE-MSMFE discretization at t+delta_t
 f_indep=build_indep_f(t+delta_t);        % Source term f
-q_indep=build_indep_q(t+delta_t);           % Source term q
+q_indep=build_indep_q(t+delta_t);        % Source term q
+% f_indep=build_indep_f_integral2(t+delta_t);        % Source term f
+% q_indep=build_indep_q_integral2(t+delta_t);        % Source term q
 
-%      % For homogeneous Dir. B.C.
-% f_hat=-f_indep;          
-% q_hat=delta_t*q_indep + gTp;    
+     % For homogeneous Dir. B.C.
+f_hat=f_indep;          
+q_hat=delta_t*q_indep + gTp;    
 
-    % For non-homogeneous Dir. B.C.
-[gDu,gDp]=dir_bc_Pg(delta_t,t+delta_t);   
-% f_hat= -f_indep + gDu; 
-f_hat= f_indep + gDu; 
-q_hat= delta_t*q_indep + gTp + gDp;
-% aux_u=A11\f_hat;
-% aux_p=2*(lambda+mu)*ones(N*N,1);
-% q_hat= A21*aux_u + A22*aux_p;
+%     % For non-homogeneous Dir. B.C.
+% [gDu,gDp]=dir_bc_Pg(delta_t,t+delta_t);   
+% % f_hat= f_indep + gDu; 
+% f_hat= f_indep + gDu; 
+% q_hat= delta_t*q_indep + gTp + gDp;
     
     % Right-hand side of the Biot system
 indep_term=[f_hat;q_hat];
     
 % Solution of the Biot system for the displacement and pressure vectors
 sol_vec=Biot_matrix\indep_term; 
-% disp(indep_term)
-% disp(' ')
+% max(abs(sol_vec-sol_vec_old))
 % pause
+% sol_vec_old=sol_vec;
+
 u=sol_vec(1:2*N*N);
 p=sol_vec(2*N*N+1:2*N*N+N*N);
 
@@ -198,8 +217,8 @@ error_z_zh_inf
 % u1=u(1:2:2*N*N);
 % u2=u(2:2:2*N*N);
 
-%% Plots of the Magnitude/Vectors of the variables
-
+% %% Plots of the Magnitude/Vectors of the variables
+% 
 % % We associate the values of sigma_n to the vertices of the mesh.
 % [s1x,s1y,s2x,s2y]=reorder_sigma_n(sigma_n);
 % [stress_flux1]=compute_stress_fluxes_2(s1x,s1y);
