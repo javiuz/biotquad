@@ -18,12 +18,13 @@ nu=0.2; % Este parámetro no sirve en este problema, solamente está para que
 % funcione la función 'sol_exactax_sigma.m'
 %lambda=(E*nu)/((1+nu)*(1-2*nu));
 %mu=E/(2*(1+nu));
-lambda=0;
+% lambda=0;
+lambda=1;
 mu=1;
 
 % Storativity coefficient
-% c0=1e-05;
-c0=0;
+c0=1e-05;
+% c0=0;
 % c0=1;
 
 % Hydraulic conductivity: is inside the function 'kinv.m'
@@ -51,21 +52,21 @@ Biot_matrix=[A11 A12;A21 A22];
 %% Terms involving time
 
 % Initial solution of the variables at t=0 
-u=zeros(2*N*N,1);
+% u=zeros(2*N*N,1);
 p=zeros(N*N,1);
 
 for j=1:N
     for i=1:N
-        ind2u=(i+(j-1)*N)*2;
-        ind1u=ind2u-1;
-        ind1p=ind2u/2;
-%         ind1p=i+(j-1)*N;
+%         ind2u=(i+(j-1)*N)*2;
+%         ind1u=ind2u-1;
+%         ind1p=ind2u/2;
+        ind1p=i+(j-1)*N;
         
         xx=(x(i,j)+x(i+1,j)+x(i+1,j+1)+x(i,j+1))/4;
         yy=(y(i,j)+y(i+1,j)+y(i+1,j+1)+y(i,j+1))/4;
         
-        u(ind1u)=sol_exactax(xx,yy,t,1);
-        u(ind2u)=sol_exactax(xx,yy,t,2);
+%         u(ind1u)=sol_exactax(xx,yy,t,1);
+%         u(ind2u)=sol_exactax(xx,yy,t,2);
         p(ind1p)=sol_exactax(xx,yy,t,3);
     end
 end
@@ -151,22 +152,6 @@ errorg_L2_inf=max(errorg_L2_inf,errorg_L2);
 error_sigma_sigmah_inf=max(error_sigma_sigmah_inf,error_sigma_sigmah);
 error_z_zh_inf=max(error_z_zh_inf,error_z_zh);
 
-% disp('u')
-% disp(u)
-% pause
-% disp('sigma')
-% disp(sigma)
-% pause
-% disp('gamma')
-% disp(gamma)
-% pause
-% disp('p')
-% disp(p)
-% pause
-% disp('z')
-% disp(z)
-% pause
-
 end
 
 % We display the infinity norms of the errors of the variables at final time step
@@ -188,16 +173,13 @@ error_z_zh_inf
 % error_sigma_sigmah
 % error_z_zh
 
-% disp(Biot_matrix)
-% disp(indep_term)
-
-% We compute the variable z of velocity at the final time step Tf(t):
+% % We compute the variable z of velocity at the final time step Tf(t):
 % [z,zx,zy]=compute_fluxes(p,t); 
-
-% Components of the displacement vector: u1 and u2
-% u1=u(1:2:2*N*N);
-% u2=u(2:2:2*N*N);
-
+% 
+% % Components of the displacement vector: u1 and u2
+% % u1=u(1:2:2*N*N);
+% % u2=u(2:2:2*N*N);
+% 
 % %% Plots of the Magnitude/Vectors of the variables
 % 
 % % We associate the values of sigma_n to the vertices of the mesh.
