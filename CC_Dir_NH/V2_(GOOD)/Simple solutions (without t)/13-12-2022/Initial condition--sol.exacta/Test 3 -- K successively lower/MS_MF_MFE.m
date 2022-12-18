@@ -73,7 +73,11 @@ end
 
 %% sol. exacta sigma:
     % V. válido SÓLO para MALLAS CARTESIANAS
-[sigma,sx1,sx2,sy1,sy2]=build_sigma_0_cartesian(t,nu);
+sigma=build_sigma_0_cartesian(t,nu);
+sigma_n=build_sigma_n_2(sigma);
+[s1x,s1y,s2x,s2y]=reorder_sigma_n(sigma_n);
+[stress_flux1]=compute_stress_fluxes_2(s1x,s1y);
+[stress_flux2]=compute_stress_fluxes_2(s2x,s2y);
 
 %     % V_válida para MALLAS GENERALES
 % sigma=build_sigma_0_gral_grid(t,nu);
