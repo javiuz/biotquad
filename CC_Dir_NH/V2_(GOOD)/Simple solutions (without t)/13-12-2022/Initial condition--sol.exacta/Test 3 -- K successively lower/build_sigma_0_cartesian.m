@@ -1,10 +1,15 @@
-function sigma=build_sigma_0_cartesian(tt,nu)
+function [sigma,sx1,sx2,sy1,sy2]=build_sigma_0_cartesian(tt,nu)
 
 global NN x y 
 
 N=NN;
 
 sigma=zeros(8*N*(N+1),1);
+
+sx1=zeros(N+1,N+1,2);
+sx2=sx1;
+sy1=sx1;
+sy2=sx1;
 
 % South-West corner node
 i=1;
@@ -26,6 +31,11 @@ ss(1)=sol_exactax_sigma(x1,y1,tt,nu,1,2);
 ss(2)=sol_exactax_sigma(x1,y1,tt,nu,2,2);
 ss(3)=sol_exactax_sigma(x1,y1,tt,nu,1,1);
 ss(4)=sol_exactax_sigma(x1,y1,tt,nu,2,1);
+
+sy1(i,j,1)=ss(1,1);
+sy2(i,j,1)=ss(2,1);
+sx1(i,j,2)=ss(3,1);
+sx2(i,j,2)=ss(4,1);
 
 indr=1:vdim;
 sigma(indr)=ss;
@@ -57,6 +67,13 @@ for i=2:N
     ss(5)=ss(1);
     ss(6)=ss(2);
     
+    sy1(i,j,1)=ss(1,1);
+    sy2(i,j,1)=ss(2,1);
+    sx1(i,j,2)=ss(3,1);
+    sx2(i,j,2)=ss(4,1);
+    sy1(i,j,2)=ss(5,1);
+    sy2(i,j,2)=ss(6,1);
+    
     indr=ld+1:ld+vdim;
     sigma(indr)=ss;
     ld=ld+vdim;
@@ -80,6 +97,11 @@ ss(1)=sol_exactax_sigma(x2,y2,tt,nu,1,1);
 ss(2)=sol_exactax_sigma(x2,y2,tt,nu,2,1);
 ss(3)=sol_exactax_sigma(x2,y2,tt,nu,1,2);
 ss(4)=sol_exactax_sigma(x2,y2,tt,nu,2,2);
+
+sx1(i,j,2)=ss(1,1);
+sx2(i,j,2)=ss(2,1);
+sy1(i,j,2)=ss(3,1);
+sy2(i,j,2)=ss(4,1);
 
 indr=ld+1:ld+vdim;
 sigma(indr)=ss;
@@ -112,6 +134,13 @@ for j=2:N
     ss(4)=sol_exactax_sigma(x4,y4,tt,nu,2,2);
     ss(5)=ss(1);
     ss(6)=ss(2);
+    
+    sx1(i,j,1)=ss(1,1);
+    sx2(i,j,1)=ss(2,1);
+    sy1(i,j,1)=ss(3,1);
+    sy2(i,j,1)=ss(4,1);
+    sx1(i,j,2)=ss(5,1);
+    sx2(i,j,2)=ss(6,1);
 
     indr=ld+1:ld+vdim;
     sigma(indr)=ss;
@@ -151,6 +180,15 @@ for j=2:N
     ss(6)=ss(2);
     ss(7)=ss(3);
     ss(8)=ss(4);
+    
+    sx1(i,j,1)=ss(1,1);
+    sx2(i,j,1)=ss(2,1);
+    sy1(i,j,1)=ss(3,1);
+    sy2(i,j,1)=ss(4,1);
+    sx1(i,j,2)=ss(5,1);
+    sx2(i,j,2)=ss(6,1);
+    sy1(i,j,2)=ss(7,1);
+    sy2(i,j,2)=ss(8,1);
 
     indr=ld+1:ld+vdim;
     sigma(indr)=ss;
@@ -182,6 +220,13 @@ for j=2:N
     ss(4)=ss(2);
     ss(5)=sol_exactax_sigma(x3,y3,tt,nu,1,2);
     ss(6)=sol_exactax_sigma(x3,y3,tt,nu,2,2);
+    
+    sx1(i,j,1)=ss(1,1);
+    sx2(i,j,1)=ss(2,1);
+    sx1(i,j,2)=ss(3,1);
+    sx2(i,j,2)=ss(4,1);
+    sy1(i,j,2)=ss(5,1);
+    sy2(i,j,2)=ss(6,1);
 
     indr=ld+1:ld+vdim;
     sigma(indr)=ss;
@@ -206,6 +251,11 @@ ss(1)=sol_exactax_sigma(x4,y4,tt,nu,1,1);
 ss(2)=sol_exactax_sigma(x4,y4,tt,nu,2,1);
 ss(3)=sol_exactax_sigma(x4,y4,tt,nu,1,2);
 ss(4)=sol_exactax_sigma(x4,y4,tt,nu,2,2);
+
+sx1(i,j,1)=ss(1,1);
+sx2(i,j,1)=ss(2,1);
+sy1(i,j,1)=ss(3,1);
+sy2(i,j,1)=ss(4,1);
 
 indr=ld+1:ld+vdim;
 sigma(indr)=ss;
@@ -236,6 +286,13 @@ for i=2:N
     ss(4)=sol_exactax_sigma(x3,y3,tt,nu,2,2);
     ss(5)=ss(3);
     ss(6)=ss(4);
+    
+    sx1(i,j,1)=ss(1,1);
+    sx2(i,j,1)=ss(2,1);
+    sy1(i,j,1)=ss(3,1);
+    sy2(i,j,1)=ss(4,1);
+    sy1(i,j,2)=ss(5,1);
+    sy2(i,j,2)=ss(6,1);
 
     indr=ld+1:ld+vdim;
     sigma(indr)=ss;
@@ -260,6 +317,11 @@ ss(1)=sol_exactax_sigma(x3,y3,tt,nu,1,1);
 ss(2)=sol_exactax_sigma(x3,y3,tt,nu,2,1);
 ss(3)=sol_exactax_sigma(x3,y3,tt,nu,1,2);
 ss(4)=sol_exactax_sigma(x3,y3,tt,nu,2,2);
+
+sx1(i,j,1)=ss(1,1);
+sx2(i,j,1)=ss(2,1);
+sy1(i,j,2)=ss(3,1);
+sy2(i,j,2)=ss(4,1);
 
 indr=ld+1:ld+vdim;
 sigma(indr)=ss;
