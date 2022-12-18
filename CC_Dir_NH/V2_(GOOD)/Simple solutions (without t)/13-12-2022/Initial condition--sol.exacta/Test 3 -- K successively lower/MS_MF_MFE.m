@@ -71,8 +71,12 @@ for j=1:N
     end
 end
 
-%% sol. exacta sigma: ¡¡¡ SÓLO VÁLIDA PARA MALLAS CARTESIANAS !!!
+%% sol. exacta sigma:
+    % V. válido SÓLO para MALLAS CARTESIANAS
 sigma=build_sigma_0_cartesian(t,nu);
+
+    % V_válida para MALLAS GENERALES
+sigma=build_sigma_0_gral_grid(t,nu);
 
 % Initialize errors
 erroru_L2_inf=0;
