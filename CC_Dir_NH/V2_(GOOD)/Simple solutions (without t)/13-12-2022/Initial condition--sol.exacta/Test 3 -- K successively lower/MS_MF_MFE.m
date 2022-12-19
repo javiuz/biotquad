@@ -72,15 +72,19 @@ for j=1:N
 end
 
 %% sol. exacta sigma:
-    % V. válido SÓLO para MALLAS CARTESIANAS
-sigma=build_sigma_0_cartesian(t,nu);
-sigma_n=build_sigma_n_2(sigma);
-[s1x,s1y,s2x,s2y]=reorder_sigma_n(sigma_n);
-[stress_flux1]=compute_stress_fluxes_2(s1x,s1y);
-[stress_flux2]=compute_stress_fluxes_2(s2x,s2y);
+%     % V. válido SÓLO para MALLAS CARTESIANAS
+% sigma=build_sigma_0_cartesian(t,nu);
 
-%     % V_válida para MALLAS GENERALES
-% sigma=build_sigma_0_gral_grid(t,nu);
+    % V. válida para MALLAS GENERALES
+sigma=build_sigma_0_gral_grid(t,nu);
+
+%     % V. alt. para MALLAS GENERALES (Más larga e ineficiente)
+% sigma_aux=build_sigma_0_gral_grid_2(t,nu);
+% sigma_n=build_sigma_n_2(sigma_aux);
+% [s1x,s1y,s2x,s2y]=reorder_sigma_n(sigma_n);
+% % [stress_flux1]=compute_stress_fluxes_2(s1x,s1y);
+% % [stress_flux2]=compute_stress_fluxes_2(s2x,s2y);
+% sigma=build_sigma_0_gral_grid_3(s1x,s1y,s2x,s2y);
 
 % Initialize errors
 erroru_L2_inf=0;
