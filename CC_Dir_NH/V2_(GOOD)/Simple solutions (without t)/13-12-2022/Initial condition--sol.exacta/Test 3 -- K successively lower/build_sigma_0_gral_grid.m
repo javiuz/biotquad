@@ -6,12 +6,12 @@ N=NN;
 
 sigma=zeros(8*N*(N+1),1);
 
-sx1=zeros(N+1,N+1,2);
-sx2=sx1;
-sy1=sx1;
-sy2=sx1;
+s1x=zeros(N+1,N+1,2);
+s2x=s1x;
+s1y=s1x;
+s2y=s1x;
 
-normal_n=sx1;
+normal_n=s1x;
 normal_s=normal_n;
 normal_e=normal_n;
 normal_w=normal_n;
@@ -20,6 +20,9 @@ normal_w=normal_n;
 
 % Comp. normales de las tensiones (1ª fila por un lado y 2ª fila por otro) 
 % vienen dadas por normal_e y normal_n (celda noreste de los apuntes). 
+
+vdim=4;
+ss=zeros(vdim,1);
 
 i=1;
 j=1;
@@ -35,39 +38,40 @@ denom_ne=normal_e(i,j,1)*normal_n(i,j,2)-normal_n(i,j,1)*normal_e(i,j,2);
     gamma_ne=-normal_n(i,j,1)/denom_ne;
     delta_ne=normal_e(i,j,1)/denom_ne;
 
-vdim=4;
-
 x1=x(i,j);  
 y1=y(i,j);            
-% x2=x(i+1,j);
-% y2=y(i+1,j);
+x2=x(i+1,j);
+y2=y(i+1,j);
 % x3=x(i+1,j+1);
 % y3=y(i+1,j+1);
-% x4=x(i,j+1);
-% y4=y(i,j+1);
+x4=x(i,j+1);
+y4=y(i,j+1);
 
-ss=zeros(vdim,1);
+% We need to multiply to the module squared in order to obtain the
+% fluxes multiplied by |e|.
+mod_e1_sqrd=(x1-x2)^2+(y1-y2)^2;
+mod_e2_sqrd=(x1-x4)^2+(y1-y4)^2;
 
-sy1(i,j,1)=sol_exactax_sigma(x1,y1,tt,nu,1,2);
-sy2(i,j,1)=sol_exactax_sigma(x1,y1,tt,nu,2,2);
-sx1(i,j,2)=sol_exactax_sigma(x1,y1,tt,nu,1,1);
-sx2(i,j,2)=sol_exactax_sigma(x1,y1,tt,nu,2,1);
+s1y(i,j,1)=sol_exactax_sigma(x1,y1,tt,nu,1,2)*mod_e1_sqrd;
+s2y(i,j,1)=sol_exactax_sigma(x1,y1,tt,nu,2,2)*mod_e1_sqrd;
+s1x(i,j,2)=sol_exactax_sigma(x1,y1,tt,nu,1,1)*mod_e2_sqrd;
+s2x(i,j,2)=sol_exactax_sigma(x1,y1,tt,nu,2,1)*mod_e2_sqrd;
 
     % Celda NE
         % 1ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-    s_flux_h_ne_1=alpha_ne*sy1(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
-                  beta_ne*sx1(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);
+    s_flux_h_ne_1=alpha_ne*s1y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
+                  beta_ne*s1x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);
         % Comp. vertical del flujo 
-    s_flux_v_ne_1=gamma_ne*sy1(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
-                  delta_ne*sx1(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);
+    s_flux_v_ne_1=gamma_ne*s1y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
+                  delta_ne*s1x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);
     % 2ª fila de la matriz de tensiones
         % Comp. horizontal del flujo         
-    s_flux_h_ne_2=alpha_ne*sy2(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
-                  beta_ne*sx2(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);
+    s_flux_h_ne_2=alpha_ne*s2y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
+                  beta_ne*s2x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);
         % Comp. vertical del flujo 
-    s_flux_v_ne_2=gamma_ne*sy2(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
-                  delta_ne*sx2(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);
+    s_flux_v_ne_2=gamma_ne*s2y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
+                  delta_ne*s2x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);
         
 ss(1)=s_flux_v_ne_1;
 ss(2)=s_flux_v_ne_2;
@@ -89,16 +93,16 @@ ss=zeros(vdim,1);
 
 for i=2:N
    
-%     x1=x(i-1,j);
-%     y1=y(i-1,j);
+    x1=x(i-1,j);
+    y1=y(i-1,j);
     x2=x(i,j);
     y2=y(i,j);
-%     x3=x(i,j+1);
-%     y3=y(i,j+1);
+    x3=x(i,j+1);
+    y3=y(i,j+1);
 %     x4=x(i-1,j+1);
 %     y4=y(i-1,j+1);
-%     x5=x(i+1,j);
-%     y5=y(i+1,j);
+    x5=x(i+1,j);
+    y5=y(i+1,j);
 %     x6=x(i+1,j+1);
 %     y6=y(i+1,j+1);
 
@@ -121,44 +125,48 @@ for i=2:N
         gamma_nw=-normal_w(i,j,1)/denom_nw;
         delta_nw=normal_n(i,j,1)/denom_nw;
     
-    sy1(i,j,1)=sol_exactax_sigma(x2,y2,tt,nu,1,2);
-    sy2(i,j,1)=sol_exactax_sigma(x2,y2,tt,nu,2,2);
-    sx1(i,j,2)=sol_exactax_sigma(x2,y2,tt,nu,1,1);
-    sx2(i,j,2)=sol_exactax_sigma(x2,y2,tt,nu,2,1);
-    sy1(i,j,2)=sy1(i,j,1);
-    sy2(i,j,2)=sy2(i,j,1);
+    mod_e1_sqrd=(x2-x5)^2+(y2-y5)^2;
+    mod_e2_sqrd=(x2-x3)^2+(y2-y3)^2;
+    mod_e3_sqrd=(x2-x1)^2+(y2-y1)^2;    
+        
+    s1y(i,j,1)=sol_exactax_sigma(x2,y2,tt,nu,1,2)*mod_e1_sqrd;
+    s2y(i,j,1)=sol_exactax_sigma(x2,y2,tt,nu,2,2)*mod_e1_sqrd;
+    s1x(i,j,2)=sol_exactax_sigma(x2,y2,tt,nu,1,1)*mod_e2_sqrd;
+    s2x(i,j,2)=sol_exactax_sigma(x2,y2,tt,nu,2,1)*mod_e2_sqrd;
+    s1y(i,j,2)=sol_exactax_sigma(x2,y2,tt,nu,1,2)*mod_e3_sqrd;
+    s2y(i,j,2)=sol_exactax_sigma(x2,y2,tt,nu,2,2)*mod_e3_sqrd;
     
     % Celda NE
         % 1ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_ne_1=alpha_ne*sy1(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
-                   beta_ne*sx1(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);
+     s_flux_h_ne_1=alpha_ne*s1y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
+                   beta_ne*s1x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);
             % Comp. vertical del flujo 
-     s_flux_v_ne_1=gamma_ne*sy1(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
-                   delta_ne*sx1(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);   
+     s_flux_v_ne_1=gamma_ne*s1y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
+                   delta_ne*s1x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);   
         % 2ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_ne_2=alpha_ne*sy2(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
-                   beta_ne*sx2(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);
+     s_flux_h_ne_2=alpha_ne*s2y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
+                   beta_ne*s2x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);
             % Comp. vertical del flujo 
-     s_flux_v_ne_2=gamma_ne*sy2(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
-                   delta_ne*sx2(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);   
+     s_flux_v_ne_2=gamma_ne*s2y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
+                   delta_ne*s2x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);   
 
     % Celda NO
         % 1ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_nw_1=alpha_nw*sx1(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
-                   beta_nw*sy1(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);
+     s_flux_h_nw_1=alpha_nw*s1x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
+                   beta_nw*s1y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);
             % Comp. vertical del flujo 
-     s_flux_v_nw_1=gamma_nw*sx1(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
-                   delta_nw*sy1(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);   
+     s_flux_v_nw_1=gamma_nw*s1x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
+                   delta_nw*s1y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);   
         % 2ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_nw_2=alpha_nw*sx2(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
-                   beta_nw*sy2(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);
+     s_flux_h_nw_2=alpha_nw*s2x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
+                   beta_nw*s2y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);
             % Comp. vertical del flujo 
-     s_flux_v_nw_2=gamma_nw*sx2(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
-                   delta_nw*sy2(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);   
+     s_flux_v_nw_2=gamma_nw*s2x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
+                   delta_nw*s2y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);   
                
     ss(1)=s_flux_v_ne_1;
     ss(2)=s_flux_v_ne_2;
@@ -166,13 +174,6 @@ for i=2:N
     ss(4)=(s_flux_h_ne_2 + s_flux_h_nw_2)/2;
     ss(5)=s_flux_v_nw_1;
     ss(6)=s_flux_v_nw_2;
-               
-%     ss(1)=sol_exactax_sigma(x2,y2,tt,nu,1,2);
-%     ss(2)=sol_exactax_sigma(x2,y2,tt,nu,2,2);
-%     ss(3)=sol_exactax_sigma(x2,y2,tt,nu,1,1);
-%     ss(4)=sol_exactax_sigma(x2,y2,tt,nu,2,1);
-%     ss(5)=ss(1);
-%     ss(6)=ss(2);
     
     indr=ld+1:ld+vdim;
     sigma(indr)=ss;
@@ -195,45 +196,43 @@ denom_nw=normal_n(i,j,1)*normal_w(i,j,2)-normal_w(i,j,1)*normal_n(i,j,2);
     gamma_nw=-normal_w(i,j,1)/denom_nw;
     delta_nw=normal_n(i,j,1)/denom_nw;
 
-% x1=x(i-1,j);  
-% y1=y(i-1,j);            
+x1=x(i-1,j);  
+y1=y(i-1,j);            
 x2=x(i,j);
 y2=y(i,j);
-% x3=x(i,j+1);
-% y3=y(i,j+1);
+x3=x(i,j+1);
+y3=y(i,j+1);
 % x4=x(i-1,j+1);
 % y4=y(i-1,j+1);
 
-sx1(i,j,2)=sol_exactax_sigma(x2,y2,tt,nu,1,1);
-sx2(i,j,2)=sol_exactax_sigma(x2,y2,tt,nu,2,1);
-sy1(i,j,2)=sol_exactax_sigma(x2,y2,tt,nu,1,2);
-sy2(i,j,2)=sol_exactax_sigma(x2,y2,tt,nu,2,2);
+mod_e1_sqrd=(x2-x3)^2+(y2-y3)^2;
+mod_e2_sqrd=(x2-x1)^2+(y2-y1)^2;
+
+s1x(i,j,2)=sol_exactax_sigma(x2,y2,tt,nu,1,1)*mod_e1_sqrd;
+s2x(i,j,2)=sol_exactax_sigma(x2,y2,tt,nu,2,1)*mod_e1_sqrd;
+s1y(i,j,2)=sol_exactax_sigma(x2,y2,tt,nu,1,2)*mod_e2_sqrd;
+s2y(i,j,2)=sol_exactax_sigma(x2,y2,tt,nu,2,2)*mod_e2_sqrd;
 
     % Celda NO
         % 1ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_nw_1=alpha_nw*sx1(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
-                   beta_nw*sy1(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);
+     s_flux_h_nw_1=alpha_nw*s1x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
+                   beta_nw*s1y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);
             % Comp. vertical del flujo 
-     s_flux_v_nw_1=gamma_nw*sx1(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
-                   delta_nw*sy1(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);   
+     s_flux_v_nw_1=gamma_nw*s1x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
+                   delta_nw*s1y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);   
         % 2ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_nw_2=alpha_nw*sx2(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
-                   beta_nw*sy2(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);
+     s_flux_h_nw_2=alpha_nw*s2x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
+                   beta_nw*s2y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);
             % Comp. vertical del flujo 
-     s_flux_v_nw_2=gamma_nw*sx2(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
-                   delta_nw*sy2(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);  
+     s_flux_v_nw_2=gamma_nw*s2x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
+                   delta_nw*s2y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);  
 
 ss(1)=s_flux_h_nw_1;
 ss(2)=s_flux_h_nw_2;
 ss(3)=s_flux_v_nw_1;
 ss(4)=s_flux_v_nw_2;
-               
-% ss(1)=sol_exactax_sigma(x2,y2,tt,nu,1,1);
-% ss(2)=sol_exactax_sigma(x2,y2,tt,nu,2,1);
-% ss(3)=sol_exactax_sigma(x2,y2,tt,nu,1,2);
-% ss(4)=sol_exactax_sigma(x2,y2,tt,nu,2,2);
 
 indr=ld+1:ld+vdim;
 sigma(indr)=ss;
@@ -247,18 +246,18 @@ for j=2:N
     vdim=6;
     ss=zeros(vdim,1);
     
-%     x1=x(i,j-1);
-%     y1=y(i,j-1);
+    x1=x(i,j-1);
+    y1=y(i,j-1);
 %     x2=x(i+1,j-1);
 %     y2=y(i+1,j-1);
-%     x3=x(i+1,j);
-%     y3=y(i+1,j);
+    x3=x(i+1,j);
+    y3=y(i+1,j);
     x4=x(i,j);
     y4=y(i,j);
 %     x5=x(i+1,j+1);
 %     y5=y(i+1,j+1);
-%     x6=x(i,j+1);
-%     y6=y(i,j+1);
+    x6=x(i,j+1);
+    y6=y(i,j+1);
     
     normal_s(i,j,1)=(y(i,j)-y(i,j-1))/sqrt((y(i,j)-y(i,j-1))^2+(x(i,j-1)-x(i,j))^2);
     normal_s(i,j,2)=(x(i,j-1)-x(i,j))/sqrt((y(i,j)-y(i,j-1))^2+(x(i,j-1)-x(i,j))^2);
@@ -274,49 +273,53 @@ for j=2:N
         delta_se=normal_s(i,j,1)/denom_se; 
 
     denom_ne=normal_e(i,j,1)*normal_n(i,j,2)-normal_n(i,j,1)*normal_e(i,j,2);
-        alpha_ne=normal_e(i,j,2)/denom_ne;
-        beta_ne=-normal_s(i,j,2)/denom_ne;
-        gamma_ne=-normal_e(i,j,1)/denom_ne;
-        delta_ne=normal_s(i,j,1)/denom_ne;         
+        alpha_ne=normal_n(i,j,2)/denom_ne;
+        beta_ne=-normal_e(i,j,2)/denom_ne;
+        gamma_ne=-normal_n(i,j,1)/denom_ne;
+        delta_ne=normal_e(i,j,1)/denom_ne; 
+        
+    mod_e1_sqrd=(x4-x1)^2+(y4-y1)^2;
+    mod_e2_sqrd=(x4-x3)^2+(y4-y3)^2;
+    mod_e3_sqrd=(x4-x6)^2+(y4-y6)^2;
 
-    sx1(i,j,1)=sol_exactax_sigma(x4,y4,tt,nu,1,1);
-    sx2(i,j,1)=sol_exactax_sigma(x4,y4,tt,nu,2,1);
-    sy1(i,j,1)=sol_exactax_sigma(x4,y4,tt,nu,1,2);
-    sy2(i,j,1)=sol_exactax_sigma(x4,y4,tt,nu,2,2);
-    sx1(i,j,2)=sx1(i,j,1);
-    sx2(i,j,2)=sx2(i,j,1);
+    s1x(i,j,1)=sol_exactax_sigma(x4,y4,tt,nu,1,1)*mod_e1_sqrd;
+    s2x(i,j,1)=sol_exactax_sigma(x4,y4,tt,nu,2,1)*mod_e1_sqrd;
+    s1y(i,j,1)=sol_exactax_sigma(x4,y4,tt,nu,1,2)*mod_e2_sqrd;
+    s2y(i,j,1)=sol_exactax_sigma(x4,y4,tt,nu,2,2)*mod_e2_sqrd;
+    s1x(i,j,2)=sol_exactax_sigma(x4,y4,tt,nu,1,1)*mod_e3_sqrd;
+    s2x(i,j,2)=sol_exactax_sigma(x4,y4,tt,nu,2,1)*mod_e3_sqrd;
     
     % Celda SE
         % 1ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_se_1=alpha_se*sx1(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
-                   beta_se*sy1(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);
+     s_flux_h_se_1=alpha_se*s1x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
+                   beta_se*s1y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);
             % Comp. vertical del flujo 
-     s_flux_v_se_1=gamma_se*sx1(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
-                   delta_se*sy1(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);  
+     s_flux_v_se_1=gamma_se*s1x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
+                   delta_se*s1y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);  
         % 2ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_se_2=alpha_se*sx2(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
-                   beta_se*sy2(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);
+     s_flux_h_se_2=alpha_se*s2x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
+                   beta_se*s2y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);
             % Comp. vertical del flujo 
-     s_flux_v_se_2=gamma_se*sx2(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
-                   delta_se*sy2(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);    
+     s_flux_v_se_2=gamma_se*s2x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
+                   delta_se*s2y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);    
     
     % Celda NE
         % 1ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_ne_1=alpha_ne*sy1(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
-                   beta_ne*sx1(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);
+     s_flux_h_ne_1=alpha_ne*s1y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
+                   beta_ne*s1x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);
             % Comp. vertical del flujo 
-     s_flux_v_ne_1=gamma_ne*sy1(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
-                   delta_ne*sx1(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);   
+     s_flux_v_ne_1=gamma_ne*s1y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
+                   delta_ne*s1x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);   
         % 2ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_ne_2=alpha_ne*sy2(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
-                   beta_ne*sx2(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);
+     s_flux_h_ne_2=alpha_ne*s2y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
+                   beta_ne*s2x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);
             % Comp. vertical del flujo 
-     s_flux_v_ne_2=gamma_ne*sy2(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
-                   delta_ne*sx2(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);   
+     s_flux_v_ne_2=gamma_ne*s2y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
+                   delta_ne*s2x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);   
                
     ss(1)=s_flux_h_se_1;
     ss(2)=s_flux_h_se_2;
@@ -324,13 +327,6 @@ for j=2:N
     ss(4)=(s_flux_v_ne_2 + s_flux_v_se_2)/2;
     ss(5)=s_flux_h_ne_1;
     ss(6)=s_flux_h_ne_2;
-   
-%     ss(1)=sol_exactax_sigma(x4,y4,tt,nu,1,1);
-%     ss(2)=sol_exactax_sigma(x4,y4,tt,nu,2,1);
-%     ss(3)=sol_exactax_sigma(x4,y4,tt,nu,1,2);
-%     ss(4)=sol_exactax_sigma(x4,y4,tt,nu,2,2);
-%     ss(5)=ss(1);
-%     ss(6)=ss(2);
 
     indr=ld+1:ld+vdim;
     sigma(indr)=ss;
@@ -338,27 +334,26 @@ for j=2:N
     
     % Central nodes 
     vdim=8;
-
     ss=zeros(vdim,1);
          
     for i=2:N
         
 %     x1=x(i-1,j-1);
 %     y1=y(i-1,j-1);
-%     x2=x(i,j-1);
-%     y2=y(i,j-1);
+    x2=x(i,j-1);
+    y2=y(i,j-1);
     x3=x(i,j);
     y3=y(i,j);
-%     x4=x(i-1,j);
-%     y4=y(i-1,j);
+    x4=x(i-1,j);
+    y4=y(i-1,j);
 %     x5=x(i+1,j-1);
 %     y5=y(i+1,j-1);
-%     x6=x(i+1,j);
-%     y6=y(i+1,j);
+    x6=x(i+1,j);
+    y6=y(i+1,j);
 %     x7=x(i+1,j+1);
 %     y7=y(i+1,j+1);
-%     x8=x(i,j+1);
-%     y8=y(i,j+1);
+    x8=x(i,j+1);
+    y8=y(i,j+1);
 %     x9=x(i-1,j+1);
 %     y9=y(i-1,j+1);
 
@@ -395,78 +390,83 @@ for j=2:N
         gamma_sw=-normal_s(i,j,1)/denom_sw;
         delta_sw=normal_w(i,j,1)/denom_sw;
 
-    sx1(i,j,1)=sol_exactax_sigma(x3,y3,tt,nu,1,1);
-    sx2(i,j,1)=sol_exactax_sigma(x3,y3,tt,nu,2,1);
-    sy1(i,j,1)=sol_exactax_sigma(x3,y3,tt,nu,1,2);
-    sy2(i,j,1)=sol_exactax_sigma(x3,y3,tt,nu,2,2);
-    sx1(i,j,2)=sx1(i,j,1);
-    sx2(i,j,2)=sx2(i,j,1);
-    sy1(i,j,2)=sy1(i,j,1);
-    sy2(i,j,2)=sy2(i,j,1);    
+    mod_e1_sqrd=(x3-x2)^2+(y3-y2)^2;
+    mod_e2_sqrd=(x3-x6)^2+(y3-y6)^2;
+    mod_e3_sqrd=(x3-x8)^2+(y3-y8)^2;
+    mod_e4_sqrd=(x3-x4)^2+(y3-y4)^2;
+        
+    s1x(i,j,1)=sol_exactax_sigma(x3,y3,tt,nu,1,1)*mod_e1_sqrd;
+    s2x(i,j,1)=sol_exactax_sigma(x3,y3,tt,nu,2,1)*mod_e1_sqrd;
+    s1y(i,j,1)=sol_exactax_sigma(x3,y3,tt,nu,1,2)*mod_e2_sqrd;
+    s2y(i,j,1)=sol_exactax_sigma(x3,y3,tt,nu,2,2)*mod_e2_sqrd;
+    s1x(i,j,2)=sol_exactax_sigma(x3,y3,tt,nu,1,1)*mod_e3_sqrd;
+    s2x(i,j,2)=sol_exactax_sigma(x3,y3,tt,nu,2,1)*mod_e3_sqrd;
+    s1y(i,j,2)=sol_exactax_sigma(x3,y3,tt,nu,1,2)*mod_e4_sqrd;
+    s2y(i,j,2)=sol_exactax_sigma(x3,y3,tt,nu,2,2)*mod_e4_sqrd;
     
     % Celda SE
         % 1ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_se_1=alpha_se*sx1(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
-                   beta_se*sy1(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);
+     s_flux_h_se_1=alpha_se*s1x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
+                   beta_se*s1y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);
             % Comp. vertical del flujo 
-     s_flux_v_se_1=gamma_se*sx1(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
-                   delta_se*sy1(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);  
+     s_flux_v_se_1=gamma_se*s1x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
+                   delta_se*s1y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);  
         % 2ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_se_2=alpha_se*sx2(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
-                   beta_se*sy2(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);
+     s_flux_h_se_2=alpha_se*s2x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
+                   beta_se*s2y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);
             % Comp. vertical del flujo 
-     s_flux_v_se_2=gamma_se*sx2(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
-                   delta_se*sy2(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);    
+     s_flux_v_se_2=gamma_se*s2x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
+                   delta_se*s2y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);    
     
     % Celda NE
         % 1ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_ne_1=alpha_ne*sy1(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
-                   beta_ne*sx1(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);
+     s_flux_h_ne_1=alpha_ne*s1y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
+                   beta_ne*s1x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);
             % Comp. vertical del flujo 
-     s_flux_v_ne_1=gamma_ne*sy1(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
-                   delta_ne*sx1(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);   
+     s_flux_v_ne_1=gamma_ne*s1y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
+                   delta_ne*s1x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);   
         % 2ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_ne_2=alpha_ne*sy2(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
-                   beta_ne*sx2(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);
+     s_flux_h_ne_2=alpha_ne*s2y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
+                   beta_ne*s2x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);
             % Comp. vertical del flujo 
-     s_flux_v_ne_2=gamma_ne*sy2(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
-                   delta_ne*sx2(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);
+     s_flux_v_ne_2=gamma_ne*s2y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2)+...
+                   delta_ne*s2x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2);
                
     % Celda NO
         % 1ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_nw_1=alpha_nw*sx1(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
-                   beta_nw*sy1(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);
+     s_flux_h_nw_1=alpha_nw*s1x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
+                   beta_nw*s1y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);
             % Comp. vertical del flujo 
-     s_flux_v_nw_1=gamma_nw*sx1(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
-                   delta_nw*sy1(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);   
+     s_flux_v_nw_1=gamma_nw*s1x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
+                   delta_nw*s1y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);   
         % 2ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_nw_2=alpha_nw*sx2(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
-                   beta_nw*sy2(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);
+     s_flux_h_nw_2=alpha_nw*s2x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
+                   beta_nw*s2y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);
             % Comp. vertical del flujo 
-     s_flux_v_nw_2=gamma_nw*sx2(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
-                   delta_nw*sy2(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);      
+     s_flux_v_nw_2=gamma_nw*s2x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
+                   delta_nw*s2y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);      
                
     % Celda SO
         % 1ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_sw_1=alpha_sw*sy1(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
-                   beta_sw*sx1(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);
+     s_flux_h_sw_1=alpha_sw*s1y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
+                   beta_sw*s1x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);
             % Comp. vertical del flujo 
-     s_flux_v_sw_1=gamma_sw*sy1(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
-                   delta_sw*sx1(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);  
+     s_flux_v_sw_1=gamma_sw*s1y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
+                   delta_sw*s1x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);  
         % 2ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_sw_2=alpha_sw*sy2(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
-                   beta_sw*sx2(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);
+     s_flux_h_sw_2=alpha_sw*s2y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
+                   beta_sw*s2x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);
             % Comp. vertical del flujo 
-     s_flux_v_sw_2=gamma_sw*sy2(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
-                   delta_sw*sx2(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);    
+     s_flux_v_sw_2=gamma_sw*s2y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
+                   delta_sw*s2x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);    
                
     ss(1)=(s_flux_h_se_1 + s_flux_h_sw_1)/2;
     ss(2)=(s_flux_h_se_2 + s_flux_h_sw_2)/2;
@@ -476,15 +476,6 @@ for j=2:N
     ss(6)=(s_flux_h_ne_2 + s_flux_h_nw_2)/2;
     ss(7)=(s_flux_v_sw_1 + s_flux_v_nw_1)/2;
     ss(8)=(s_flux_v_sw_2 + s_flux_v_nw_2)/2;  
-    
-%     ss(1)=sol_exactax_sigma(x3,y3,tt,nu,1,1);
-%     ss(2)=sol_exactax_sigma(x3,y3,tt,nu,2,1);
-%     ss(3)=sol_exactax_sigma(x3,y3,tt,nu,1,2);
-%     ss(4)=sol_exactax_sigma(x3,y3,tt,nu,2,2);
-%     ss(5)=ss(1);
-%     ss(6)=ss(2);
-%     ss(7)=ss(3);
-%     ss(8)=ss(4);
 
     indr=ld+1:ld+vdim;
     sigma(indr)=ss;
@@ -499,14 +490,14 @@ for j=2:N
     
 %     x1=x(i-1,j-1);
 %     y1=y(i-1,j-1);
-%     x2=x(i,j-1);
-%     y2=y(i,j-1);
+    x2=x(i,j-1);
+    y2=y(i,j-1);
     x3=x(i,j);
     y3=y(i,j);
-%     x4=x(i-1,j);
-%     y4=y(i-1,j);
-%     x5=x(i,j+1);
-%     y5=y(i,j+1);
+    x4=x(i-1,j);
+    y4=y(i-1,j);
+    x5=x(i,j+1);
+    y5=y(i,j+1);
 %     x6=x(i-1,j+1);
 %     y6=y(i-1,j+1);   
 
@@ -529,44 +520,48 @@ for j=2:N
         gamma_sw=-normal_s(i,j,1)/denom_sw;
         delta_sw=normal_w(i,j,1)/denom_sw;
     
-    sx1(i,j,1)=sol_exactax_sigma(x3,y3,tt,nu,1,1);
-    sx2(i,j,1)=sol_exactax_sigma(x3,y3,tt,nu,2,1);
-    sx1(i,j,2)=sx1(i,j,1);
-    sx2(i,j,2)=sx2(i,j,1);
-    sy1(i,j,2)=sol_exactax_sigma(x3,y3,tt,nu,1,2);
-    sy2(i,j,2)=sol_exactax_sigma(x3,y3,tt,nu,2,2);
+    mod_e1_sqrd=(x3-x2)^2+(y3-y2)^2;
+    mod_e2_sqrd=(x3-x5)^2+(y3-y5)^2;
+    mod_e3_sqrd=(x3-x4)^2+(y3-y4)^2;
+        
+    s1x(i,j,1)=sol_exactax_sigma(x3,y3,tt,nu,1,1)*mod_e1_sqrd;
+    s2x(i,j,1)=sol_exactax_sigma(x3,y3,tt,nu,2,1)*mod_e1_sqrd;
+    s1x(i,j,2)=sol_exactax_sigma(x3,y3,tt,nu,1,1)*mod_e2_sqrd;
+    s2x(i,j,2)=sol_exactax_sigma(x3,y3,tt,nu,2,1)*mod_e2_sqrd;
+    s1y(i,j,2)=sol_exactax_sigma(x3,y3,tt,nu,1,2)*mod_e3_sqrd;
+    s2y(i,j,2)=sol_exactax_sigma(x3,y3,tt,nu,2,2)*mod_e3_sqrd;
     
     % Celda NO
         % 1ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_nw_1=alpha_nw*sx1(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
-                   beta_nw*sy1(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);
+     s_flux_h_nw_1=alpha_nw*s1x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
+                   beta_nw*s1y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);
             % Comp. vertical del flujo 
-     s_flux_v_nw_1=gamma_nw*sx1(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
-                   delta_nw*sy1(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);   
+     s_flux_v_nw_1=gamma_nw*s1x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
+                   delta_nw*s1y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);   
         % 2ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_nw_2=alpha_nw*sx2(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
-                   beta_nw*sy2(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);
+     s_flux_h_nw_2=alpha_nw*s2x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
+                   beta_nw*s2y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);
             % Comp. vertical del flujo 
-     s_flux_v_nw_2=gamma_nw*sx2(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
-                   delta_nw*sy2(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);      
+     s_flux_v_nw_2=gamma_nw*s2x(i,j,2)/sqrt((x(i,j)-x(i,j+1))^2+(y(i,j)-y(i,j+1))^2)+...
+                   delta_nw*s2y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2);      
                
     % Celda SO
         % 1ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_sw_1=alpha_sw*sy1(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
-                   beta_sw*sx1(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);
+     s_flux_h_sw_1=alpha_sw*s1y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
+                   beta_sw*s1x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);
             % Comp. vertical del flujo 
-     s_flux_v_sw_1=gamma_sw*sy1(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
-                   delta_sw*sx1(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);  
+     s_flux_v_sw_1=gamma_sw*s1y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
+                   delta_sw*s1x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);  
         % 2ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_sw_2=alpha_sw*sy2(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
-                   beta_sw*sx2(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);
+     s_flux_h_sw_2=alpha_sw*s2y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
+                   beta_sw*s2x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);
             % Comp. vertical del flujo 
-     s_flux_v_sw_2=gamma_sw*sy2(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
-                   delta_sw*sx2(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);  
+     s_flux_v_sw_2=gamma_sw*s2y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
+                   delta_sw*s2x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);  
                
     ss(1)=s_flux_h_sw_1;
     ss(2)=s_flux_h_sw_2;
@@ -574,13 +569,6 @@ for j=2:N
     ss(4)=s_flux_h_nw_2;
     ss(5)=(s_flux_v_sw_1 + s_flux_v_nw_1)/2;  
     ss(6)=(s_flux_v_sw_2 + s_flux_v_nw_2)/2;            
-
-%     ss(1)=sol_exactax_sigma(x3,y3,tt,nu,1,1);
-%     ss(2)=sol_exactax_sigma(x3,y3,tt,nu,2,1);
-%     ss(3)=ss(1);
-%     ss(4)=ss(2);
-%     ss(5)=sol_exactax_sigma(x3,y3,tt,nu,1,2);
-%     ss(6)=sol_exactax_sigma(x3,y3,tt,nu,2,2);
 
     indr=ld+1:ld+vdim;
     sigma(indr)=ss;
@@ -592,51 +580,49 @@ i=1;
 vdim=4;
 ss=zeros(vdim,1);
 
-% x1=x(i,j-1);
-% y1=y(i,j-1);           
+x1=x(i,j-1);
+y1=y(i,j-1);           
 % x2=x(i+1,j-1);
 % y2=y(i+1,j-1);
-% x3=x(i+1,j);
-% y3=y(i+1,j);
+x3=x(i+1,j);
+y3=y(i+1,j);
 x4=x(i,j);
 y4=y(i,j);
-
-sx1(i,j,1)=sol_exactax_sigma(x4,y4,tt,nu,1,1);
-sx2(i,j,1)=sol_exactax_sigma(x4,y4,tt,nu,2,1);
-sy1(i,j,1)=sol_exactax_sigma(x4,y4,tt,nu,1,2);
-sy2(i,j,1)=sol_exactax_sigma(x4,y4,tt,nu,2,2);
 
 denom_se=normal_s(i,j,1)*normal_e(i,j,2)-normal_e(i,j,1)*normal_s(i,j,2);
     alpha_se=normal_e(i,j,2)/denom_se;
     beta_se=-normal_s(i,j,2)/denom_se;
     gamma_se=-normal_e(i,j,1)/denom_se;
-    delta_se=normal_s(i,j,1)/denom_se;    
+    delta_se=normal_s(i,j,1)/denom_se;   
+    
+mod_e1_sqrd=(x4-x1)^2+(y4-y1)^2;
+mod_e2_sqrd=(x4-x3)^2+(y4-y3)^2;
+    
+s1x(i,j,1)=sol_exactax_sigma(x4,y4,tt,nu,1,1)*mod_e1_sqrd;
+s2x(i,j,1)=sol_exactax_sigma(x4,y4,tt,nu,2,1)*mod_e1_sqrd;
+s1y(i,j,1)=sol_exactax_sigma(x4,y4,tt,nu,1,2)*mod_e2_sqrd;
+s2y(i,j,1)=sol_exactax_sigma(x4,y4,tt,nu,2,2)*mod_e2_sqrd;
     
     % Celda SE
         % 1ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_se_1=alpha_se*sx1(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
-                   beta_se*sy1(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);
+     s_flux_h_se_1=alpha_se*s1x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
+                   beta_se*s1y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);
             % Comp. vertical del flujo 
-     s_flux_v_se_1=gamma_se*sx1(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
-                   delta_se*sy1(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);  
+     s_flux_v_se_1=gamma_se*s1x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
+                   delta_se*s1y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);  
         % 2ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_se_2=alpha_se*sx2(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
-                   beta_se*sy2(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);
+     s_flux_h_se_2=alpha_se*s2x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
+                   beta_se*s2y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);
             % Comp. vertical del flujo 
-     s_flux_v_se_2=gamma_se*sx2(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
-                   delta_se*sy2(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);    
+     s_flux_v_se_2=gamma_se*s2x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
+                   delta_se*s2y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);    
                
 ss(1)=s_flux_h_se_1;
 ss(2)=s_flux_h_se_2;
 ss(3)=s_flux_v_se_1;
 ss(4)=s_flux_v_se_2;
-
-% ss(1)=sol_exactax_sigma(x4,y4,tt,nu,1,1);
-% ss(2)=sol_exactax_sigma(x4,y4,tt,nu,2,1);
-% ss(3)=sol_exactax_sigma(x4,y4,tt,nu,1,2);
-% ss(4)=sol_exactax_sigma(x4,y4,tt,nu,2,2);
 
 indr=ld+1:ld+vdim;
 sigma(indr)=ss;
@@ -650,16 +636,16 @@ for i=2:N
     
 %     x1=x(i-1,j-1);
 %     y1=y(i-1,j-1);
-%     x2=x(i,j-1);
-%     y2=y(i,j-1);
+    x2=x(i,j-1);
+    y2=y(i,j-1);
     x3=x(i,j);
     y3=y(i,j);
-%     x4=x(i-1,j);
-%     y4=y(i-1,j);
+    x4=x(i-1,j);
+    y4=y(i-1,j);
 %     x5=x(i+1,j-1);
 %     y5=y(i+1,j-1);
-%     x6=x(i+1,j);
-%     y6=y(i+1,j);   
+    x6=x(i+1,j);
+    y6=y(i+1,j);   
 
     normal_s(i,j,1)=(y(i,j)-y(i,j-1))/sqrt((y(i,j)-y(i,j-1))^2+(x(i,j-1)-x(i,j))^2);
     normal_s(i,j,2)=(x(i,j-1)-x(i,j))/sqrt((y(i,j)-y(i,j-1))^2+(x(i,j-1)-x(i,j))^2);
@@ -680,44 +666,48 @@ for i=2:N
         gamma_sw=-normal_s(i,j,1)/denom_sw;
         delta_sw=normal_w(i,j,1)/denom_sw;
 
-    sx1(i,j,1)=sol_exactax_sigma(x3,y3,tt,nu,1,1);
-    sx2(i,j,1)=sol_exactax_sigma(x3,y3,tt,nu,2,1);
-    sy1(i,j,1)=sol_exactax_sigma(x3,y3,tt,nu,1,2);
-    sy2(i,j,1)=sol_exactax_sigma(x3,y3,tt,nu,2,2);
-    sy1(i,j,2)=sy1(i,j,1);
-    sy2(i,j,2)=sy2(i,j,1);
+    mod_e1_sqrd=(x3-x2)^2+(y3-y2)^2;
+    mod_e2_sqrd=(x3-x6)^2+(y3-y6)^2;
+    mod_e3_sqrd=(x3-x4)^2+(y3-y4)^2;
+        
+    s1x(i,j,1)=sol_exactax_sigma(x3,y3,tt,nu,1,1)*mod_e1_sqrd;
+    s2x(i,j,1)=sol_exactax_sigma(x3,y3,tt,nu,2,1)*mod_e1_sqrd;
+    s1y(i,j,1)=sol_exactax_sigma(x3,y3,tt,nu,1,2)*mod_e2_sqrd;
+    s2y(i,j,1)=sol_exactax_sigma(x3,y3,tt,nu,2,2)*mod_e2_sqrd;
+    s1y(i,j,2)=sol_exactax_sigma(x3,y3,tt,nu,1,2)*mod_e3_sqrd;
+    s2y(i,j,2)=sol_exactax_sigma(x3,y3,tt,nu,2,2)*mod_e3_sqrd;
     
     % Celda SE
         % 1ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_se_1=alpha_se*sx1(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
-                   beta_se*sy1(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);
+     s_flux_h_se_1=alpha_se*s1x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
+                   beta_se*s1y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);
             % Comp. vertical del flujo 
-     s_flux_v_se_1=gamma_se*sx1(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
-                   delta_se*sy1(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);  
+     s_flux_v_se_1=gamma_se*s1x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
+                   delta_se*s1y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);  
         % 2ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_se_2=alpha_se*sx2(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
-                   beta_se*sy2(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);
+     s_flux_h_se_2=alpha_se*s2x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
+                   beta_se*s2y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);
             % Comp. vertical del flujo 
-     s_flux_v_se_2=gamma_se*sx2(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
-                   delta_se*sy2(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);       
+     s_flux_v_se_2=gamma_se*s2x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2)+...
+                   delta_se*s2y(i,j,1)/sqrt((x(i,j)-x(i+1,j))^2+(y(i,j)-y(i+1,j))^2);       
                
     % Celda SO
         % 1ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_sw_1=alpha_sw*sy1(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
-                   beta_sw*sx1(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);
+     s_flux_h_sw_1=alpha_sw*s1y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
+                   beta_sw*s1x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);
             % Comp. vertical del flujo 
-     s_flux_v_sw_1=gamma_sw*sy1(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
-                   delta_sw*sx1(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);  
+     s_flux_v_sw_1=gamma_sw*s1y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
+                   delta_sw*s1x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);  
         % 2ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_sw_2=alpha_sw*sy2(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
-                   beta_sw*sx2(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);
+     s_flux_h_sw_2=alpha_sw*s2y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
+                   beta_sw*s2x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);
             % Comp. vertical del flujo 
-     s_flux_v_sw_2=gamma_sw*sy2(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
-                   delta_sw*sx2(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);  
+     s_flux_v_sw_2=gamma_sw*s2y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
+                   delta_sw*s2x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);  
                
     ss(1)=(s_flux_h_se_1 + s_flux_h_sw_1)/2;
     ss(2)=(s_flux_h_se_2 + s_flux_h_sw_2)/2;
@@ -725,13 +715,6 @@ for i=2:N
     ss(4)=s_flux_v_se_2;
     ss(5)=s_flux_v_sw_1;
     ss(6)=s_flux_v_sw_2;
-    
-%     ss(1)=sol_exactax_sigma(x3,y3,tt,nu,1,1);
-%     ss(2)=sol_exactax_sigma(x3,y3,tt,nu,2,1);
-%     ss(3)=sol_exactax_sigma(x3,y3,tt,nu,1,2);
-%     ss(4)=sol_exactax_sigma(x3,y3,tt,nu,2,2);
-%     ss(5)=ss(3);
-%     ss(6)=ss(4);
 
     indr=ld+1:ld+vdim;
     sigma(indr)=ss;
@@ -745,17 +728,12 @@ ss=zeros(vdim,1);
 
 % x1=x(i-1,j-1);  
 % y1=y(i-1,j-1);            
-% x2=x(i,j-1);
-% y2=y(i,j-1);
+x2=x(i,j-1);
+y2=y(i,j-1);
 x3=x(i,j);
 y3=y(i,j);
-% x4=x(i-1,j);
-% y4=y(i-1,j);
-
-sx1(i,j,1)=sol_exactax_sigma(x3,y3,tt,nu,1,1);
-sx2(i,j,1)=sol_exactax_sigma(x3,y3,tt,nu,2,1);
-sy1(i,j,2)=sol_exactax_sigma(x3,y3,tt,nu,1,2);
-sy2(i,j,2)=sol_exactax_sigma(x3,y3,tt,nu,2,2);
+x4=x(i-1,j);
+y4=y(i-1,j);
 
 denom_sw=normal_w(i,j,1)*normal_s(i,j,2)-normal_s(i,j,1)*normal_w(i,j,2);
     alpha_sw=normal_s(i,j,2)/denom_sw;
@@ -763,34 +741,36 @@ denom_sw=normal_w(i,j,1)*normal_s(i,j,2)-normal_s(i,j,1)*normal_w(i,j,2);
     gamma_sw=-normal_s(i,j,1)/denom_sw;
     delta_sw=normal_w(i,j,1)/denom_sw;
     
+mod_e1_sqrd=(x3-x2)^2+(y3-y2)^2;
+mod_e2_sqrd=(x3-x4)^2+(y3-y4)^2;
+    
+s1x(i,j,1)=sol_exactax_sigma(x3,y3,tt,nu,1,1)*mod_e1_sqrd;
+s2x(i,j,1)=sol_exactax_sigma(x3,y3,tt,nu,2,1)*mod_e1_sqrd;
+s1y(i,j,2)=sol_exactax_sigma(x3,y3,tt,nu,1,2)*mod_e2_sqrd;
+s2y(i,j,2)=sol_exactax_sigma(x3,y3,tt,nu,2,2)*mod_e2_sqrd;
+    
     % Celda SO
         % 1ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_sw_1=alpha_sw*sy1(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
-                   beta_sw*sx1(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);
+     s_flux_h_sw_1=alpha_sw*s1y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
+                   beta_sw*s1x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);
             % Comp. vertical del flujo 
-     s_flux_v_sw_1=gamma_sw*sy1(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
-                   delta_sw*sx1(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);  
+     s_flux_v_sw_1=gamma_sw*s1y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
+                   delta_sw*s1x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);  
         % 2ª fila de la matriz de tensiones
             % Comp. horizontal del flujo 
-     s_flux_h_sw_2=alpha_sw*sy2(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
-                   beta_sw*sx2(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);
+     s_flux_h_sw_2=alpha_sw*s2y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
+                   beta_sw*s2x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);
             % Comp. vertical del flujo 
-     s_flux_v_sw_2=gamma_sw*sy2(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
-                   delta_sw*sx2(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);      
+     s_flux_v_sw_2=gamma_sw*s2y(i,j,2)/sqrt((x(i,j)-x(i-1,j))^2+(y(i,j)-y(i-1,j))^2)+...
+                   delta_sw*s2x(i,j,1)/sqrt((x(i,j)-x(i,j-1))^2+(y(i,j)-y(i,j-1))^2);      
 
 ss(1)=s_flux_h_sw_1;
 ss(2)=s_flux_h_sw_2;
 ss(3)=s_flux_v_sw_1;
 ss(4)=s_flux_v_sw_2;      
-               
-% ss(1)=sol_exactax_sigma(x3,y3,tt,nu,1,1);
-% ss(2)=sol_exactax_sigma(x3,y3,tt,nu,2,1);
-% ss(3)=sol_exactax_sigma(x3,y3,tt,nu,1,2);
-% ss(4)=sol_exactax_sigma(x3,y3,tt,nu,2,2);
 
 indr=ld+1:ld+vdim;
 sigma(indr)=ss;
-% sigma=sigma*(1/N);
 return
 end
