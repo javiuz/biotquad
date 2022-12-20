@@ -6,7 +6,7 @@ NN=N;       % Dimensión del problema discreto.
 
 % Generación de la malla: ¡OJO! Para la malla nº 3 tenemos que introducir 
 % el valor del nº de refinamientos de manera manual.
-mesh=0;                 
+mesh=3;                 
 [x,y]=init_mesh(mesh);  % coordenadas de los vértices de la malla.
 tic
 
@@ -24,8 +24,8 @@ mu=1;
 
 % Storativity coefficient
 % c0=1e-05;
-% c0=0;
-c0=1;
+c0=0;
+% c0=1;
 
 % Hydraulic conductivity: is inside the function 'kinv.m'
 % K=perm*[1 0;0 1]; with perm=1, 1e-03, 1e-06, 1e-09, 1e-12
@@ -42,8 +42,9 @@ Tf=1e-03;
 %  Matrices del sistema de Biot: A11, A12, A21 y A22
     % Asp y App las utilizaremos después
 [A11,A12,A22,AspT,App]=build_matrices_Biot(delta_t);
-A21=-A12';
-Asp=AspT';
+% A21=-A12';
+A21=zeros(N*N,2*N*N);
+% Asp=AspT';
 
 % Matriz del sistema reducido de Biot
 Biot_matrix=[A11 A12;A21 A22];
@@ -59,7 +60,7 @@ for j=1:N
     for i=1:N
         ind2u=(i+(j-1)*N)*2;
         ind1u=ind2u-1;
-        ind1p=ind2u/2;
+%         ind1p=ind2u/2;
         ind1p=i+(j-1)*N;
         
         xx=(x(i,j)+x(i+1,j)+x(i+1,j+1)+x(i,j+1))/4;
@@ -100,7 +101,8 @@ error_z_zh_inf=erroru_L2_inf;
 while t < Tf
     
     % Initial time terms affecting q
-gTp=Asp*sigma + App*p;
+% gTp=Asp*sigma + App*p;
+gTp=App*p;
 
     % Source terms of the MFMFE-MSMFE discretization at t+delta_t
 f_indep=build_indep_f(t+delta_t);        % Source term f
