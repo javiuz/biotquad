@@ -11,7 +11,8 @@ AspT=sparse(8*N*(N+1),N*N);
 App=sparse(N*N,N*N);
 
 coef_d=alpha/(8*(lambda+mu));
-coef_p=c0+alpha^2/(lambda+mu);
+% coef_p=c0+alpha^2/(lambda+mu);
+coef_p=c0;
 coef_denom=16*mu*(lambda + mu);
 
 % South-West corner node
@@ -85,14 +86,15 @@ k=coef_p*area_cuadrilatero(x1,y1,x2,y2,x3,y3,x4,y4);
 
 localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
 localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-localm3=k-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+% localm3=k-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+localm3=k +(delta_t*f')*(t\f);
 
 M1(ind1u:ind2u,ind1u:ind2u)=M1(ind1u:ind2u,ind1u:ind2u)+localm1;
 M2(ind1u:ind2u,ind1p)=M2(ind1u:ind2u,ind1p)+localm2;
 M3(ind1p,ind1p)=M3(ind1p,ind1p)+localm3;
 
-indr=1:vdim;
-AspT(indr,ind1p)=d;
+%indr=1:vdim;
+%AspT(%indr,ind1p)=d;
 ld=vdim;
 App(ind1p,ind1p)=k;
 
@@ -208,14 +210,15 @@ for i=2:N
 
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-    localm3=k-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+%     localm3=k-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+    localm3=k +(delta_t*f')*(t\f);
     
     M1(ind1u:ind4u,ind1u:ind4u)=M1(ind1u:ind4u,ind1u:ind4u)+localm1;   
     M2(ind1u:ind4u,ind1p:ind2p)=M2(ind1u:ind4u,ind1p:ind2p)+localm2;
     M3(ind1p:ind2p,ind1p:ind2p)=M3(ind1p:ind2p,ind1p:ind2p)+localm3;
     
-    indr=ld+1:ld+vdim;
-    AspT(indr,ind1p:ind2p)=d;
+    %indr=ld+1:ld+vdim;
+    %AspT(%indr,ind1p:ind2p)=d;
     ld=ld+vdim;
     App(ind2p,ind2p)=k2;
 end
@@ -283,14 +286,15 @@ t=(1/4)*t;
 
 localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
 localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+% localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+localm3=(delta_t*f')*(t\f);
 
 M1(ind1u:ind2u,ind1u:ind2u)=M1(ind1u:ind2u,ind1u:ind2u)+localm1;
 M2(ind1u:ind2u,ind1p)=M2(ind1u:ind2u,ind1p)+localm2;
 M3(ind1p,ind1p)=M3(ind1p,ind1p)+localm3;
 
-indr=ld+1:ld+vdim;
-AspT(indr,ind1p)=d;
+%indr=ld+1:ld+vdim;
+%AspT(%indr,ind1p)=d;
 ld=ld+vdim;
 
 for j=2:N
@@ -406,14 +410,15 @@ for j=2:N
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-    localm3=k-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+%     localm3=k-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+    localm3=k +(delta_t*f')*(t\f);
     
     M1([ind1u:ind2u,ind3u:ind4u],[ind1u:ind2u,ind3u:ind4u])=M1([ind1u:ind2u,ind3u:ind4u],[ind1u:ind2u,ind3u:ind4u])+localm1;    
     M2([ind1u:ind2u,ind3u:ind4u],[ind1p,ind2p])=M2([ind1u:ind2u,ind3u:ind4u],[ind1p,ind2p])+localm2;    
     M3([ind1p,ind2p],[ind1p,ind2p])=M3([ind1p,ind2p],[ind1p,ind2p])+localm3;
     
-    indr=ld+1:ld+vdim;
-    AspT(indr,[ind1p,ind2p])=d;
+    %indr=ld+1:ld+vdim;
+    %AspT(%indr,[ind1p,ind2p])=d;
     ld=ld+vdim;
     App(ind2p,ind2p)=k2;
     
@@ -616,14 +621,15 @@ for j=2:N
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-    localm3=k-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+%     localm3=k-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+    localm3=k +(delta_t*f')*(t\f);
     
     M1([ind1u:ind4u,ind5u:ind8u],[ind1u:ind4u,ind5u:ind8u])=M1([ind1u:ind4u,ind5u:ind8u],[ind1u:ind4u,ind5u:ind8u])+localm1;    
     M2([ind1u:ind4u,ind5u:ind8u],[ind1p:ind2p,ind3p:ind4p])=M2([ind1u:ind4u,ind5u:ind8u],[ind1p:ind2p,ind3p:ind4p])+localm2;    
     M3([ind1p:ind2p,ind3p:ind4p],[ind1p:ind2p,ind3p:ind4p])=M3([ind1p:ind2p,ind3p:ind4p],[ind1p:ind2p,ind3p:ind4p])+localm3;
     
-    indr=ld+1:ld+vdim;
-    AspT(indr,[ind1p:ind2p,ind3p:ind4p])=d;
+    %indr=ld+1:ld+vdim;
+    %AspT(%indr,[ind1p:ind2p,ind3p:ind4p])=d;
     ld=ld+vdim;
     App(ind4p,ind4p)=k3;
     end
@@ -739,14 +745,15 @@ for j=2:N
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-    localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+%     localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+    localm3=(delta_t*f')*(t\f);
     
     M1([ind1u:ind2u,ind3u:ind4u],[ind1u:ind2u,ind3u:ind4u])=M1([ind1u:ind2u,ind3u:ind4u],[ind1u:ind2u,ind3u:ind4u])+localm1; 
     M2([ind1u:ind2u,ind3u:ind4u],[ind1p,ind2p])=M2([ind1u:ind2u,ind3u:ind4u],[ind1p,ind2p])+localm2;
     M3([ind1p,ind2p],[ind1p,ind2p])=M3([ind1p,ind2p],[ind1p,ind2p])+localm3;
     
-    indr=ld+1:ld+vdim;
-    AspT(indr,[ind1p,ind2p])=d;
+    %indr=ld+1:ld+vdim;
+    %AspT(%indr,[ind1p,ind2p])=d;
     ld=ld+vdim;
 end
 
@@ -814,14 +821,15 @@ t=(1/4)*t;
 
 localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
 localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+% localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+localm3=(delta_t*f')*(t\f);
 
 M1(ind1u:ind2u,ind1u:ind2u)=M1(ind1u:ind2u,ind1u:ind2u)+localm1;
 M2(ind1u:ind2u,ind1p)=M2(ind1u:ind2u,ind1p)+localm2;
 M3(ind1p,ind1p)=M3(ind1p,ind1p)+localm3;
 
-indr=ld+1:ld+vdim;
-AspT(indr,ind1p)=d;
+%indr=ld+1:ld+vdim;
+%AspT(%indr,ind1p)=d;
 ld=ld+vdim;
 
 % North nodes (j=N+1)
@@ -936,14 +944,15 @@ for i=2:N
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-    localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+%     localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+    localm3=(delta_t*f')*(t\f);
     
     M1(ind1u:ind4u,ind1u:ind4u)=M1(ind1u:ind4u,ind1u:ind4u)+localm1;
     M2(ind1u:ind4u,ind1p:ind2p)=M2(ind1u:ind4u,ind1p:ind2p)+localm2;  
     M3(ind1p:ind2p,ind1p:ind2p)=M3(ind1p:ind2p,ind1p:ind2p)+localm3;
     
-    indr=ld+1:ld+vdim;
-    AspT(indr,ind1p:ind2p)=d;
+    %indr=ld+1:ld+vdim;
+    %AspT(%indr,ind1p:ind2p)=d;
     ld=ld+vdim;
 end
 
@@ -1010,13 +1019,14 @@ t=(1/4)*t;
 
 localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
 localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+% localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+localm3=(delta_t*f')*(t\f);
 
 M1(ind1u:ind2u,ind1u:ind2u)=M1(ind1u:ind2u,ind1u:ind2u)+localm1;
 M2(ind1u:ind2u,ind1p)=M2(ind1u:ind2u,ind1p)+localm2;
 M3(ind1p,ind1p)=M3(ind1p,ind1p)+localm3;
 
-indr=ld+1:ld+vdim;
-AspT(indr,ind1p)=d;
+%indr=ld+1:ld+vdim;
+%AspT(%indr,ind1p)=d;
 return
 end
