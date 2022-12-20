@@ -6,7 +6,7 @@ NN=N;       % Dimensión del problema discreto.
 
 % Generación de la malla: ¡OJO! Para la malla nº 3 tenemos que introducir 
 % el valor del nº de refinamientos de manera manual.
-mesh=0;                 
+mesh=3;                 
 [x,y]=init_mesh(mesh);  % coordenadas de los vértices de la malla.
 tic
 
@@ -72,11 +72,11 @@ for j=1:N
 end
 
 %% sol. exacta sigma:
-    % V. válido SÓLO para MALLAS CARTESIANAS
-sigma=build_sigma_0_cartesian(t,nu);
+%     % V. válido SÓLO para MALLAS CARTESIANAS
+% sigma=build_sigma_0_cartesian(t,nu);
 
-%     % V. válida para MALLAS GENERALES
-% sigma=build_sigma_0_gral_grid(t,nu);
+    % V. válida para MALLAS GENERALES
+sigma=build_sigma_0_gral_grid(t,nu);
 
 %     % V. alt. para MALLAS GENERALES (Más larga e ineficiente)
 % sigma_aux=build_sigma_0_gral_grid_2(t,nu);
