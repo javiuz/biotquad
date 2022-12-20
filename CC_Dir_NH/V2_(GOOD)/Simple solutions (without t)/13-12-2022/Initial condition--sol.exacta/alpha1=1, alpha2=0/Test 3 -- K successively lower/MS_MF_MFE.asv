@@ -6,7 +6,7 @@ NN=N;       % Dimensión del problema discreto.
 
 % Generación de la malla: ¡OJO! Para la malla nº 3 tenemos que introducir 
 % el valor del nº de refinamientos de manera manual.
-mesh=3;                 
+mesh=0;                 
 [x,y]=init_mesh(mesh);  % coordenadas de los vértices de la malla.
 tic
 
@@ -42,7 +42,8 @@ Tf=1e-03;
 %  Matrices del sistema de Biot: A11, A12, A21 y A22
     % Asp y App las utilizaremos después
 [A11,A12,A22,AspT,App]=build_matrices_Biot(delta_t);
-A21=-A12';
+% A21=-A12';
+A21=zeros(N*N,2*N*N);
 Asp=AspT';
 
 % Matriz del sistema reducido de Biot
@@ -52,21 +53,21 @@ Biot_matrix=[A11 A12;A21 A22];
 %% Terms involving time
 
 % Initial solution of the variables at t=0 
-% u=zeros(2*N*N,1);
+u=zeros(2*N*N,1);
 p=zeros(N*N,1);
 
 for j=1:N
     for i=1:N
-%         ind2u=(i+(j-1)*N)*2;
-%         ind1u=ind2u-1;
+        ind2u=(i+(j-1)*N)*2;
+        ind1u=ind2u-1;
 %         ind1p=ind2u/2;
         ind1p=i+(j-1)*N;
         
         xx=(x(i,j)+x(i+1,j)+x(i+1,j+1)+x(i,j+1))/4;
         yy=(y(i,j)+y(i+1,j)+y(i+1,j+1)+y(i,j+1))/4;
         
-%         u(ind1u)=sol_exactax(xx,yy,t,1);
-%         u(ind2u)=sol_exactax(xx,yy,t,2);
+        u(ind1u)=sol_exactax(xx,yy,t,1);
+        u(ind2u)=sol_exactax(xx,yy,t,2);
         p(ind1p)=sol_exactax(xx,yy,t,3);
     end
 end
@@ -75,8 +76,8 @@ end
 %     % V. válido SÓLO para MALLAS CARTESIANAS
 % sigma=build_sigma_0_cartesian(t,nu);
 
-%     % V. válida para MALLAS GENERALES
-% sigma=build_sigma_0_gral_grid(t,nu);
+    % V. válida para MALLAS GENERALES
+sigma=build_sigma_0_gral_grid(t,nu);
 
 %     % V. alt. para MALLAS GENERALES (Más larga e ineficiente)
 % sigma_aux=build_sigma_0_gral_grid_2(t,nu);
@@ -101,6 +102,7 @@ while t < Tf
     
     % Initial time terms affecting q
 gTp=Asp*sigma + App*p;
+gTp=App*p;
 
     % Source terms of the MFMFE-MSMFE discretization at t+delta_t
 f_indep=build_indep_f(t+delta_t);        % Source term f
