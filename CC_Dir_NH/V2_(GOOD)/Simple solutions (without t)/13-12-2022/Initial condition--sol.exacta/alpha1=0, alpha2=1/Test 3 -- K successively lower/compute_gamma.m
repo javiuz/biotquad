@@ -6,7 +6,8 @@ N=NN;
 
 gamma=zeros((N+1)*(N+1),1);
 
-coef_d=alpha/(8*(lambda+mu));
+% coef_d=alpha/(8*(lambda+mu));
+coef_d=0;
 coef_denom=16*mu*(lambda + mu);
 
 % South-West corner node
