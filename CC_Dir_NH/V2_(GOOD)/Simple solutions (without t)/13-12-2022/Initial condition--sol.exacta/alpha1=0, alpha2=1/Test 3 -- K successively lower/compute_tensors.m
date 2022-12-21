@@ -14,7 +14,8 @@ sx2=sx1;
 sy1=sx1;
 sy2=sx1;
 
-coef_d=alpha/(8*(lambda+mu));
+% coef_d=alpha/(8*(lambda+mu));
+coef_d=0;
 coef_denom=16*mu*(lambda + mu);
 
 % South-West corner node
