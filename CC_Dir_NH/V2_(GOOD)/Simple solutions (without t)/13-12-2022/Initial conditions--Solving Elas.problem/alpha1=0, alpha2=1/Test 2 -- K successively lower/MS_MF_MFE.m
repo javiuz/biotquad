@@ -74,20 +74,26 @@ for j=1:N
     end
 end
 
-%% sol. exacta sigma:
-%     % V. válido SÓLO para MALLAS CARTESIANAS
-% sigma=build_sigma_0_cartesian(t,nu);
+%% sol. of the Elasticity sistem at t=0:
 
-    % V. válida para MALLAS GENERALES
-sigma=build_sigma_0_gral_grid(t,nu);
+ % Source term of the MSMFE discretization at t=0
+f_indep=build_indep_f(t);        % Source term f
 
-%     % V. alt. para MALLAS GENERALES (Más larga e ineficiente)
-% sigma_aux=build_sigma_0_gral_grid_2(t,nu);
-% sigma_n=build_sigma_n_2(sigma_aux);
-% [s1x,s1y,s2x,s2y]=reorder_sigma_n(sigma_n);
-% % [stress_flux1]=compute_stress_fluxes_2(s1x,s1y);
-% % [stress_flux2]=compute_stress_fluxes_2(s2x,s2y);
-% sigma=build_sigma_0_gral_grid_3(s1x,s1y,s2x,s2y);
+%     % For non-homogeneous Dir. B.C.
+[gDu,~]=dir_bc_Pg(delta_t,t);   
+    
+    % Right-hand side of the Elasticity system
+indep_elas=f_indep + gDu -A12*p; 
+
+% We solve for the displacement in the elasticity system
+u=A11\indep_elas;
+
+% Now we compute the rest of the elasticity variables at t=0:
+        % rotation 
+gamma=compute_gamma(u,p,t);  % Computed solution for the rotation term
+        % stress
+[sigma,~,~,~,~]=compute_tensors(u,p,gamma,t);
+
 
 % Initialize errors
 erroru_L2_inf=0;
