@@ -6,7 +6,7 @@ NN=N;       % Dimensión del problema discreto.
 
 % Generación de la malla: ¡OJO! Para la malla nº 3 tenemos que introducir 
 % el valor del nº de refinamientos de manera manual.
-mesh=0;                 
+mesh=3;                 
 [x,y]=init_mesh(mesh);  % coordenadas de los vértices de la malla.
 tic
 
@@ -23,14 +23,17 @@ lambda=1;
 mu=1;
 
 % Storativity coefficient
-% c0=1e-05;
+c0=1e-05;
 % c0=0;
-c0=1;
+% c0=1;
 
 % Hydraulic conductivity: is inside the function 'kinv.m'
 % K=perm*[1 0;0 1]; with perm=1, 1e-03, 1e-06, 1e-09, 1e-12
-perm=1;
+% perm=1;
 % perm=1e-03;
+% perm=1e-06;
+% perm=1e-09;
+perm=1e-12;
 
 % initial time
 t=0;
