@@ -390,24 +390,24 @@ end
 
 % Dibujo de la malla
 
-fig=figure;
-    hold on
-    for j=1:N+1
-        plot(x(:,j),y(:,j),'k','LineWidth',1.2)
-    end
-    for i=1:N+1
-        plot(x(i,:),y(i,:),'k','LineWidth',1.2)
-    end
-    set(gca, 'YTick', []);
-set(gca, 'XTick', []);
-set(gca,'PlotBoxAspectRatio',[1 1 1]);
-%pos = get(gcf,'paperposition');
-
-%set(gcf,'paperposition',[pos(1),pos(2), 4, 4]);
-orient(fig,'landscape');
-print(fig,'prueba.pdf','-dpdf')
-
-    hold off 
+% fig=figure;
+%     hold on
+%     for j=1:N+1
+%         plot(x(:,j),y(:,j),'k','LineWidth',1.2)
+%     end
+%     for i=1:N+1
+%         plot(x(i,:),y(i,:),'k','LineWidth',1.2)
+%     end
+%     set(gca, 'YTick', []);
+% set(gca, 'XTick', []);
+% set(gca,'PlotBoxAspectRatio',[1 1 1]);
+% %pos = get(gcf,'paperposition');
+% 
+% %set(gcf,'paperposition',[pos(1),pos(2), 4, 4]);
+% orient(fig,'landscape');
+% print(fig,'prueba.pdf','-dpdf')
+% 
+%     hold off 
 
 return
 end
