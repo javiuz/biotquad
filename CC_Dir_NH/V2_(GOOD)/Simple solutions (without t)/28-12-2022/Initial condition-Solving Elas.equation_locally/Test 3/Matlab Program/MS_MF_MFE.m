@@ -6,11 +6,7 @@ NN=N;       % Dimensión del problema discreto.
 
 % Generación de la malla: ¡OJO! Para la malla nº 3 tenemos que introducir 
 % el valor del nº de refinamientos de manera manual.
-% meshes=[0,3];
-% for ttm=1:2
-%     ... end (line 195)
 mesh=0; 
-mesh=meshes(ttm)
 [x,y]=init_mesh(mesh);  % coordenadas de los vértices de la malla.
 tic
 
@@ -42,7 +38,7 @@ perm=1;
 % perms=[1,1e-03,1e-06,1e-09,1e-12];
 % for kp=1:5
 % perm=perms(kp)
-% ... end (line 194)
+% ... end (line 190)
 
 % initial time
 t=0;
@@ -191,8 +187,7 @@ errorp_3_inf
 errorg_L2_inf
 error_sigma_sigmah_inf
 error_z_zh_inf
-% end
-% end
+
 % % We display the L2 norms of the errors of the variables at final time step
 % t
 % erroru_L2
