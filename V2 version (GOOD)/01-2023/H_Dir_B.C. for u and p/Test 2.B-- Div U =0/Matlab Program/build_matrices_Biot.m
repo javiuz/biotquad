@@ -11,7 +11,8 @@ AspT=sparse(8*N*(N+1),N*N);
 App=sparse(N*N,N*N);
 
 coef_d=alpha/(8*(lambda+mu));
-coef_p=c0+alpha^2/(lambda+mu);
+% coef_p=c0+alpha^2/(lambda+mu);
+coef_p=c0;
 coef_denom=16*mu*(lambda + mu);
 
 % South-West corner node
@@ -286,7 +287,7 @@ t=(1/4)*t;
 localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
 localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
 % localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+localm3=(delta_t*f')*(t\f);
 
 M1(ind1u:ind2u,ind1u:ind2u)=M1(ind1u:ind2u,ind1u:ind2u)+localm1;
 M2(ind1u:ind2u,ind1p)=M2(ind1u:ind2u,ind1p)+localm2;
@@ -409,7 +410,8 @@ for j=2:N
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-    localm3=k-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+%     localm3=k-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+    localm3=k +(delta_t*f')*(t\f);
     
     M1([ind1u:ind2u,ind3u:ind4u],[ind1u:ind2u,ind3u:ind4u])=M1([ind1u:ind2u,ind3u:ind4u],[ind1u:ind2u,ind3u:ind4u])+localm1;    
     M2([ind1u:ind2u,ind3u:ind4u],[ind1p,ind2p])=M2([ind1u:ind2u,ind3u:ind4u],[ind1p,ind2p])+localm2;    
@@ -619,7 +621,8 @@ for j=2:N
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-    localm3=k-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+%     localm3=k-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+    localm3=k +(delta_t*f')*(t\f);
     
     M1([ind1u:ind4u,ind5u:ind8u],[ind1u:ind4u,ind5u:ind8u])=M1([ind1u:ind4u,ind5u:ind8u],[ind1u:ind4u,ind5u:ind8u])+localm1;    
     M2([ind1u:ind4u,ind5u:ind8u],[ind1p:ind2p,ind3p:ind4p])=M2([ind1u:ind4u,ind5u:ind8u],[ind1p:ind2p,ind3p:ind4p])+localm2;    
@@ -742,7 +745,8 @@ for j=2:N
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-    localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+%     localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+    localm3=(delta_t*f')*(t\f);
     
     M1([ind1u:ind2u,ind3u:ind4u],[ind1u:ind2u,ind3u:ind4u])=M1([ind1u:ind2u,ind3u:ind4u],[ind1u:ind2u,ind3u:ind4u])+localm1; 
     M2([ind1u:ind2u,ind3u:ind4u],[ind1p,ind2p])=M2([ind1u:ind2u,ind3u:ind4u],[ind1p,ind2p])+localm2;
@@ -817,7 +821,8 @@ t=(1/4)*t;
 
 localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
 localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+% localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+localm3=(delta_t*f')*(t\f);
 
 M1(ind1u:ind2u,ind1u:ind2u)=M1(ind1u:ind2u,ind1u:ind2u)+localm1;
 M2(ind1u:ind2u,ind1p)=M2(ind1u:ind2u,ind1p)+localm2;
@@ -939,7 +944,8 @@ for i=2:N
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-    localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+%     localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+    localm3=(delta_t*f')*(t\f);
     
     M1(ind1u:ind4u,ind1u:ind4u)=M1(ind1u:ind4u,ind1u:ind4u)+localm1;
     M2(ind1u:ind4u,ind1p:ind2p)=M2(ind1u:ind4u,ind1p:ind2p)+localm2;  
@@ -1013,7 +1019,8 @@ t=(1/4)*t;
 
 localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
 localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
-localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+% localm3=-d'*(a\d)+(delta_t*f')*(t\f)+((d'*(a\c))*((c'*(a\c))\(c'*(a\d))));
+localm3=(delta_t*f')*(t\f);
 
 M1(ind1u:ind2u,ind1u:ind2u)=M1(ind1u:ind2u,ind1u:ind2u)+localm1;
 M2(ind1u:ind2u,ind1p)=M2(ind1u:ind2u,ind1p)+localm2;

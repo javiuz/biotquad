@@ -50,9 +50,10 @@ Tf=1e-03;
 %  Matrices del sistema de Biot: A11, A12, A21 y A22
     % Asp y App las utilizaremos después
 [A11,A12,A22,AspT,App]=build_matrices_Biot(delta_t);
-A21=-A12';
-A12=zeros(2*N*N,N*N);
-Asp=AspT';
+AS1=-A12';
+A21=zeros(N*N,2*N*N);
+% Asp=AspT';
+Asp=zeros(N*N,8*N*(N+1));
 
 % Matriz del sistema reducido de Biot
 Biot_matrix=[A11 A12;A21 A22];
@@ -96,9 +97,9 @@ u=A11\indep_elas;
 
 % Now we compute the rest of the elasticity variables at t=0:
         % rotation 
-gamma=compute_gamma_(u,p,t);  % Computed solution for the rotation term
+gamma=compute_gamma(u,p,t);  % Computed solution for the rotation term
         % stress
-[sigma,~,~,~,~]=compute_tensors_GradP0(u,gamma,t);
+[sigma,~,~,~,~]=compute_tensors(u,p,gamma,t);
 
 %% Initialize errors
 erroru_L2_inf=0;
@@ -147,7 +148,7 @@ t=t+delta_t;
         % rotation 
 gamma=compute_gamma(u,p,t);  % Computed solution for the rotation term
         % stress
-[sigma,~,~,~,~]=compute_tensors_GradP0(u,gamma,t);
+[sigma,~,~,~,~]=compute_tensors(u,p,gamma,t);
         % velocity
 [z,zx,zy]=compute_fluxes(p,t); 
 
