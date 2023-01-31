@@ -1,6 +1,6 @@
 function qq=q(xx,yy,tt)
 
-global c0 perm
+global c0 perm alpha
 
 %       qq(xx,yy,tt) = q
     
