@@ -92,8 +92,8 @@ q0_hat= delta_t*q0_indep + gDp0;
 p=A22_t0\q0_hat;
 
 % Solution for the displacement
-f0_indep=f0_hat -A12*p;
-u=A11\f0_indep;
+f0_term=f0_hat -A12*p;
+u=A11\f0_term;
 
 % Now we compute the rest of the elasticity variables at t=0:
         % rotation 
