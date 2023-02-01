@@ -6,7 +6,7 @@ NN=N;       % Dimensión del problema discreto.
 
 % Generación de la malla: ¡OJO! Para la malla nº 3 tenemos que introducir 
 % el valor del nº de refinamientos de manera manual.
-mesh=3;                 
+mesh=0;                 
 [x,y]=init_mesh(mesh);  % coordenadas de los vértices de la malla.
 tic
 
@@ -43,8 +43,8 @@ perm=1;
 % initial time
 t=0;
 % Time step
-% delta_t=1e-04;
-delta_t=1e-03;
+delta_t=1e-04;
+% delta_t=1e-03;
 % Final time
 Tf=1e-03;
 % Tf=2;
@@ -63,11 +63,11 @@ Biot_matrix=[A11 A12;A21 A22];
 % Initial solution of the variables u and p at t=0 
 
 % Matrices A22 and A21 of Biot's stationary system at t0=0.
-A21_t0=zeros(N*N,2*N*N);
+% A21_t0=zeros(N*N,2*N*N);
 A22_t0=build_flux_matrix_t0(delta_t);
 
-% Biot's reduced matrix in t0=0 for the stationary system.
-Biot_matrix_t0=[A11 A12;A21_t0 A22_t0];
+% % Biot's reduced matrix in t0=0 for the stationary system.
+% Biot_matrix_t0=[A11 A12;A21_t0 A22_t0];
 
 % source terms at t0=0.
 f0_indep=build_indep_f(t);              % Source term f
@@ -79,14 +79,21 @@ gDp0=dir_bc_PgP(delta_t,t);
 f0_hat= f0_indep + gDu0; 
 q0_hat= delta_t*q0_indep + gDp0;
     
-    % Right-hand side of the Biot system
-indep_term_t0=[f0_hat;q0_hat];
-    
-% Solution of the Biot system for the displacement and pressure vectors
-sol_vec=Biot_matrix_t0\indep_term_t0; 
+%     % Right-hand side of the Biot system
+% indep_term_t0=[f0_hat;q0_hat];
+%     
+% % Solution of the Biot system for the displacement and pressure vectors
+% sol_vec=Biot_matrix_t0\indep_term_t0; 
+% 
+% u=sol_vec(1:2*N*N);
+% p=sol_vec(2*N*N+1:2*N*N+N*N);
 
-u=sol_vec(1:2*N*N);
-p=sol_vec(2*N*N+1:2*N*N+N*N);
+% Solution for the pressure at t0=0
+p=A22_t0\q0_hat;
+
+% Solution for the displacement at t0=0
+f0_indep=f0_hat-A12*p;
+u=A11\f0_indep;
 
 % Now we compute the rest of the elasticity variables at t=0:
         % rotation 
