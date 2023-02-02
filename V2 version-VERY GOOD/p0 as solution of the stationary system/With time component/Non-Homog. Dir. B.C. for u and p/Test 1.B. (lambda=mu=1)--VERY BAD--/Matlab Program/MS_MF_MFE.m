@@ -43,7 +43,7 @@ perm=1;
 % initial time
 t=0;
 % Time step
-% delta_t=1e-04;
+delta_t=1e-04;
 % delta_t=1e-03;
 % Final time
 Tf=1e-03;
@@ -62,38 +62,24 @@ Biot_matrix=[A11 A12;A21 A22];
 
 % Initial solution of the variables u and p at t=0 
 
-% Matrices A22 and A21 of Biot's stationary system at t0=0.
-% A21_t0=zeros(N*N,2*N*N);
-A22_t0=build_flux_matrix_t0(delta_t);
-
-% Biot's reduced matrix in t0=0 for the stationary system.
-% Biot_matrix_t0=[A11 A12;A21_t0 A22_t0];
-
 % source terms at t0=0.
 f0_indep=build_indep_f(t);              % Source term f
-q0_indep=build_indep_q0(t);             % Source term q
+q0_indep=build_indep_q(t);            % Source term q
 
     % For non-homogeneous Dir. B.C.
-[gDu0,~]=dir_bc_Pg(delta_t,t);  
-gDp0=dir_bc_PgP(delta_t,t);   
+[gDu0,gDp0]=dir_bc_Pg(delta_t,t);  
+
 f0_hat= f0_indep + gDu0; 
 q0_hat= delta_t*q0_indep + gDp0;
     
     % Right-hand side of the Biot system
-% indep_term_t0=[f0_hat;q0_hat];
+indep_term_t0=[f0_hat;q0_hat];
     
 % Solution of the Biot system for the displacement and pressure vectors
-% sol_vec=Biot_matrix_t0\indep_term_t0; 
+sol_vec=Biot_matrix\indep_term_t0; 
 
-% u=sol_vec(1:2*N*N);
-% p=sol_vec(2*N*N+1:2*N*N+N*N);
-
-% Solution for the pressure
-p=A22_t0\q0_hat;
-
-% Solution for the displacement
-f0_term=f0_hat -A12*p;
-u=A11\f0_term;
+u=sol_vec(1:2*N*N);
+p=sol_vec(2*N*N+1:2*N*N+N*N);
 
 % Now we compute the rest of the elasticity variables at t=0:
         % rotation 
