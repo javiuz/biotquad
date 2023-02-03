@@ -75,8 +75,8 @@ q0_indep=build_indep_q0(t);             % Source term q
 
     % For non-homogeneous Dir. B.C.
 [gDu0,~]=dir_bc_Pg(delta_t,t);  
+f0_hat= f0_indep + gDu0;
 gDp0=dir_bc_PgP(delta_t,t);   
-f0_hat= f0_indep + gDu0; 
 q0_hat= delta_t*q0_indep + gDp0;
     
     % Right-hand side of the Biot system
@@ -90,6 +90,16 @@ q0_hat= delta_t*q0_indep + gDp0;
 
 % Solution for the pressure
 p=A22_t0\q0_hat;
+
+% % Initial exact solution of p at t0=0
+% p=zeros(N*N,1);
+% 
+% for j=1:N
+%     for i=1:N
+%         indp=i+(j-1)*N;
+%         p(indp)=sol_exacta_p(i,j,t);
+%     end
+% end
 
 % Solution for the displacement
 f0_term=f0_hat -A12*p;
