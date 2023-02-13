@@ -101,6 +101,36 @@ gamma=compute_gamma(u,p,t);
         % stress
 [sigma,~,~,~,~]=compute_tensors(u,p,gamma,t);
 
+% Exact solution for the pressure
+
+% p=zeros(N*N,1);
+% 
+% for j=1:N
+%     for i=1:N
+%         ind1p=i+(j-1)*N;  
+%         xx=(x(i,j)+x(i+1,j)+x(i+1,j+1)+x(i,j+1))/4;
+%         yy=(y(i,j)+y(i+1,j)+y(i+1,j+1)+y(i,j+1))/4;  
+%         p(ind1p)=sol_exactax(xx,yy,t,3);
+%     end
+% end
+% 
+% % source terms at t0=0.
+% f0_indep=build_indep_f(t);              % Source term f
+% 
+%     % For non-homogeneous Dir. B.C.
+% [gDu0,~]=dir_bc_Pg(delta_t,t);     
+% f0_hat= f0_indep + gDu0; 
+% 
+% % Solution for the displacement at t0=0
+% f0_indep=f0_hat-A12*p;
+% u=A11\f0_indep;
+% 
+% % Now we compute the rest of the elasticity variables at t=0:
+%         % rotation 
+% gamma=compute_gamma(u,p,t);  
+%         % stress
+% [sigma,~,~,~,~]=compute_tensors(u,p,gamma,t);
+
 %% Initialize errors
 erroru_L2_inf=0;
 erroru_3_inf=erroru_L2_inf;
