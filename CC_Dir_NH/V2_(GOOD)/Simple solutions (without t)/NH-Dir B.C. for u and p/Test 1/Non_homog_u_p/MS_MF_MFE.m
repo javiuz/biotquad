@@ -21,7 +21,7 @@ lambda=0;
 mu=1;
 
 % Storativity coefficient
-%c0=1e-05;
+% c0=1e-05;
 c0=0;
 
 % Hydraulic conductivity: is inside the function 'kinv.m'
