@@ -62,6 +62,7 @@ Biot_matrix=[A11 A12;A21 A22];
 % Initial solution of the variables at t=0 
 p=build_initial_p0(t);
 
+% p=zeros(N*N,1);
 % for j=1:N
 %     for i=1:N
 % %         ind2u=(i+(j-1)*N)*2;
