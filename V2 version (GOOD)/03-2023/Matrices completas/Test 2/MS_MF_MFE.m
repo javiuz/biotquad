@@ -21,6 +21,7 @@ perm=1;
 
 % Storativity coefficient
 c0=0;
+% c0=1e-05;
 
 % Hydraulic conductivity: is inside the function 'kinv.m'
 
@@ -54,6 +55,7 @@ A_sp=(A_sp_T)';
 
 % Matriz de fuerza: pressure-pressure
 A_pp=(c0+alpha^2/(lambda+mu))*(1/(N^2))*eye(N*N);
+% A_pp=0*eye(N*N);
 
 % Matriz de fuerza: velocity-velocity
 A_zz=build_matrix_z_z;
@@ -107,7 +109,11 @@ errorp_L2_inf=erroru_L2_inf;
 errorp_3_inf=erroru_L2_inf;
 error_z_zh_inf=erroru_L2_inf;
 
-indep_old=zeros(12*N*(N+1)+3*N*N+(N+1)*(N+1),1);
+% indep_old=zeros(12*N*(N+1)+3*N*N+(N+1)*(N+1),1);
+indep1old=zeros(8*N*(N+1),1);
+indep2old=zeros(2*N*N,1);
+indep4old=zeros(4*N*(N+1),1);
+indep5old=zeros(N*N,1);
 
 %% We solve Biot's system: Time loop
 
@@ -124,8 +130,19 @@ indep=[indep1;indep2;zeros((N+1)*(N+1),1);indep4;indep5];
    
 Sol=M_big\indep;
 
-disp(max(abs(indep-indep_old)))
-indep_old=indep;
+% disp(max(abs(indep-indep_old)))
+
+disp(max(abs(indep1-indep1old)))
+disp(max(abs(indep2-indep2old)))
+disp(max(abs(indep4-indep4old)))
+disp(max(abs(indep5-indep5old)))
+pause
+indep1old=indep1;
+indep2old=indep2;
+indep4old=indep4;
+indep5old=indep5;
+
+% indep_old=indep;
 
 sigma=Sol(1:8*N*(N+1));
 u=Sol(8*N*(N+1)+1:8*N*(N+1)+2*N*N);
