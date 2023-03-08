@@ -11,12 +11,13 @@ mesh=0;
 tic
 
 % Parámetros ecuación Biot
-alpha=1;
-% E=1;
+% alpha=1;
+alpha=0;
+%E=1;
 % nu=0.2;
 nu=0;
-% lambda=(E*nu)/((1+nu)*(1-2*nu));
-% mu=E/(2*(1+nu));
+%lambda=(E*nu)/((1+nu)*(1-2*nu));
+%mu=E/(2*(1+nu));
 lambda=0;
 mu=1;
 
@@ -39,7 +40,8 @@ Tf=1e-03;
     % Asp y App las utilizaremos después
 [A11,A12,A22,AspT,App]=build_matrices_Biot(delta_t);
 A21=-A12';
-Asp=AspT';
+% Asp=AspT';
+Asp=zeros(N*N,8*N*(N+1));
 
 % Matriz del sistema reducido de Biot
 Biot_matrix=[A11 A12;A21 A22];
@@ -70,6 +72,8 @@ end
 
 sigma=build_sigma_0_cartesian(t,nu);
 
+% sigma=build_exact_sol_sigma(t);
+
 % Initialize errors
 erroru_L2_inf=0;
 erroru_3_inf=erroru_L2_inf;
@@ -85,6 +89,7 @@ while t < Tf
     
     % Initial time terms affecting q
 gTp=Asp*sigma + App*p;
+% gTp=zeros(N*N,1);
 
     % Source terms of the MFMFE-MSMFE discretization at t+delta_t
 f_indep=build_indep_f(t+delta_t);        % Source term f
@@ -105,6 +110,10 @@ indep_term=[f_hat;q_hat];
     
 % Solution of the Biot system for the displacement and pressure vectors
 sol_vec=Biot_matrix\indep_term; 
+% disp(full(Biot_matrix(2*N*N+1:2*N*N+N*N,2*N*N+1:2*N*N+N*N)))
+% disp(indep_term)
+% disp(' ')
+% pause
 u=sol_vec(1:2*N*N);
 p=sol_vec(2*N*N+1:2*N*N+N*N);
 
@@ -144,6 +153,23 @@ errorp_3_inf=max(errorp_3_inf,errorp_3);
 errorg_L2_inf=max(errorg_L2_inf,errorg_L2);
 error_sigma_sigmah_inf=max(error_sigma_sigmah_inf,error_sigma_sigmah);
 error_z_zh_inf=max(error_z_zh_inf,error_z_zh);
+
+% disp('u')
+% disp(u)
+% pause
+% disp('sigma')
+% disp(sigma)
+% pause
+% disp('gamma')
+% disp(gamma)
+% pause
+% disp('p')
+% disp(p)
+% pause
+% disp('z')
+% disp(z)
+% pause
+
 end
 
 % We display the infinity norms of the errors of the variables at final time step
@@ -154,6 +180,16 @@ errorp_3_inf
 errorg_L2_inf
 error_sigma_sigmah_inf
 error_z_zh_inf
+
+% % We display the L2 norms of the errors of the variables at final time step
+% t
+% erroru_L2
+% erroru_3
+% errorp_L2
+% errorp_3
+% errorg_L2
+% error_sigma_sigmah
+% error_z_zh
 
 % disp(Biot_matrix)
 % disp(indep_term)

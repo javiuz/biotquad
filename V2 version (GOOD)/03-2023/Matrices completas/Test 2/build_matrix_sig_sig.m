@@ -1,7 +1,6 @@
-function matrix=build_matrix_sig_sig(lambda,mu)
+function matrix=build_matrix_sig_sig
 
-global NN x y lamba
-
+global NN x y lambda mu
 
 N=NN;
 

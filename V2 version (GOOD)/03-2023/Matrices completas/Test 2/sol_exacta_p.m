@@ -8,7 +8,7 @@ yy=(y(i,j)+y(i+1,j)+y(i+1,j+1)+y(i,j+1))/4;
 % p(xx,yy,tt)
 
 % sol=0;
-sol=tt*xx;
+sol=xx;
 
 return
 end

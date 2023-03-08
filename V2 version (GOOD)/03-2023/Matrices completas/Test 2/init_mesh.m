@@ -126,78 +126,32 @@ elseif mesh==2 % D. Boffi mesh
     end
 
 elseif mesh==3 % Regular mesh O(h^2) parallelograms
-    % mesh from: Ambartsumyan et. al article (2020)--Biot's reference article   
-    % BEWARE: Here we have to insert the number number of refinements
-    % manually
+    x(1,:)=0.;
+    x(N+1,:)=1.;
+    y(:,1)=0.;
+    y(:,N+1)=1.;
     
-    Ni=4;
-
-    xx=zeros(Ni+1,Ni+1);
-    yy=zeros(Ni+1,Ni+1);
-
-    for j=1:Ni+1
-            for i=1:Ni+1
-                xx(i,j)=(i-1)*1./Ni;
-                yy(i,j)=(j-1)*1./Ni;
-            end
+    c1=0.06;
+    c2=-0.05;
+    
+    for j=2:N
+        y(1,j)=(j-1)*1./N;
+        y(N+1,j)=(j-1)*1./N;
+    end
+    
+    for i=2:N
+        x(i,1)=(i-1)*1./N;
+        x(i,N+1)=(i-1)*1./N;
     end
 
-    x=xx+0.03*cos(3*pi*xx).*cos(3*pi*yy);
-    y=yy-0.04*cos(3*pi*xx).*cos(3*pi*yy);
-
-    refinement=5;
-
-    nf = Ni;
-        for k = 1:refinement
-            nf = 2*nf;
-            for j = 1:2:nf+1
-                for i = 1:2:nf+1
-                    xf(i,j) = x((i+1)/2,(j+1)/2);
-                    yf(i,j) = y((i+1)/2,(j+1)/2);
-                end
-                for i = 2:2:nf+1
-                    xf(i,j) = 0.5*(xf(i-1,j)+xf(i+1,j));
-                    yf(i,j) = 0.5*(yf(i-1,j)+yf(i+1,j));             
-                end
-            end
-            for j = 2:2:nf+1
-                for i = 1:nf+1
-                    xf(i,j) = 0.5*(xf(i,j-1)+xf(i,j+1));
-                    yf(i,j) = 0.5*(yf(i,j-1)+yf(i,j+1));
-                end
-            end  
-            x = xf;
-            y = yf;
+    for j=2:N
+        for i=2:N
+            xx=(i-1)*1./N;
+            yy=(j-1)*1./N;
+            x(i,j)=xx+c1*sin(2.*pi*xx)*sin(2.*pi*yy);
+            y(i,j)=yy+c2*sin(2.*pi*xx)*sin(2.*pi*yy);
         end
-
-    
-    % Original O(h2) mesh for Darcy's flow
-%     x(1,:)=0.;
-%     x(N+1,:)=1.;
-%     y(:,1)=0.;
-%     y(:,N+1)=1.;
-%     
-%     c1=0.06;
-%     c2=-0.05;
-%     
-%     for j=2:N
-%         y(1,j)=(j-1)*1./N;
-%         y(N+1,j)=(j-1)*1./N;
-%     end
-%     
-%     for i=2:N
-%         x(i,1)=(i-1)*1./N;
-%         x(i,N+1)=(i-1)*1./N;
-%     end
-% 
-%     for j=2:N
-%         for i=2:N
-%             xx=(i-1)*1./N;
-%             yy=(j-1)*1./N;
-%             x(i,j)=xx+c1*sin(2.*pi*xx)*sin(2.*pi*yy);
-%             y(i,j)=yy+c2*sin(2.*pi*xx)*sin(2.*pi*yy);
-%         end
-%     end
+    end
 % else % Porous media example mesh
 %     for j=1:N+1
 %         for i=1:N+1
@@ -388,8 +342,8 @@ elseif mesh==22 %FVCA5_mesh2
     
 end
 
-% % Dibujo de la malla
-% 
+% Dibujo de la malla
+
 % fig=figure;
 %     hold on
 %     for j=1:N+1

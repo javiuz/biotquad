@@ -21,10 +21,10 @@ global perm
  elseif comp==2     % Solución analítica de u2(yy)
      sol=yy;
  elseif comp==3     % Solución analítica de p(xx,tt)
-     sol=tt*xx;
+     sol=xx;
 %      sol=0;
  elseif comp==4     % Solución analítica de z1(tt)
-     sol=-perm*tt;
+     sol=-perm;
 %      sol=0;
  elseif comp==5     % Solución analítica de z2
      sol=0;
