@@ -5,12 +5,12 @@ global NN x y lambda mu alpha c0 perm
 NN=N;       % Dimensión del problema discreto.
 
 % Generación de la malla 
-mesh=0;                 
+mesh=3;                 
 [x,y]=init_mesh(mesh);  % coordenadas de los vértices de la malla.
 
 % Parámetros ecuación Biot
-alpha=1;
-% alpha=0;
+% alpha=1;
+alpha=0;
 lambda=0;
 mu=1;
 % lambda=123;
@@ -72,6 +72,9 @@ M_big=[A_ss A_su_T A_sg_T zeros(8*N*(N+1),4*N*(N+1)) A_sp_T;...
        zeros(4*N*(N+1),8*N*(N+1)+2*N*N+(N+1)*(N+1)) A_zz A_zp_T;...
        A_sp zeros(N*N,2*N*N+(N+1)*(N+1)) -A_zp A_pp];
    
+% eigs(M_big)
+% pause
+   
 % M_big_st=[A_ss A_su_T A_sg_T zeros(8*N*(N+1),4*N*(N+1)) A_sp_T;...
 %        -A_su zeros(2*N*N,2*N*N+(N+1)*(N+1)+4*N*(N+1)+N*N);...
 %        -A_sg zeros((N+1)*(N+1),2*N*N+(N+1)*(N+1)+4*N*(N+1)+N*N);...
@@ -98,7 +101,8 @@ for j=1:N
 end
 
 nu=0;
-sigma=build_sigma_0_cartesian(t,nu);
+% sigma=build_sigma_0_cartesian(t,nu);
+sigma=build_sigma_0_gral_grid(t,nu);
 
 %% Initialize errors
 erroru_L2_inf=0;
@@ -132,15 +136,15 @@ Sol=M_big\indep;
 
 % disp(max(abs(indep-indep_old)))
 
-disp(max(abs(indep1-indep1old)))
-disp(max(abs(indep2-indep2old)))
-disp(max(abs(indep4-indep4old)))
-disp(max(abs(indep5-indep5old)))
-pause
-indep1old=indep1;
-indep2old=indep2;
-indep4old=indep4;
-indep5old=indep5;
+% disp(max(abs(indep1-indep1old)))
+% disp(max(abs(indep2-indep2old)))
+% disp(max(abs(indep4-indep4old)))
+% disp(max(abs(indep5-indep5old)))
+% pause
+% indep1old=indep1;
+% indep2old=indep2;
+% indep4old=indep4;
+% indep5old=indep5;
 
 % indep_old=indep;
 

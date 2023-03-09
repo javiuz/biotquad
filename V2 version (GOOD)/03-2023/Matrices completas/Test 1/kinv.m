@@ -1,9 +1,10 @@
 function k=kinv(r,c,i,j,k,l)
 
-global x y NN
+global x y NN perm
 
 % Hydraulic conductivity
-tensor=[2 1.25;1.25 3];
+% tensor=[2 1.25;1.25 3];
+tensor=perm*eye(2);
 
 % tensor_mean=tensor;
 

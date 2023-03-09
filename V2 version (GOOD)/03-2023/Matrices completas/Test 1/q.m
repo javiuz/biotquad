@@ -4,6 +4,6 @@ global c0 perm
 
 %       qq(xx,yy,tt) = q
     
-qq=0; 
+qq=c0*xx; 
 return
 end

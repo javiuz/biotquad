@@ -6,26 +6,26 @@ NN=N;       % Dimensión del problema discreto.
 
 % Generación de la malla: ¡OJO! Para la malla nº 3 tenemos que introducir 
 % el valor del nº de refinamientos de manera manual.
-mesh=0;                 
+mesh=3;                 
 [x,y]=init_mesh(mesh);  % coordenadas de los vértices de la malla.
 tic
 
 % Parámetros ecuación Biot
-alpha=1;
-% alpha=0;
+% alpha=1;
+alpha=0;
 %E=1;
 nu=0.2; % Este parámetro no sirve en este problema, solamente está para que
 % funcione la función 'sol_exactax_sigma.m'
 %lambda=(E*nu)/((1+nu)*(1-2*nu));
 %mu=E/(2*(1+nu));
 % lambda=0;
-lambda=1;
+lambda=0;
 mu=1;
 
 % Storativity coefficient
 % c0=1e-05;
-% c0=0;
-c0=1;
+c0=0;
+% c0=1;
 
 % Hydraulic conductivity: is inside the function 'kinv.m'
 % K=perm*[1 0;0 1]; with perm=1, 1e-03, 1e-06, 1e-09, 1e-12
