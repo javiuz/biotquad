@@ -6,6 +6,7 @@ global x y perm
 % K=perm*[1 0;0 1];
 
 tensor=perm*eye(2);
+% tensor=[2 1;1 3];
 
 % tensor_mean=tensor;
 
