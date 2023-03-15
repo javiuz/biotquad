@@ -10,16 +10,17 @@ mesh=0;
 
 % Parámetros ecuación Biot
 alpha=1;
-lambda=0;
+lambda=1;
 mu=1;
 % lambda=123;
 % mu=79.3;
 
 % Parámetros ecuación flujo
-perm=1e-09;
+perm=1;
 
 % Storativity coefficient
-c0=0;
+% c0=0;
+c0=1e-05;
 
 % Hydraulic conductivity: is inside the function 'kinv.m'
 
