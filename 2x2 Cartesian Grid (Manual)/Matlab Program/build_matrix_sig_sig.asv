@@ -1,0 +1,295 @@
+function matrix=build_matrix_sig_sig
+
+global lambda mu
+
+matrix=sparse(48,48);
+
+d16mlm=16*mu*(lambda + mu);
+d8mlm=d16mlm/2;
+d8m=8*mu;
+d4m=d8m/2;
+
+l2m=lambda + 2*mu;
+
+% South-West corner node
+ind=1:4;
+
+a=zeros(4);
+
+a(1,1)=1/d8m;
+a(2,2)=l2m/d16mlm;
+a(2,3)=-lambda/d16mlm;
+a(3,2)=a(2,3);
+a(3,3)=a(2,2);
+a(4,4)=a(1,1);
+
+matrix(ind,ind)=a;
+
+% South node 
+ind=5:10;
+
+a=zeros(6);
+    
+a(1,1)=1/d8m;
+a(2,2)=l2m/d16mlm;
+a(2,3)=-lambda/d16mlm;
+a(3,2)=a(2,3);
+a(3,3)=l2m/d8mlm;
+a(3,6)=a(2,3);
+a(4,4)=1/d4m;
+a(5,5)=a(1,1);
+a(6,3)=a(2,3);
+a(6,6)=a(2,2);
+
+matrix(ind,ind)=a;
+
+% South-East corner node 
+ind=11:14;
+
+a=zeros(4);
+
+a(1,1)=l2m/d16mlm;
+a(1,4)=-lambda /d16mlm;
+a(2,2)=1/d8m;
+a(3,3)=a(2,2);
+a(4,1)=a(1,4);
+a(4,4)=a(1,1);
+
+matrix(ind,ind)=a;
+
+% West node
+ind=15:20;
+
+a=zeros(6);  
+
+a(1,1)=l2m/d16mlm;
+a(1,4)=-lambda/d16mlm;
+a(2,2)=1/d8m;
+a(3,3)=1/d4m;    
+a(4,1)=a(1,4);
+a(4,4)=l2m/d8mlm;
+a(4,5)=a(1,4);
+a(5,4)=a(4,5);
+a(5,5)=a(1,1);
+a(6,6)=1/d8m;
+
+matrix(ind,ind)=a;
+    
+% Central nodes 
+ind=21:28;
+
+a=zeros(8);
+
+a(1,1)=l2m/d8mlm;
+a(1,4)=-lambda/d16mlm;
+a(1,8)=-lambda/d16mlm;
+a(2,2)=1/d4m;
+a(3,3)=a(2,2);
+a(4,1)=a(1,4);
+a(4,4)=a(1,1);
+a(4,5)=a(1,8);
+a(5,4)=a(4,5);
+a(5,5)=a(1,1);
+a(5,8)=a(1,8);
+a(6,6)=a(2,2);
+a(7,7)=a(2,2);
+a(8,1)=a(1,8);
+a(8,5)=a(5,8);
+a(8,8)=a(1,1);
+
+matrix(ind,ind)=a;
+    
+% East node;
+ind=29:34;
+a=zeros(6);
+
+a(1,1)=
+a(1,6)=
+a(2,2)=
+a(3,3)=
+a(3,6)=
+%     a(4,1)=0;
+%     a(4,2)=0;
+    a(4,3)=a(3,4);
+    a(4,4)=(2*(lambda + mu)*(x3 - x4)^2 + (lambda + 2*mu)*(y3 - y4)^2)/JE2r2;
+    a(4,5)=(lambda*(x3 - x5)*(y3 - y4))/JE2r2;
+    a(4,6)=-((2*(lambda + mu)*(x3 - x4)*(x3 - x5) + (lambda + 2*mu)*(y3 - y4)*(y3 - y5))/JE2r2);
+    a(5,1)=a(1,5);
+    a(5,2)=a(2,5);
+    a(5,3)=a(3,5);
+    a(5,4)=a(4,5);
+    a(5,5)=((lambda + 2*mu)*(x2 - x3)^2 + 2*(lambda + mu)*(y2 - y3)^2)/JE1r3 + ...
+           ((lambda + 2*mu)*(x3 - x5)^2 + 2*(lambda + mu)*(y3 - y5)^2)/JE2r2;
+    a(5,6)=-((lambda*(x2 - x3)*(y2 - y3))/JE1r3) - (lambda*(x3 - x5)*(y3 - y5))/JE2r2;
+    a(6,1)=a(1,6);
+    a(6,2)=a(2,6);
+    a(6,3)=a(3,6);
+    a(6,4)=a(4,6);
+    a(6,5)=a(5,6);
+    a(6,6)=(2*(lambda + mu)*(x2 - x3)^2 + (lambda + 2*mu)*(y2 - y3)^2)/JE1r3 +...
+           (2*(lambda + mu)*(x3 - x5)^2 + (lambda + 2*mu)*(y3 - y5)^2)/JE2r2;
+    a=(1/(16.*mu*(lambda + mu)))*a;
+    
+    ind=ld+1:ld+vdim;
+    matrix(ind,ind)=a;
+%          tf = issymmetric(a)
+%          d = eig(a);
+%          isposdef = all(d > 0)
+    ld=ld+vdim;
+
+% North-West corner node
+i=1;
+j=N+1;
+
+vdim=4;
+a=zeros(vdim,vdim);
+
+x1=x(i, j - 1);
+y1=y(i, j - 1);           
+% x2=x(i + 1, j - 1);
+% y2=y(i + 1, j - 1);
+x3=x(i + 1, j);
+y3=y(i + 1, j);
+x4=x(i, j);
+y4=y(i, j);
+
+Jer4=abs(x4*(y1 - y3) + x1*(y3 - y4) + x3*(-y1 + y4));
+denom=16*Jer4*mu*(lambda + mu);
+
+a(1,1)=(lambda + 2*mu)*(x3 - x4)^2 + 2*(lambda + mu)*(y3 - y4)^2;
+a(1,2)=lambda*(-x3 + x4)*(y3 - y4);
+a(1,3)=-((lambda + 2*mu)*(x1 - x4)*(x3 - x4)) - 2*(lambda + mu)*(y1 - y4)*(y3 - y4);
+a(1,4)=lambda*(x3 - x4)*(y1 - y4);
+a(2,1)=a(1,2);
+a(2,2)=2*(lambda + mu)*(x3 - x4)^2 + (lambda + 2*mu)*(y3 - y4)^2;
+a(2,3)=lambda*(x1 - x4)*(y3 - y4);
+a(2,4)=-2*(lambda + mu)*(x1 - x4)*(x3 - x4) - (lambda + 2*mu)*(y1 - y4)*(y3 - y4);
+a(3,1)=a(1,3);
+a(3,2)=a(2,3);
+a(3,3)=(lambda + 2*mu)*(x1 - x4)^2 + 2*(lambda + mu)*(y1 - y4)^2;
+a(3,4)=lambda*(-x1 + x4)*(y1 - y4);
+a(4,1)=a(1,4);
+a(4,2)=a(2,4);
+a(4,3)=a(3,4);
+a(4,4)=2*(lambda + mu)*(x1 - x4)^2 + (lambda + 2*mu)*(y1 - y4)^2;
+a=(1/denom)*a;
+
+ind=ld+1:ld+vdim;
+matrix(ind,ind)=a;
+%     tf = issymmetric(a)
+%     d = eig(a);
+%     isposdef = all(d > 0)
+ld=ld+vdim;
+
+% North nodes (j=N+1)
+vdim=6;
+a=zeros(vdim,vdim);
+
+for i=2:N
+    
+%     x1=x(i - 1, j - 1);
+%     y1=y(i - 1, j - 1);
+    x2=x(i, j - 1);
+    y2=y(i, j - 1);
+    x3=x(i, j);
+    y3=y(i, j);
+    x4=x(i - 1, j);
+    y4=y(i - 1, j);
+%     x5=x(i + 1, j - 1);
+%     y5=y(i + 1, j - 1);
+    x6=x(i + 1, j);
+    y6=y(i + 1, j);
+    
+    JE1r3=abs(x4*(y2 - y3) + x2*(y3 - y4) + x3*(-y2 + y4));
+    JE2r4=abs(x6*(-y2 + y3) + x3*(y2 - y6) + x2*(-y3 + y6));
+    
+    a(1,1)=((lambda + 2*mu)*(x3 - x4)^2 + 2*(lambda + mu)*(y3 - y4)^2)/JE1r3 + ...
+           ((lambda + 2*mu)*(x3 - x6)^2 + 2*(lambda + mu)*(y3 - y6)^2)/JE2r4;
+    a(1,2)=-((lambda*(x3 - x4)*(y3 - y4))/JE1r3) - (lambda*(x3 - x6)*(y3 - y6))/JE2r4;
+    a(1,3)=((lambda + 2*mu)*(x2 - x3)*(x3 - x6) + 2*(lambda + mu)*(y2 - y3)*(y3 - y6))/JE2r4;
+    a(1,4)=-((lambda*(x3 - x6)*(y2 - y3))/JE2r4);
+    a(1,5)=-(((lambda + 2*mu)*(x2 - x3)*(x3 - x4) + 2*(lambda + mu)*(y2 - y3)*(y3 - y4))/JE1r3);
+    a(1,6)=(lambda*(x3 - x4)*(y2 - y3))/JE1r3;
+    a(2,1)=a(1,2);
+    a(2,2)=(2*(lambda + mu)*(x3 - x4)^2 + (lambda + 2*mu)*(y3 - y4)^2)/JE1r3 + ...
+           (2*(lambda + mu)*(x3 - x6)^2 + (lambda + 2*mu)*(y3 - y6)^2)/JE2r4;
+    a(2,3)=-((lambda*(x2 - x3)*(y3 - y6))/JE2r4);
+    a(2,4)=(2*(lambda + mu)*(x2 - x3)*(x3 - x6) + (lambda + 2*mu)*(y2 - y3)*(y3 - y6))/JE2r4;
+    a(2,5)=(lambda*(x2 - x3)*(y3 - y4))/JE1r3;
+    a(2,6)=(-2*(lambda + mu)*(x2 - x3)*(x3 - x4) - (lambda + 2*mu)*(y2 - y3)*(y3 - y4))/JE1r3;
+    a(3,1)=a(1,3);
+    a(3,2)=a(2,3);
+    a(3,3)=((lambda + 2*mu)*(x2 - x3)^2 + 2*(lambda + mu)*(y2 - y3)^2)/JE2r4;
+    a(3,4)=-((lambda*(x2 - x3)*(y2 - y3))/JE2r4);
+%     a(3,5)=0;
+%     a(3,6)=0;
+    a(4,1)= a(1,4);
+    a(4,2)= a(2,4);
+    a(4,3)= a(3,4);
+    a(4,4)=(2*(lambda + mu)*(x2 - x3)^2 + (lambda + 2*mu)*(y2 - y3)^2)/JE2r4;
+%     a(4,5)=0;
+%     a(4,6)=0;
+    a(5,1)=a(1,5);
+    a(5,2)=a(2,5);
+%     a(5,3)=0;
+%     a(5,4)=0;
+    a(5,5)=((lambda + 2*mu)*(x2 - x3)^2 + 2*(lambda + mu)*(y2 - y3)^2)/JE1r3;
+    a(5,6)=-((lambda*(x2 - x3)*(y2 - y3))/JE1r3);
+    a(6,1)=a(1,6);
+    a(6,2)=a(2,6);
+%     a(6,3)=0;
+%     a(6,4)=0;
+    a(6,5)=a(5,6);
+    a(6,6)=(2*(lambda + mu)*(x2 - x3)^2 + (lambda + 2*mu)*(y2 - y3)^2)/JE1r3;
+    a=(1/(16.*mu*(lambda + mu)))*a;
+    
+    ind=ld+1:ld+vdim;
+    matrix(ind,ind)=a;
+%         tf = issymmetric(a)
+%         d = eig(a);
+%         isposdef = all(d > 0)
+    ld=ld+vdim;
+end
+
+% North-East corner node (j=N+1)
+i=N+1;
+
+vdim=4;
+a=zeros(vdim,vdim);
+
+% x1=x(i - 1, j - 1);  
+% y1=y(i - 1, j - 1);            
+x2=x(i, j - 1);
+y2=y(i, j - 1);
+x3=x(i, j);
+y3=y(i, j);
+x4=x(i - 1, j);
+y4=y(i - 1, j);
+
+Jer3=abs(x4*(y2 - y3) + x2*(y3 - y4) + x3*(-y2 + y4));
+denom=16*Jer3*mu*(lambda + mu);
+
+a(1,1)=((lambda + 2*mu)*(x3 - x4)^2 + 2*(lambda + mu)*(y3 - y4)^2);
+a(1,2)=-((lambda*(x3 - x4)*(y3 - y4)));
+a(1,3)=-(((lambda + 2*mu)*(x2 - x3)*(x3 - x4) + 2*(lambda + mu)*(y2 - y3)*(y3 - y4)));
+a(1,4)=(lambda*(x3 - x4)*(y2 - y3));
+a(2,1)=a(1,2);
+a(2,2)=(2*(lambda + mu)*(x3 - x4)^2 + (lambda + 2*mu)*(y3 - y4)^2);
+a(2,3)=(lambda*(x2 - x3)*(y3 - y4));
+a(2,4)=-((2*(lambda + mu)*(x2 - x3)*(x3 - x4) + (lambda + 2*mu)*(y2 - y3)*(y3 - y4)));
+a(3,1)=a(1,3);
+a(3,2)=a(2,3);
+a(3,3)=((lambda + 2*mu)*(x2 - x3)^2 + 2*(lambda + mu)*(y2 - y3)^2);
+a(3,4)=-((lambda*(x2 - x3)*(y2 - y3)));
+a(4,1)=a(1,4);
+a(4,2)=a(2,4);
+a(4,3)=a(3,4);
+a(4,4)=(2*(lambda + mu)*(x2 - x3)^2 + (lambda + 2*mu)*(y2 - y3)^2);
+a=(1/denom)*a;
+
+ind=ld+1:ld+vdim;
+matrix(ind,ind)=a;
+%     tf = issymmetric(a)
+%     d = eig(a);
+%     isposdef = all(d > 0)
+end
