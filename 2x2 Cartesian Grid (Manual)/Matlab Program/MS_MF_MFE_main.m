@@ -34,3 +34,23 @@ A_sp_T=build_matrix_sig_p;
 
 % Matriz de fuerza: stress-pressure
 A_sp=(A_sp_T)';
+
+% Matriz de fuerza: velocity-velocity
+A_zz=build_matrix_z_z;
+
+% Matriz de fuerza (transpuesta): velocity-pressure
+A_zp_T=build_matrix_z_p;
+
+% Matriz de fuerza: velocity-pressure
+A_zp=(A_zp_T)'*delta_t;
+
+% Matriz de fuerza: pressure-pressure
+A_pp=(c0+alpha^2/(lambda+mu))*(1/4)*eye(4);
+
+% Mass matrix of the system 
+MM=[A_ss A_su_T A_sg_T zeros(48,24) A_sp_T;...
+    -A_su zeros(8,8+9+24+4);...
+    -A_sg zeros(9,8+9+24+4);...
+    zeros(24,48+8+9) A_zz A_zp_T;...
+    A_sp zeros(4,8+9) -A_zp A_pp];
+
