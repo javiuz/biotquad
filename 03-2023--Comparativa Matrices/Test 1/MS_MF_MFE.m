@@ -35,30 +35,36 @@ A_ss_manual=build_matrix_sig_sig_manual;
 
 % Matriz de fuerza (transpuesta): stress-displacement
 A_su_T=build_matrix_sig_u;
+A_su_T_manual=build_matrix_sig_u_manual;
 
 % Matriz de fuerza: A_sigma_u
 A_su=(A_su_T)';
 
 % Matriz de fuerza (transpuesta): stress-rotation
 A_sg_T=build_matrix_sig_gamma;
+A_sg_T_manual=build_matrix_sig_gamma_manual;
 
 % Matriz de fuerza: A_sigma_gamma
 A_sg=(A_sg_T)';
 
 % Matriz de fuerza (transpuesta): stress-pressure
 A_sp_T=build_matrix_p_tau;
+A_sp_T_manual=build_matrix_p_tau_manual;
 
 % Matriz de fuerza: A_sigma_p
 A_sp=(A_sp_T)';
 
 % Matriz de fuerza: pressure-pressure
 A_pp=(c0+alpha^2/(lambda+mu))*(1/(N^2))*eye(N*N);
+A_pp_manual=(c0+alpha^2/(lambda+mu))*(1/4)*eye(4);
 
 % Matriz de fuerza: velocity-velocity
 A_zz=build_matrix_z_z;
+A_zz_manual=build_matrix_z_z_manual;
 
 % Matriz de fuerza (transpuesta): velocity-pressure
 A_zp_T=build_matrix_z_p;
+A_zp_T_manual=build_matrix_z_p_manual;
 
 % Matriz de fuerza: A_zp
 A_zp=(A_zp_T)'*delta_t;
@@ -87,9 +93,13 @@ for j=1:N
         p(ind1p)=sol_exactax(xx,yy,t,3);
     end
 end
+% Forma manual
+p_manual=zeros(4,1);
 
 nu=0;
 sigma=build_sigma_0_cartesian(t,nu);
+% Forma manual
+sigma_manual=build_initial_sigma;
 
 %% Initialize errors
 erroru_L2_inf=0;
@@ -105,10 +115,17 @@ error_z_zh_inf=erroru_L2_inf;
 while t < Tf
 
 indep2=build_indep_f(t+delta_t);
+indep2_manual=build_indep_f_manual(t+delta_t);
 
 indep5=delta_t*build_indep_q(t+delta_t) + A_sp*sigma + A_pp*p;
+% Forma manual
+q_term_manual=(c0*delta_t/16)*[1;3;1;3];
+indep5_manual=build_indep_q_manual(q_term_manual,sigma_manual,p_manual);
 
 [indep1,indep4]=dir_bc_Pg(t+delta_t);
+% Forma manual
+indep1_manual=dir_bc_u_manual;
+indep4_manual=dir_bc_p_manual(t+delta_t);
 
 indep=[indep1;indep2;zeros((N+1)*(N+1),1);indep4;indep5];
    
