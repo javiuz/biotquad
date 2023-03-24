@@ -56,12 +56,12 @@ cind2=5:6;
 b=zeros(6,4);  
 
 b(1,1)=nval;
-b(3,1)=nval;
+b(3,1)=val;
 b(2,2)=nval;
-b(4,2)=nval;
-b(3,3)=val;
+b(4,2)=val;
+b(3,3)=nval;
 b(5,3)=nval;
-b(4,4)=val;
+b(4,4)=nval;
 b(6,4)=nval;
 
 matrix(rind,cind1)=b(:,1:2);
@@ -73,22 +73,22 @@ cind=1:8;
 
 b=zeros(8);
 
-b(1,1)=nval;
-b(7,1)=nval;
-b(2,2)=nval;
-b(8,2)=nval;
-b(1,3)=val;
-b(3,3)=nval;
-b(2,4)=val;
-b(4,4)=nval;
-b(5,5)=nval;
-b(7,5)=val;
-b(6,6)=nval;
-b(8,6)=val;
-b(3,7)=val;
-b(5,7)=val;
-b(4,8)=val;
-b(6,8)=val;
+b(1,1)=val;
+b(7,1)=val;
+b(2,2)=val;
+b(8,2)=val;
+b(1,3)=nval;
+b(3,3)=val;
+b(2,4)=nval;
+b(4,4)=val;
+b(5,5)=val;
+b(7,5)=nval;
+b(6,6)=val;
+b(8,6)=nval;
+b(3,7)=nval;
+b(5,7)=nval;
+b(4,8)=nval;
+b(6,8)=nval;
 
 matrix(rind,cind)=b;
     
@@ -100,13 +100,13 @@ cind2=7:8;
 b=zeros(6,4);
 
 b(1,1)=val;
-b(5,1)=nval;
+b(5,1)=val;
 b(2,2)=val;
-b(6,2)=nval;
+b(6,2)=val;
 b(3,3)=val;
-b(5,3)=val;
+b(5,3)=nval;
 b(4,4)=val;
-b(6,4)=val;
+b(6,4)=nval;
 
 matrix(rind,cind1)=b(:,1:2);
 matrix(rind,cind2)=b(:,3:4);
