@@ -48,8 +48,8 @@ cind2=3;
 f=zeros(3,2);  
 
 f(1,1)=val;
-f(2,1)=val;
-f(2,2)=nval;
+f(2,1)=nval;
+f(2,2)=val;
 f(3,2)=val;
 
 matrix(rind,cind1)=f(:,1);
@@ -61,14 +61,14 @@ cind=1:4;
 
 f=zeros(4);
 
-f(1,1)=val;
-f(4,1)=val;
-f(1,2)=nval;
-f(2,2)=val;
-f(3,3)=val;
-f(4,3)=nval;
-f(2,4)=nval;
-f(3,4)=nval;
+f(1,1)=nval;
+f(4,1)=nval;
+f(1,2)=val;
+f(2,2)=nval;
+f(3,3)=nval;
+f(4,3)=val;
+f(2,4)=val;
+f(3,4)=val;
 
 matrix(rind,cind)=f;
     
@@ -80,9 +80,9 @@ cind2=4;
 f=zeros(3,2);
 
 f(1,1)=nval;
-f(3,1)=val;
+f(3,1)=nval;
 f(2,2)=nval;
-f(3,2)=nval;
+f(3,2)=val;
 
 matrix(rind,cind1)=f(:,1);
 matrix(rind,cind2)=f(:,2);
