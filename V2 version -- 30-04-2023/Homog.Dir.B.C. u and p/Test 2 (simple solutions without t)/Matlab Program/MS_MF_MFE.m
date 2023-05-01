@@ -43,6 +43,7 @@ Tf=1e-03;       % Final time
     % Asp y App las utilizaremos después
 [A11,A12,A22,AspT,App]=build_matrices_Biot(delta_t);
 A21=-A12';
+A22=App+A22;
 Asp=AspT';
 
 % Matriz del sistema reducido de Biot
