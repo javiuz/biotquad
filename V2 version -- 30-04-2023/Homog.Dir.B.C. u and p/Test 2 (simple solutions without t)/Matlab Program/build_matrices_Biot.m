@@ -121,9 +121,9 @@ for i=2:N
     y6=y(i+1,j+1);
     
     JE1r2=abs(x2*y1 - x3*y1 - x1*y2 + x3*y2 + x1*y3 - x2*y3);
-    S_denom_E1=coef_denom*JE1r2;
+    S_denom_E1=coef_denom_elas*JE1r2;
     JE2r1=abs(x5*(-y2 + y3) + x3*(y2 - y5) + x2*(-y3 + y5));
-    S_denom_E2=coef_denom*JE2r1;
+    S_denom_E2=coef_denom_elas*JE2r1;
     
     a(1,1)=((lambda + 2*mu)*(x2 - x3)^2 + 2*(lambda + mu)*(y2 - y3)^2)/S_denom_E2;
     a(2,1)=-(lambda*(x2 - x3)*(y2 - y3))/S_denom_E2;
@@ -285,7 +285,7 @@ for j=2:N
     x6=x(i,j+1);
     y6=y(i,j+1);
     
-    JE1r4=Abs(x3*y1 - x4*y1 - x1*y3 + x4*y3 + x1*y4 - x3*y4);
+    JE1r4=abs(x3*y1 - x4*y1 - x1*y3 + x4*y3 + x1*y4 - x3*y4);
     W_denom_E1=coef_denom_elas*JE1r4;
     JE2r1=abs(x6*(-y3 + y4) + x4*(y3 - y6) + x3*(-y4 + y6));
     W_denom_E2=coef_denom_elas*JE2r1;
@@ -309,7 +309,7 @@ for j=2:N
            ((lambda + 2*mu)*(x4 - x6)^2 + 2*(lambda + mu)*(y4 - y6)^2)/W_denom_E2;
     a(4,3)=-(lambda*(x1 - x4)*(y1 - y4))/W_denom_E1 - ...
            (lambda*(x4 - x6)*(y4 - y6))/W_denom_E2;
-    a(5,3)=((lambda + 2*mu)*(x3 - x4)*(x4 - x6) - 2*(lambda + mu)*(y3 - y4)*(y4 - y6))/W_denom_E2;
+    a(5,3)=-((lambda + 2*mu)*(x3 - x4)*(x4 - x6) + 2*(lambda + mu)*(y3 - y4)*(y4 - y6))/W_denom_E2;
     a(6,3)=(lambda*(x4 - x6)*(y3 - y4))/W_denom_E2;
     a(1,4)= a(4,1);
     a(2,4)= a(4,2);
@@ -317,7 +317,7 @@ for j=2:N
     a(4,4)=(2*(lambda + mu)*(x1 - x4)^2 + (lambda + 2*mu)*(y1 - y4)^2)/W_denom_E1 + ...
            (2*(lambda + mu)*(x4 - x6)^2 + (lambda + 2*mu)*(y4 - y6)^2)/W_denom_E2;
     a(5,4)=(lambda*(x3 - x4)*(y4 - y6))/W_denom_E2;
-    a(6,4)=(-2*(lambda + mu)*(x3 - x4)*(x4 - x6) + (lambda + 2*mu)*(y3 - y4)*(y4 - y6))/W_denom_E2;
+    a(6,4)=-(2*(lambda + mu)*(x3 - x4)*(x4 - x6) + (lambda + 2*mu)*(y3 - y4)*(y4 - y6))/W_denom_E2;
 %     a(1,5)=0;
 %     a(2,5)=0;
     a(3,5)=a(5,3);
