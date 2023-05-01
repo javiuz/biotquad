@@ -51,7 +51,7 @@ a(1,4)=a(4,1);
 a(2,4)=a(4,2);
 a(3,4)=a(4,3);
 a(4,4)=(2*(lambda + mu)*(x1 - x2)^2 + (lambda + 2*mu)*(y1 - y2)^2);
-a=a/SWdenom;
+a=a/SW_denom;
 
 % Matriz local (A sigma, u)^t
 b
