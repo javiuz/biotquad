@@ -33,7 +33,7 @@ perm=1;
 % perm=1e-12;
 
 K=perm*eye(2);
-Kinv=K;
+Kinv=inv(K);
 
 t=0;            % initial time
 delta_t=1e-04;  % Time step
