@@ -12,6 +12,7 @@ App=sparse(N*N,N*N);
 
 coef_denom_elas=(16.*mu*(lambda + mu));
 coef_d=alpha/(8*(lambda+mu));
+coef_k=(alpha^2 + c0*(lambda + mu))/(lambda + mu);
 
 % South-West corner node
 i=1;
@@ -92,7 +93,7 @@ t(2,2)=Kinv(1,1)*(x1 - x2)^2 + (2*Kinv(1,2)*(x1 - x2) + Kinv(2,2)*(y1 - y2))*(y1
 t=t/SW_denom_zz;
 
 % Matriz local (A p, p)
-k   % EVALUADA EN CUADRILÁTERO E
+k=coef_k*area_cuadrilatero(x1,y1,x2,y2,x3,y3,x4,y4);   % CUADRILÁTERO E
 
 localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
 localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
@@ -158,8 +159,8 @@ for i=2:N
     y2=y(i,j);
     x3=x(i,j+1);
     y3=y(i,j+1);
-    x4=x(i-1,j+1);
-    y4=y(i-1,j+1);
+%     x4=x(i-1,j+1);
+%     y4=y(i-1,j+1);
     x5=x(i+1,j);
     y5=y(i+1,j);
     x6=x(i+1,j+1);
@@ -245,7 +246,7 @@ for i=2:N
 %     k2
 %     k=[0 0;0 k2];
 
-    k   % EVALUADA EN CUADRILÁTERO E2
+    k=coef_k*area_cuadrilatero(x2,y2,x5,y5,x6,y6,x3,y3);   % CUADRILÁTERO E2
 
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
@@ -277,8 +278,8 @@ x2=x(i,j);
 y2=y(i,j);
 x3=x(i,j+1);
 y3=y(i,j+1);
-x4=x(i-1,j+1);
-y4=y(i-1,j+1);
+% x4=x(i-1,j+1);
+% y4=y(i-1,j+1);
 
 Jer2=abs(x2*y1 - x3*y1 - x1*y2 + x3*y2 + x1*y3 - x2*y3);
 SE_denom_ss=Jer2*coef_denom_elas;
@@ -365,8 +366,8 @@ for j=2:N
     
     x1=x(i,j-1);
     y1=y(i,j-1);
-    x2=x(i+1,j-1);
-    y2=y(i+1,j-1);
+%     x2=x(i+1,j-1);
+%     y2=y(i+1,j-1);
     x3=x(i+1,j);
     y3=y(i+1,j);
     x4=x(i,j);
@@ -485,7 +486,7 @@ for j=2:N
 %     k2
 %     k=[0 0;0 k2];
     
-    k   % EVALUADA EN CUADRILÁTERO E2
+    k=coef_k*area_cuadrilatero(x4,y4,x3,y3,x5,y5,x6,y6);   % CUADRILÁTERO E2
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
@@ -564,7 +565,6 @@ for j=2:N
 %     f(4,4)=0;
          
     for i=2:N
-%        ¡¡REVISAR ÍNDICES en AzpT!!
         ind2u=(i-1+(j-2)*N)*2;
         ind1u=ind2u-1;
         ind4u=(i+(j-2)*N)*2;
@@ -587,16 +587,16 @@ for j=2:N
     y3=y(i,j);
     x4=x(i-1,j);
     y4=y(i-1,j);
-    x5=x(i+1,j-1);
-    y5=y(i+1,j-1);
+%     x5=x(i+1,j-1);
+%     y5=y(i+1,j-1);
     x6=x(i+1,j);
     y6=y(i+1,j);
     x7=x(i+1,j+1);
     y7=y(i+1,j+1);
     x8=x(i,j+1);
     y8=y(i,j+1);
-    x9=x(i-1,j+1);
-    y9=y(i-1,j+1);
+%     x9=x(i-1,j+1);
+%     y9=y(i-1,j+1);
     
     JE1r3=abs(x2*y1 - x3*y1 - x1*y2 + x3*y2 + x1*y3 - x2*y3) - ...
           abs(x2*y1 - x4*y1 - x1*y2 + x4*y2 + x1*y4 - x2*y4) + ...
@@ -760,7 +760,7 @@ for j=2:N
 %     k3
 %     k=[0 0 0 0;0 0 0 0;0 0 0 0;0 0 0 k3];
     
-    k % EVALUADA EN CUADRILÁTERO E3 
+    k=coef_k*area_cuadrilatero(x3,y3,x6,y6,x7,y7,x8,y8); % CUADRILÁTERO E3 
     
     localm1=b'*(a\b)-((b'*(a\c))*((c'*(a\c))\(c'*(a\b))));
     localm2=b'*(a\d)-((b'*(a\c))*((c'*(a\c))\(c'*(a\d))));
@@ -801,8 +801,8 @@ for j=2:N
     y4=y(i-1,j);
     x5=x(i,j+1);
     y5=y(i,j+1);
-    x6=x(i-1,j+1);
-    y6=y(i-1,j+1);   
+%     x6=x(i-1,j+1);
+%     y6=y(i-1,j+1);   
     
     JE1r3=abs(x2*y1 - x3*y1 - x1*y2 + x3*y2 + x1*y3 - x2*y3) - ...
           abs(x2*y1 - x4*y1 - x1*y2 + x4*y2 + x1*y4 - x2*y4) +...
@@ -939,8 +939,8 @@ vdim2=vdim/2;
 
 x1=x(i,j-1);
 y1=y(i,j-1);           
-x2=x(i+1,j-1);
-y2=y(i+1,j-1);
+% x2=x(i+1,j-1);
+% y2=y(i+1,j-1);
 x3=x(i+1,j);
 y3=y(i+1,j);
 x4=x(i,j);
@@ -1066,8 +1066,8 @@ for i=2:N
     y3=y(i,j);
     x4=x(i-1,j);
     y4=y(i-1,j);
-    x5=x(i+1,j-1);
-    y5=y(i+1,j-1);
+%     x5=x(i+1,j-1);
+%     y5=y(i+1,j-1);
     x6=x(i+1,j);
     y6=y(i+1,j);   
     
