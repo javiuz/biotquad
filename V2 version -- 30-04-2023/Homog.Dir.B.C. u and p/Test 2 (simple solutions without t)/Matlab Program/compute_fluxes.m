@@ -56,8 +56,8 @@ t=t/SW_denom_zz;
         Pgp_L1=int_dir_simpson(i,j,i+1,j,tt,3);
     % frontera Oeste
         Pgp_L4=int_dir_simpson(i,j,i,j+1,tt,3);
-%         Pgp=(1/2)*[Pgp_L1;Pgp_L4];
-        Pgp=-(1/2)*[Pgp_L1;Pgp_L4];
+        Pgp=(1/2)*[Pgp_L1;Pgp_L4];
+%         Pgp=-(1/2)*[Pgp_L1;Pgp_L4];
 
 pp(1,1)=p(i,j);
 zz=t\(Pgp-f*pp);
@@ -121,8 +121,8 @@ for i=2:N
             Pgp_L2=int_dir_simpson(i,j,i+1,j,tt,3); 
         % frontera Sur 2
             Pgp_L1=int_dir_simpson(i-1,j,i,j,tt,3); 
-%         Pgp=(1/2)*[Pgp_L2;0;Pgp_L1];
-        Pgp=-(1/2)*[Pgp_L2;0;Pgp_L1];
+        Pgp=(1/2)*[Pgp_L2;0;Pgp_L1];
+%         Pgp=-(1/2)*[Pgp_L2;0;Pgp_L1];
     
     pp(1,1)=p(i-1,j);
     pp(2,1)=p(i,j);
@@ -171,8 +171,8 @@ t=t/SE_denom_zz;
         Pgp_L7=int_dir_simpson(i,j,i,j+1,tt,3);
     % frontera Sur
         Pgp_L3=int_dir_simpson(i-1,j,i,j,tt,3);
-%     Pgp=(1/2)*[-Pgp_L7;Pgp_L3];
-    Pgp=-(1/2)*[Pgp_L7;Pgp_L3];
+    Pgp=(1/2)*[-Pgp_L7;Pgp_L3];
+%     Pgp=-(1/2)*[Pgp_L7;Pgp_L3];
 
 pp(1,1)=p(i-1,j);
 zz=t\(Pgp-f*pp);
@@ -236,8 +236,8 @@ for j=2:N
             Pgp_L4=int_dir_simpson(i,j,i,j-1,tt,3);
         % frontera Oeste 2
             Pgp_L11=int_dir_simpson(i,j,i,j+1,tt,3);
-%         Pgp=(1/2)*[Pgp_L4;0;Pgp_L11];
-        Pgp=-(1/2)*[Pgp_L4;0;Pgp_L11];
+        Pgp=(1/2)*[Pgp_L4;0;Pgp_L11];
+%         Pgp=-(1/2)*[Pgp_L4;0;Pgp_L11];
         
     pp(1,1)=p(i,j-1);
     pp(2,1)=p(i,j);
@@ -402,8 +402,8 @@ for j=2:N
             Pgp_L7=int_dir_simpson(i,j,i,j-1,tt,3);
         % frontera Este 2
             Pgp_L14=int_dir_simpson(i,j,i,j+1,tt,3);
-%         Pgp=(1/2)*[-Pgp_L7;-Pgp_L14;0];
-        Pgp=-(1/2)*[Pgp_L7;Pgp_L14;0];
+        Pgp=(1/2)*[-Pgp_L7;-Pgp_L14;0];
+%         Pgp=-(1/2)*[Pgp_L7;Pgp_L14;0];
 
     pp(1,1)=p(i-1,j-1);
     pp(2,1)=p(i-1,j);
@@ -454,8 +454,8 @@ t=t/NW_denom_zz;
         Pgp_L18=int_dir_simpson(i,j,i,j-1,tt,3);
     % frontera Norte
         Pgp_L22=int_dir_simpson(i,j,i+1,j,tt,3);
-%     Pgp=(1/2)*[Pgp_L18;-Pgp_L22];
-    Pgp=-(1/2)*[Pgp_L18;Pgp_L22];
+    Pgp=(1/2)*[Pgp_L18;-Pgp_L22];
+%     Pgp=-(1/2)*[Pgp_L18;Pgp_L22];
 
 pp(1,1)=p(i,j-1);
 zz=t\(Pgp-f*pp);
@@ -522,8 +522,8 @@ for i=2:N
             Pgp_L23=int_dir_simpson(i,j,i+1,j,tt,3);
         % frontera Norte 2
             Pgp_L22=int_dir_simpson(i-1,j,i,j,tt,3);
-%         Pgp=(1/2)*[0;-Pgp_L23;-Pgp_L22];
-        Pgp=-(1/2)*[0;Pgp_L23;Pgp_L22];
+        Pgp=(1/2)*[0;-Pgp_L23;-Pgp_L22];
+%         Pgp=-(1/2)*[0;Pgp_L23;Pgp_L22];
   
     pp(1,1)=p(i-1,j-1);
     pp(2,1)=p(i,j-1);
@@ -574,8 +574,8 @@ t=t/NE_denom_zz;
         Pgp_L21=int_dir_simpson(i,j,i,j-1,tt,3);
     % frontera Norte
         Pgp_L24=int_dir_simpson(i-1,j,i,j,tt,3);
-%     Pgp=(1/2)*[-Pgp_L21;-Pgp_L24];
-    Pgp=-(1/2)*[Pgp_L21;Pgp_L24];
+    Pgp=(1/2)*[-Pgp_L21;-Pgp_L24];
+%     Pgp=-(1/2)*[Pgp_L21;Pgp_L24];
 
 pp(1,1)=p(i-1,j-1);
 zz=t\(Pgp-f*pp);
