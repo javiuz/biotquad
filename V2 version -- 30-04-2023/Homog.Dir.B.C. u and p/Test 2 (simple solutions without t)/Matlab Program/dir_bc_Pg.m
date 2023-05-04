@@ -106,8 +106,8 @@ t=t/SW_denom_zz;
     % frontera Oeste
         Pgp_L4=int_dir_simpson(i,j,i,j+1,tt,3);
     
-%         Pgp=(1/2)*[Pgp_L1;Pgp_L4];
-        Pgp=-(1/2)*[Pgp_L1;Pgp_L4];
+        Pgp=(1/2)*[Pgp_L1;Pgp_L4];
+%         Pgp=-(1/2)*[Pgp_L1;Pgp_L4];
         localv_p=((delta_t*f')*(t\Pgp))+((-d'+((d'*(a\c))*((c'*(a\c))\c')))*(a\Pgu));
         gDp(ind1p)=gDp(ind1p)+localv_p;
 
@@ -259,8 +259,8 @@ for i=2:N
             Pgp_L2=int_dir_simpson(i,j,i+1,j,tt,3); 
         % frontera Sur 2
             Pgp_L1=int_dir_simpson(i-1,j,i,j,tt,3); 
-%         Pgp=(1/2)*[Pgp_L2;0;Pgp_L1];
-        Pgp=-(1/2)*[Pgp_L2;0;Pgp_L1];
+        Pgp=(1/2)*[Pgp_L2;0;Pgp_L1];
+%         Pgp=-(1/2)*[Pgp_L2;0;Pgp_L1];
         
         localv_p=((delta_t*f')*(t\Pgp))+((-d'+((d'*(a\c))*((c'*(a\c))\c')))*(a\Pgu));
         gDp(ind1p:ind2p)=gDp(ind1p:ind2p)+localv_p;
@@ -354,8 +354,8 @@ gDu(ind1u:ind2u)=gDu(ind1u:ind2u)+localv_u;
         Pgp_L7=int_dir_simpson(i,j,i,j+1,tt,3);
     % frontera Sur
         Pgp_L3=int_dir_simpson(i-1,j,i,j,tt,3);
-%     Pgp=(1/2)*[-Pgp_L7;Pgp_L3];
-    Pgp=-(1/2)*[Pgp_L7;Pgp_L3];
+    Pgp=(1/2)*[-Pgp_L7;Pgp_L3];
+%     Pgp=-(1/2)*[Pgp_L7;Pgp_L3];
     
 localv_p=((delta_t*f')*(t\Pgp))+((-d'+((d'*(a\c))*((c'*(a\c))\c')))*(a\Pgu));
 gDp(ind1p)=gDp(ind1p)+localv_p;
@@ -509,8 +509,8 @@ for j=2:N
             Pgp_L4=int_dir_simpson(i,j,i,j-1,tt,3);
         % frontera Oeste 2
             Pgp_L11=int_dir_simpson(i,j,i,j+1,tt,3);
-%         Pgp=(1/2)*[Pgp_L4;0;Pgp_L11];
-        Pgp=-(1/2)*[Pgp_L4;0;Pgp_L11];
+        Pgp=(1/2)*[Pgp_L4;0;Pgp_L11];
+%         Pgp=-(1/2)*[Pgp_L4;0;Pgp_L11];
         
     localv_p=((delta_t*f')*(t\Pgp))+((-d'+((d'*(a\c))*((c'*(a\c))\c')))*(a\Pgu));
     gDp(ind1p)=gDp(ind1p)+localv_p(1);
@@ -668,8 +668,8 @@ for j=2:N
             Pgp_L7=int_dir_simpson(i,j,i,j-1,tt,3);
         % frontera Este 2
             Pgp_L14=int_dir_simpson(i,j,i,j+1,tt,3);
-%         Pgp=(1/2)*[-Pgp_L7;-Pgp_L14;0];
-        Pgp=-(1/2)*[Pgp_L7;Pgp_L14;0];
+        Pgp=(1/2)*[-Pgp_L7;-Pgp_L14;0];
+%         Pgp=-(1/2)*[Pgp_L7;Pgp_L14;0];
     
        localv_p=((delta_t*f')*(t\Pgp))+((-d'+((d'*(a\c))*((c'*(a\c))\c')))*(a\Pgu));
        gDp(ind1p)=gDp(ind1p)+localv_p(1);
@@ -765,8 +765,8 @@ gDu(ind1u:ind2u)=gDu(ind1u:ind2u)+localv_u;
         Pgp_L18=int_dir_simpson(i,j,i,j-1,tt,3);
     % frontera Norte
         Pgp_L22=int_dir_simpson(i,j,i+1,j,tt,3);
-%     Pgp=(1/2)*[Pgp_L18;-Pgp_L22];
-    Pgp=-(1/2)*[Pgp_L18;Pgp_L22];
+    Pgp=(1/2)*[Pgp_L18;-Pgp_L22];
+%     Pgp=-(1/2)*[Pgp_L18;Pgp_L22];
     
 localv_p=((delta_t*f')*(t\Pgp))+((-d'+((d'*(a\c))*((c'*(a\c))\c')))*(a\Pgu));
 gDp(ind1p)=gDp(ind1p)+localv_p;
@@ -922,8 +922,8 @@ for i=2:N
             Pgp_L23=int_dir_simpson(i,j,i+1,j,tt,3);
         % frontera Norte 2
             Pgp_L22=int_dir_simpson(i-1,j,i,j,tt,3);
-%         Pgp=(1/2)*[0;-Pgp_L23;-Pgp_L22];
-        Pgp=-(1/2)*[0;Pgp_L23;Pgp_L22];
+        Pgp=(1/2)*[0;-Pgp_L23;-Pgp_L22];
+%         Pgp=-(1/2)*[0;Pgp_L23;Pgp_L22];
     
     localv_p=((delta_t*f')*(t\Pgp))+((-d'+((d'*(a\c))*((c'*(a\c))\c')))*(a\Pgu));
     gDp(ind1p:ind2p)=gDp(ind1p:ind2p)+localv_p;
@@ -1019,8 +1019,8 @@ gDu(ind1u:ind2u)=gDu(ind1u:ind2u)+localv_u;
         Pgp_L21=int_dir_simpson(i,j,i,j-1,tt,3);
     % frontera Norte
         Pgp_L24=int_dir_simpson(i-1,j,i,j,tt,3);
-%     Pgp=(1/2)*[-Pgp_L21;-Pgp_L24];
-    Pgp=-(1/2)*[Pgp_L21;Pgp_L24];
+    Pgp=(1/2)*[-Pgp_L21;-Pgp_L24];
+%     Pgp=-(1/2)*[Pgp_L21;Pgp_L24];
     
 localv_p=((delta_t*f')*(t\Pgp))+((-d'+((d'*(a\c))*((c'*(a\c))\c')))*(a\Pgu));
 gDp(ind1p)=gDp(ind1p)+localv_p;
