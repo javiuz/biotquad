@@ -1,6 +1,6 @@
 function [gDu,gDp]=dir_bc_Pg(delta_t,tt)
 
-global NN x y alpha lambda mu 
+global NN x y alpha lambda mu Kinv
 
 N=NN;
 
