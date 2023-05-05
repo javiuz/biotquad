@@ -76,8 +76,8 @@ d=coef_d*d;
 
 % Matriz local (A z, p)^T
 f=zeros(vdim2,1);
-f(1,1)=-(1/2);
-f(2,1)=-(1/2);
+f(1,1)=1/2;
+f(2,1)=1/2;
 
 % Matriz local (A z, z)^{-1}
 t=zeros(vdim2,vdim2);
@@ -106,8 +106,7 @@ t=t/SW_denom_zz;
     % frontera Oeste
         Pgp_L4=int_dir_simpson(i,j,i,j+1,tt,3);
     
-%         Pgp=(1/2)*[Pgp_L1;Pgp_L4];
-        Pgp=-(1/2)*[Pgp_L1;Pgp_L4];
+        Pgp=(1/2)*[Pgp_L1;Pgp_L4];
         localv_p=((delta_t*f')*(t\Pgp))+((-d'+((d'*(a\c))*((c'*(a\c))\c')))*(a\Pgu));
         gDp(ind1p)=gDp(ind1p)+localv_p;
 
@@ -137,9 +136,9 @@ b(6,2)=-(1/2);
 f=zeros(vdim2,2);
 % f(1,1)=0;
 f(2,1)=-(1/2);
-f(3,1)=-(1/2);
-f(1,2)=-(1/2);
-f(2,2)=-(1/2);
+f(3,1)=1/2;
+f(1,2)=1/2;
+f(2,2)=1/2;
 % f(3,2)=0;
 
 a=zeros(vdim,vdim);
@@ -237,7 +236,7 @@ for i=2:N
     t(1,2)=t(2,1);
     t(2,2)=(Kinv(1,1)*(x1 - x2)^2 + (2*Kinv(1,2)*(x1 - x2) + Kinv(2,2)*(y1 - y2))*(y1 - y2))/S_denom_E1_zz +...
            (Kinv(1,1)*(x2 - x5)^2 + (2*Kinv(1,2)*(x2 - x5) + Kinv(2,2)*(y2 - y5))*(y2 - y5))/S_denom_E2_zz;
-    t(3,2)=-(Kinv(1,1)*(x1 - x2)*(x2 - x3) + Kinv(2,2)*(y1 - y2)*(y2 - y3) + Kinv(1,2)*(x3*(-y1 + y2) + x1*(y2 - y3) + x2*(y1 - 2*y2 + y3)))/S_denom_E1_zz;
+    t(3,2)=(Kinv(1,1)*(x1 - x2)*(x2 - x3) + Kinv(2,2)*(y1 - y2)*(y2 - y3) + Kinv(1,2)*(x3*(-y1 + y2) + x1*(y2 - y3) + x2*(y1 - 2*y2 + y3)))/S_denom_E1_zz;
 %     t(1,3)=0;
     t(2,3)=t(3,2);
     t(3,3)=(Kinv(1,1)*(x2 - x3)^2 + (2*Kinv(1,2)*(x2 - x3) + Kinv(2,2)*(y2 - y3))*(y2 - y3))/S_denom_E1_zz;
@@ -259,8 +258,7 @@ for i=2:N
             Pgp_L2=int_dir_simpson(i,j,i+1,j,tt,3); 
         % frontera Sur 2
             Pgp_L1=int_dir_simpson(i-1,j,i,j,tt,3); 
-%         Pgp=(1/2)*[Pgp_L2;0;Pgp_L1];
-        Pgp=-(1/2)*[Pgp_L2;0;Pgp_L1];
+        Pgp=(1/2)*[Pgp_L2;0;Pgp_L1];
         
         localv_p=((delta_t*f')*(t\Pgp))+((-d'+((d'*(a\c))*((c'*(a\c))\c')))*(a\Pgu));
         gDp(ind1p:ind2p)=gDp(ind1p:ind2p)+localv_p;
@@ -327,11 +325,11 @@ d=coef_d*d;
 
 f=zeros(vdim2,1);
 f(1,1)=-(1/2);
-f(2,1)=-(1/2);
+f(2,1)=1/2;
 
 t=zeros(vdim2,vdim2);
 t(1,1)=Kinv(1,1)*(x1 - x2)^2 + (2*Kinv(1,2)*(x1 - x2) + Kinv(2,2)*(y1 - y2))*(y1 - y2);
-t(2,1)=-(Kinv(1,1)*(x1 - x2)*(x2 - x3)) + Kinv(2,2)*(y1 - y2)*(y2 - y3) + ...
+t(2,1)=(Kinv(1,1)*(x1 - x2)*(x2 - x3)) + Kinv(2,2)*(y1 - y2)*(y2 - y3) + ...
          Kinv(1,2)*(x3*(-y1 + y2) + x1*(y2 - y3) + x2*(y1 - 2*y2 + y3));
 t(1,2)=t(2,1);
 t(2,2)=Kinv(1,1)*(x2 - x3)^2 + (2*Kinv(1,2)*(x2 - x3) + Kinv(2,2)*(y2 - y3))*(y2 - y3);
@@ -354,8 +352,7 @@ gDu(ind1u:ind2u)=gDu(ind1u:ind2u)+localv_u;
         Pgp_L7=int_dir_simpson(i,j,i,j+1,tt,3);
     % frontera Sur
         Pgp_L3=int_dir_simpson(i-1,j,i,j,tt,3);
-%     Pgp=(1/2)*[-Pgp_L7;Pgp_L3];
-    Pgp=-(1/2)*[Pgp_L7;Pgp_L3];
+    Pgp=(1/2)*[-Pgp_L7;Pgp_L3];
     
 localv_p=((delta_t*f')*(t\Pgp))+((-d'+((d'*(a\c))*((c'*(a\c))\c')))*(a\Pgu));
 gDp(ind1p)=gDp(ind1p)+localv_p;
@@ -470,16 +467,16 @@ for j=2:N
     d=coef_d*d;
     
     f=zeros(vdim2,2);
-    f(1,1)=-(1/2);
+    f(1,1)=1/2;
     f(2,1)=-(1/2);
 %     f(3,1)=0;
 %     f(1,2)=0;
-    f(2,2)=-(1/2);
-    f(3,2)=-(1/2);
+    f(2,2)=1/2;
+    f(3,2)=1/2;
     
     t=zeros(vdim2,vdim2);  
     t(1,1)=(Kinv(1,1)*(x3 - x4)^2 + (2*Kinv(1,2)*(x3 - x4) + Kinv(2,2)*(y3 - y4))*(y3 - y4))/W_denom_E1_zz;
-    t(2,1)=(Kinv(1,1)*(x1 - x4)*(x3 - x4) + Kinv(2,2)*(y1 - y4)*(y3 - y4) - ...
+    t(2,1)=(Kinv(1,1)*(x1 - x4)*(-x3 + x4) + Kinv(2,2)*(y1 - y4)*(-y3 + y4) + ...
             Kinv(1,2)*(x4*(y1 + y3 - 2*y4) + x3*(-y1 + y4) + x1*(-y3 + y4)))/W_denom_E1_zz;
 %     t(3,1)=0;
     t(1,2)=t(2,1);
@@ -509,8 +506,7 @@ for j=2:N
             Pgp_L4=int_dir_simpson(i,j,i,j-1,tt,3);
         % frontera Oeste 2
             Pgp_L11=int_dir_simpson(i,j,i,j+1,tt,3);
-%         Pgp=(1/2)*[Pgp_L4;0;Pgp_L11];
-        Pgp=-(1/2)*[Pgp_L4;0;Pgp_L11];
+        Pgp=(1/2)*[Pgp_L4;0;Pgp_L11];
         
     localv_p=((delta_t*f')*(t\Pgp))+((-d'+((d'*(a\c))*((c'*(a\c))\c')))*(a\Pgu));
     gDp(ind1p)=gDp(ind1p)+localv_p(1);
@@ -634,7 +630,7 @@ for j=2:N
     f(3,1)=-(1/2);
 %     f(1,2)=0;
     f(2,2)=-(1/2);
-    f(3,2)=-(1/2);
+    f(3,2)=1/2;
     
     t=zeros(vdim2,vdim2);
     t(1,1)=(Kinv(1,1)*(x3 - x4)^2 + (2*Kinv(1,2)*(x3 - x4) + Kinv(2,2)*(y3 - y4))*(y3 - y4))/E_denom_E1_zz;
@@ -643,8 +639,8 @@ for j=2:N
              Kinv(1,2)*(x4*(-y2 + y3) + x2*(y3 - y4) + x3*(y2 - 2*y3 + y4)))/E_denom_E1_zz;
 %     t(1,2)=0;
     t(2,2)=(Kinv(1,1)*(x3 - x4)^2 + (2*Kinv(1,2)*(x3 - x4) + Kinv(2,2)*(y3 - y4))*(y3 - y4))/E_denom_E2_zz;
-    t(3,2)=(Kinv(1,1)*(x3 - x4)*(x3 - x5) + Kinv(2,2)*(y3 - y4)*(y3 - y5) - ...
-            Kinv(1,2)*(x5*(y3 - y4) + x4*(y3 - y5) + x3*(-2*y3 + y4 + y5)))/E_denom_E2_zz;
+    t(3,2)=-(Kinv(1,1)*(x3 - x4)*(x3 - x5) + Kinv(2,2)*(y3 - y4)*(y3 - y5) - ...
+             Kinv(1,2)*(x5*(y3 - y4) + x4*(y3 - y5) + x3*(-2*y3 + y4 + y5)))/E_denom_E2_zz;
     t(1,3)=t(3,1);
     t(2,3)=t(3,2);
     t(3,3)=(Kinv(1,1)*(x2 - x3)^2 + (2*Kinv(1,2)*(x2 - x3) + Kinv(2,2)*(y2 - y3))*(y2 - y3))/E_denom_E1_zz +...
@@ -668,7 +664,6 @@ for j=2:N
             Pgp_L7=int_dir_simpson(i,j,i,j-1,tt,3);
         % frontera Este 2
             Pgp_L14=int_dir_simpson(i,j,i,j+1,tt,3);
-%         Pgp=(1/2)*[-Pgp_L7;-Pgp_L14;0];
         Pgp=-(1/2)*[Pgp_L7;Pgp_L14;0];
     
        localv_p=((delta_t*f')*(t\Pgp))+((-d'+((d'*(a\c))*((c'*(a\c))\c')))*(a\Pgu));
@@ -737,12 +732,12 @@ d(4,1)=(-y1 + y4);
 d=coef_d*d;
 
 f=zeros(vdim2,1);
-f(1,1)=-(1/2);
+f(1,1)=1/2;
 f(2,1)=-(1/2);
 
 t=zeros(vdim2,vdim2);
 t(1,1)=Kinv(1,1)*(x3 - x4)^2 + (2*Kinv(1,2)*(x3 - x4) + Kinv(2,2)*(y3 - y4))*(y3 - y4);
-t(2,1)=Kinv(1,1)*(x1 - x4)*(x3 - x4) + Kinv(2,2)*(y1 - y4)*(y3 - y4) - ...
+t(2,1)=Kinv(1,1)*(x1 - x4)*(-x3 + x4) + Kinv(2,2)*(y1 - y4)*(-y3 + y4) + ...
        Kinv(1,2)*(x4*(y1 + y3 - 2*y4) + x3*(-y1 + y4) + x1*(-y3 + y4));
 t(1,2)=t(2,1);
 t(2,2)=Kinv(1,1)*(x1 - x4)^2 + (2*Kinv(1,2)*(x1 - x4) + Kinv(2,2)*(y1 - y4))*(y1 - y4);
@@ -765,8 +760,7 @@ gDu(ind1u:ind2u)=gDu(ind1u:ind2u)+localv_u;
         Pgp_L18=int_dir_simpson(i,j,i,j-1,tt,3);
     % frontera Norte
         Pgp_L22=int_dir_simpson(i,j,i+1,j,tt,3);
-%     Pgp=(1/2)*[Pgp_L18;-Pgp_L22];
-    Pgp=-(1/2)*[Pgp_L18;Pgp_L22];
+    Pgp=(1/2)*[Pgp_L18;-Pgp_L22];
     
 localv_p=((delta_t*f')*(t\Pgp))+((-d'+((d'*(a\c))*((c'*(a\c))\c')))*(a\Pgu));
 gDp(ind1p)=gDp(ind1p)+localv_p;
@@ -798,7 +792,7 @@ f=zeros(vdim2,2);
 f(1,1)=-(1/2);
 % f(2,1)=0;
 f(3,1)=-(1/2);
-f(1,2)=-(1/2);
+f(1,2)=1/2;
 f(2,2)=-(1/2);
 % f(3,2)=0;
 
@@ -894,8 +888,8 @@ for i=2:N
 
     t(1,1)=(Kinv(1,1)*(x3 - x4)^2 + (2*Kinv(1,2)*(x3 - x4) + Kinv(2,2)*(y3 - y4))*(y3 - y4))/N_denom_E1_zz +...
            (Kinv(1,1)*(x3 - x6)^2 + (2*Kinv(1,2)*(x3 - x6) + Kinv(2,2)*(y3 - y6))*(y3 - y6))/N_denom_E2_zz;
-    t(2,1)=-(Kinv(1,1)*(x2 - x3)*(x3 - x6) + Kinv(2,2)*(y2 - y3)*(y3 - y6) + ...
-             Kinv(1,2)*(x6*(-y2 + y3) + x2*(y3 - y6) + x3*(y2 - 2*y3 + y6)))/N_denom_E2_zz;
+    t(2,1)=(Kinv(1,1)*(x2 - x3)*(x3 - x6) + Kinv(2,2)*(y2 - y3)*(y3 - y6) + ...
+            Kinv(1,2)*(x6*(-y2 + y3) + x2*(y3 - y6) + x3*(y2 - 2*y3 + y6)))/N_denom_E2_zz;
     t(3,1)=-(Kinv(1,1)*(x2 - x3)*(x3 - x4) + Kinv(2,2)*(y2 - y3)*(y3 - y4) + ...
              Kinv(1,2)*(x4*(-y2 + y3) + x2*(y3 - y4) + x3*(y2 - 2*y3 + y4)))/N_denom_E1_zz;
     t(1,2)=t(2,1);
@@ -922,7 +916,6 @@ for i=2:N
             Pgp_L23=int_dir_simpson(i,j,i+1,j,tt,3);
         % frontera Norte 2
             Pgp_L22=int_dir_simpson(i-1,j,i,j,tt,3);
-%         Pgp=(1/2)*[0;-Pgp_L23;-Pgp_L22];
         Pgp=-(1/2)*[0;Pgp_L23;Pgp_L22];
     
     localv_p=((delta_t*f')*(t\Pgp))+((-d'+((d'*(a\c))*((c'*(a\c))\c')))*(a\Pgu));
@@ -1019,7 +1012,6 @@ gDu(ind1u:ind2u)=gDu(ind1u:ind2u)+localv_u;
         Pgp_L21=int_dir_simpson(i,j,i,j-1,tt,3);
     % frontera Norte
         Pgp_L24=int_dir_simpson(i-1,j,i,j,tt,3);
-%     Pgp=(1/2)*[-Pgp_L21;-Pgp_L24];
     Pgp=-(1/2)*[Pgp_L21;Pgp_L24];
     
 localv_p=((delta_t*f')*(t\Pgp))+((-d'+((d'*(a\c))*((c'*(a\c))\c')))*(a\Pgu));
