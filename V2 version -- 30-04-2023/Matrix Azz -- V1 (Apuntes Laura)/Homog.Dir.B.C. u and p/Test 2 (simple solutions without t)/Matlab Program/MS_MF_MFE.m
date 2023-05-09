@@ -53,38 +53,38 @@ Biot_matrix=[A11 A12;A21 A22];
 %% Terms involving time
 
 % Initial solution of the variables at t=0 
-u=zeros(2*N*N,1);
+% u=zeros(2*N*N,1);
 p=zeros(N*N,1);
 
 for j=1:N
     for i=1:N
-        ind2u=(i+(j-1)*N)*2;
-        ind1u=ind2u-1;
-        ind1p=ind2u/2;
-%         ind1p=i+(j-1)*N;
+%         ind2u=(i+(j-1)*N)*2;
+%         ind1u=ind2u-1;
+%         ind1p=ind2u/2;
+        ind1p=i+(j-1)*N;
         
         xx=(x(i,j)+x(i+1,j)+x(i+1,j+1)+x(i,j+1))/4;
         yy=(y(i,j)+y(i+1,j)+y(i+1,j+1)+y(i,j+1))/4;
         
-        u(ind1u)=sol_exactax(xx,yy,t,1);
-        u(ind2u)=sol_exactax(xx,yy,t,2);
+%         u(ind1u)=sol_exactax(xx,yy,t,1);
+%         u(ind2u)=sol_exactax(xx,yy,t,2);
         p(ind1p)=sol_exactax(xx,yy,t,3);
     end
 end
 
 %% solution of the elasticity system (sigma0):
 
-% % Source term of the MSMFE discretization at t=0
-% f_indep=build_indep_f(t);        % Source term f
-% 
-% % For non-homogeneous Dir. B.C.
-% [gDu,~]=dir_bc_Pg(delta_t,t);   
-%     
-%     % Right-hand side of the Elasticity system
-% indep_elas=f_indep + gDu -A12*p; 
-% 
-% % We solve for the displacement in the elasticity system
-% u=A11\indep_elas;
+% Source term of the MSMFE discretization at t=0
+f_indep=build_indep_f(t);        % Source term f
+
+% For non-homogeneous Dir. B.C.
+[gDu,~]=dir_bc_Pg(delta_t,t);   
+    
+    % Right-hand side of the Elasticity system
+indep_elas=f_indep + gDu -A12*p; 
+
+% We solve for the displacement in the elasticity system
+u=A11\indep_elas;
 
 %% Now we compute the rest of the elasticity variables at t=0:
         % rotation 
