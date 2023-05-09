@@ -83,7 +83,7 @@ end
 f_indep=build_indep_f(t);        % Source term f
 
 % For non-homogeneous Dir. B.C.
-[gDu,~]=dir_bc_Pg(delta_t,t);   
+[gDu,gDp]=dir_bc_Pg(delta_t,t);   
     
     % Right-hand side of the Elasticity system
 indep_elas=f_indep + gDu -A12*p; 
@@ -92,6 +92,26 @@ indep_elas=f_indep + gDu -A12*p;
 u=A11\indep_elas;
 
 %% Now we compute the rest of the elasticity variables at t=0:
+        % rotation 
+gamma=compute_gamma(u,p,t);  % Computed solution for the rotation term
+        % stress
+[sigma,~,~,~,~]=compute_tensors(u,p,gamma,t);
+
+%% solution of the new pressure at t=0:
+
+% Source term of the MFMFE discretization at t=0
+q_indep=build_indep_q(t);        % Source term q
+
+% Term involving stress and pressure in t0
+gTp=Asp*sigma + App*p;
+
+% Right-hand side of the Flux system of Biot (Non-Homog. Dir.B.C.)
+indep_flux=delta_t*q_indep + gTp + gDp -A21*u; 
+
+% We solve for the pressure in the flux part of Biot's system
+p=A22\indep_flux;
+
+%% Now we recalculate the elasticity variables at t=0:
         % rotation 
 gamma=compute_gamma(u,p,t);  % Computed solution for the rotation term
         % stress
