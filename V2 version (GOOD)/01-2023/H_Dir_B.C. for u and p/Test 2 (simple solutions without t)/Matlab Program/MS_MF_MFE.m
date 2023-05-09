@@ -69,8 +69,8 @@ for j=1:N
     for i=1:N
 %         ind2u=(i+(j-1)*N)*2;
 %         ind1u=ind2u-1;
-%         ind1p=ind2u/2;
-        ind1p=i+(j-1)*N;
+        ind1p=ind2u/2;
+%         ind1p=i+(j-1)*N;
         
         xx=(x(i,j)+x(i+1,j)+x(i+1,j+1)+x(i,j+1))/4;
         yy=(y(i,j)+y(i+1,j)+y(i+1,j+1)+y(i,j+1))/4;
@@ -95,7 +95,7 @@ indep_elas=f_indep + gDu -A12*p;
 % We solve for the displacement in the elasticity system
 u=A11\indep_elas;
 
-% Now we compute the rest of the elasticity variables at t=0:
+%% Now we compute the rest of the elasticity variables at t=0:
         % rotation 
 gamma=compute_gamma(u,p,t);  % Computed solution for the rotation term
         % stress
