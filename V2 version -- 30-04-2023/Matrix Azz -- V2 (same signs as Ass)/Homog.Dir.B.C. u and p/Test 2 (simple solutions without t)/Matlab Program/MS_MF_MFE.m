@@ -31,11 +31,11 @@ c0=1e-05;
 %     perm=perms(cp);
 %     perm
 tic
-% perm=1;
+perm=1;
 % perm=1e-03;
 % perm=1e-06;
 % perm=1e-09;
-perm=1e-12;
+% perm=1e-12;
 
 K=perm*eye(2);
 Kinv=inv(K);
