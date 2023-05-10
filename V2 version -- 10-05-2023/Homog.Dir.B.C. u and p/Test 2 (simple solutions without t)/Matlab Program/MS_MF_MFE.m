@@ -67,7 +67,7 @@ p=zeros(N*N,1);
 
 for j=1:N
     for i=1:N
-        ind1p=ind2u/2;
+        ind1p=i+(j-1)*N;
         
         % Coordenadas de los vértices de la celda
         x1=x(i,j);
