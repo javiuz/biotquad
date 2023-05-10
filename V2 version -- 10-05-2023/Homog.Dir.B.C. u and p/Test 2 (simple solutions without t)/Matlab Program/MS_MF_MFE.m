@@ -61,23 +61,36 @@ Biot_matrix=[A11 A12;A21 A22];
 
 %% Terms involving time
 
-% Initial solution of the variables at t=0 
-% u=zeros(2*N*N,1);
+% Initial solution of the pressure at t=0 
+p0 = @(x,y) (1 - x)*x*(1 - y)*y;
 p=zeros(N*N,1);
 
 for j=1:N
     for i=1:N
-%         ind2u=(i+(j-1)*N)*2;
-%         ind1u=ind2u-1;
         ind1p=ind2u/2;
-%         ind1p=i+(j-1)*N;
         
-        xx=(x(i,j)+x(i+1,j)+x(i+1,j+1)+x(i,j+1))/4;
-        yy=(y(i,j)+y(i+1,j)+y(i+1,j+1)+y(i,j+1))/4;
+        % Coordenadas de los vértices de la celda
+        x1=x(i,j);
+        y1=y(i,j);
+        x2=x(i+1,j);
+        y2=y(i+1,j);
+        x3=x(i+1,j+1);
+        y3=y(i+1,j+1);
+        x4=x(i,j+1);
+        y4=y(i,j+1);
         
-%         u(ind1u)=sol_exactax(xx,yy,t,1);
-%         u(ind2u)=sol_exactax(xx,yy,t,2);
-        p(ind1p)=sol_exactax(xx,yy,t,3);
+        % Límites de la celda rectangular
+        xmin=min(x1,x2,x3,x4);
+        ymin=min(y1,y2,y3,y4);
+        xmax=max(x1,x2,x3,x4);
+        ymax=max(y1,y2,y3,y4);
+        
+        % Área total de la celda rectangular
+        Ac=area_cuadrilatero(x1,y1,x2,y2,x3,y3,x4,y4);
+        
+        % Aproximación de la presión como la media de la presión en toda 
+        % la celda
+        p(ind1p)=(1/Ac)*integral2(p0, xmin, xmax, ymin, ymax);
     end
 end
 
