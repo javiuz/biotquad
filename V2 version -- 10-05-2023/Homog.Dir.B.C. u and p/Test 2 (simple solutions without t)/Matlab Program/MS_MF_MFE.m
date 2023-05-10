@@ -62,7 +62,7 @@ Biot_matrix=[A11 A12;A21 A22];
 %% Terms involving time
 
 % Initial solution of the pressure at t=0 
-p0 = @(x,y) (1 - x)*x*(1 - y)*y;
+p0 = @(x,y) (1 - x).*x.*(1 - y).*y;
 p=zeros(N*N,1);
 
 for j=1:N
