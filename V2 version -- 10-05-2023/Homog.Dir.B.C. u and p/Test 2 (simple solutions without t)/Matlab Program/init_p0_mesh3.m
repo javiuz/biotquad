@@ -25,6 +25,9 @@ for j=1:N
         xcord=[x1,x2,x3,x4];
         ycord=[y1,y2,y3,y4];
         
+        xcs=sort(xcord);
+        ycs=sort(ycord);
+        
         % Límites de la celda rectangular
         xmin=min(xcord);
         ymin=min(ycord);
@@ -32,15 +35,17 @@ for j=1:N
         ymax=max(ycord);
         
         % Generar las matrices de coordenadas X e Y
-        [X, Y] = meshgrid(xcord, ycord);
+        [X1, ~] = meshgrid(xcs);
+        [~, Y2] = meshgrid(ycs);
         
         % Generar la matriz de valores a interpolar
-%         P=[p0(x1,y1), p0(x2,y2), p0(x4,y4), p0(x3,y3)];
-        P=p0(X,Y);
-        Pgrid=sort(P,2,'ascend');
+        P=p0(X1,Y2);
+        
+        % Crear interpolador
+        F = scatteredInterpolant(X1(:), Y2(:), P(:), 'linear', 'none');
         
         % Definir la función a integrar
-        f = @(x,y) interp2(X, Y, P, x, y, 'bilinear');
+        f = @(x,y) F(x,y);
         
         % Área total de la celda rectangular
         Ac=area_cuadrilatero(x1,y1,x2,y2,x3,y3,x4,y4);
