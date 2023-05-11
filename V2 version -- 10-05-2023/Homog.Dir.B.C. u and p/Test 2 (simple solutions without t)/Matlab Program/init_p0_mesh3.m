@@ -42,7 +42,7 @@ for j=1:N
         P=p0(X1,Y2);
         
         % Crear interpolador
-        F = scatteredInterpolant(X1(:), Y2(:), P(:), 'linear', 'none');
+        F = scatteredInterpolant(X1(:), Y2(:), P(:), 'natural');
         
         % Definir la función a integrar
         f = @(x,y) F(x,y);
