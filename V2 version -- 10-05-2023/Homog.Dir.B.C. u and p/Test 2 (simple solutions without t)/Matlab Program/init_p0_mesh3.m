@@ -40,12 +40,21 @@ for j=1:N
         
         % Generar la matriz de valores a interpolar
         P=p0(X1,Y2);
+%         
+%         % Crear interpolador
+%         F = scatteredInterpolant(X1(:), Y2(:), P(:), 'natural');
+%         
+%         % Definir la función a integrar
+%         f = @(x,y) F(x,y);
+
+        % Definir la malla regular donde se interpolara
+        [xq, yq] = meshgrid(linspace(min(xcs), max(xcs), 100), linspace(min(ycs), max(ycs), 100));
         
-        % Crear interpolador
-        F = scatteredInterpolant(X1(:), Y2(:), P(:), 'natural');
+        % Interpolar a la malla regular utilizando griddata
+        Pq = griddata(xcs, ycs, P, xq, yq, 'cubic');
         
-        % Definir la función a integrar
-        f = @(x,y) F(x,y);
+        % Interpolar sobre la malla regular utilizando interp2
+        f = @(x, y) interp2(xq, yq, Pq, x, y, 'cubic');
         
         % Área total de la celda rectangular
         Ac=area_cuadrilatero(x1,y1,x2,y2,x3,y3,x4,y4);
