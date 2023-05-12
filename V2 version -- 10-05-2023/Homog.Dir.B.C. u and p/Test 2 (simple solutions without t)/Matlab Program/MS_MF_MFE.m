@@ -62,7 +62,8 @@ Biot_matrix=[A11 A12;A21 A22];
 %% Initialize the pressure
 
 % p=init_p0_mesh0; % On the cartesian mesh
-p=init_p0_mesh3; % On the O(h^2)-mesh
+% p=init_p0_mesh3; % On the O(h^2)-mesh
+p=init_p0_mesh3_v2; % On the O(h^2)-mesh
 
 
 %% solution of the elasticity system (sigma0):
