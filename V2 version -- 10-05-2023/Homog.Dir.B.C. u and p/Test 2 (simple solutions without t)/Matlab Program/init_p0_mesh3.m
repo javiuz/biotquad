@@ -5,7 +5,7 @@ global NN x y
 N=NN;
 
 % Initial solution of the pressure at t=0 
-p0 = @(x,y) (1 - x).*x.*(1 - y).*y;
+% p0 = @(x,y) (1 - x).*x.*(1 - y).*y;
 p=zeros(N*N,1);
 
 for j=1:N
@@ -21,50 +21,16 @@ for j=1:N
         y3=y(i+1,j+1);
         x4=x(i,j+1);
         y4=y(i,j+1);
-        
-        xcord=[x1,x2,x3,x4];
-        ycord=[y1,y2,y3,y4];
-        
-        xcs=sort(xcord);
-        ycs=sort(ycord);
-        
-        % Límites de la celda rectangular
-        xmin=min(xcord);
-        ymin=min(ycord);
-        xmax=max(xcord);
-        ymax=max(ycord);
-        
-        % Generar las matrices de coordenadas X e Y
-        [X1, ~] = meshgrid(xcs);
-        [~, Y2] = meshgrid(ycs);
-        
-        % Generar la matriz de valores a interpolar
-        P=p0(X1,Y2);
-%         
-%         % Crear interpolador
-%         F = scatteredInterpolant(X1(:), Y2(:), P(:), 'natural');
-%         
-%         % Definir la función a integrar
-%         f = @(x,y) F(x,y);
 
-        % Definir la malla regular donde se interpolara
-        [xq, yq] = meshgrid(linspace(min(xcs), max(xcs), 100), linspace(min(ycs), max(ycs), 100));
-        
-        % Interpolar a la malla regular utilizando griddata
-        Pq = griddata(xcs, ycs, P, xq, yq, 'cubic');
-        
-        % Interpolar sobre la malla regular utilizando interp2
-        f = @(x, y) interp2(xq, yq, Pq, x, y, 'cubic');
-        
-        % Área total de la celda rectangular
-        Ac=area_cuadrilatero(x1,y1,x2,y2,x3,y3,x4,y4);
-        
-        % Calcular la integral utilizando la función integral2 de MATLAB
-        I = integral2(f, xmin, xmax, ymin, ymax);
-        
+        % Función a integrar en el elemento de referencia
+        p0t = @(x,y) (1 - (x1+(x2-x1).*x+(x4-x1).*y+(x3-x4-x2+x1).*x.*y)).*...
+                     (x1+(x2-x1).*x+(x4-x1).*y+(x3-x4-x2+x1).*x.*y).*...
+                     (1 - (y1+(y2-y1).*x+(y4-y1).*y+(y3-y4-y2+y1).*x.*y)).*...
+                     (y1+(y2-y1).*x+(y4-y1).*y+(y3-y4-y2+y1).*x.*y);
+            
         % Aproximación de la presión como la media de la presión en toda 
-        % la celda usando interpolación bilineal de p0
-        p(ind1p) = (1/Ac)*I;
+        % la celda (cuadrado unidad).
+        p(ind1p) = integral2(p0t, 0, 1, 0, 1);
     end
 end
 return
