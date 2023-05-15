@@ -12,17 +12,17 @@ global perm
 %               = r
 
  if comp==1         % Solución analítica de u1(xx,yy,tt)
-     sol=(1 - xx)*xx*(1 - yy)*yy;    
+     sol=tt*(1 - xx)*xx*(1 - yy)*yy;
  elseif comp==2     % Solución analítica de u2(xx,yy,tt)
-     sol=(1 - xx)*xx*(1 - yy)*yy;
+     sol=tt*(1 - xx)*xx*(1 - yy)*yy;
  elseif comp==3     % Solución analítica de p(xx,yy,tt)
-     sol=(1 - xx)*xx*(1 - yy)*yy;
+     sol=tt*(1 - xx)*xx*(1 - yy)*yy;
  elseif comp==4     % Solución analítica de z1(xx,yy,tt)
-     sol=-(perm*(-1 + 2*xx)*(-1 + yy)*yy);
+     sol=-(perm*tt*(-1 + 2*xx)*(-1 + yy)*yy);
  elseif comp==5     % Solución analítica de z2(xx,yy,tt)
-     sol=-(perm*(-1 + xx)*xx*(-1 + 2*yy));
+     sol=-(perm*tt*(-1 + xx)*xx*(-1 + 2*yy));
  else               % Solución analítica de gamma (1st row & 2nd column)
-     sol=(xx + (-1 + yy)*yy - 2*xx*yy^2 + xx^2*(-1 + 2*yy))/2.;
+     sol=(tt*(xx + (-1 + yy)*yy - 2*xx*yy^2 + xx^2*(-1 + 2*yy)))/2.;
  end
 
 return

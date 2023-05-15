@@ -1,4 +1,4 @@
-function sol=sol_exacta(i,j,~,comp)
+function sol=sol_exacta(i,j,tt,comp)
 
 global x y
 
@@ -8,9 +8,9 @@ yy=(y(i,j)+y(i+1,j)+y(i+1,j+1)+y(i,j+1))/4;
 % u=[u1;u2];
 
 if comp==1
-    sol=(1 - xx)*xx*(1 - yy)*yy;
+    sol=tt*(1 - xx)*xx*(1 - yy)*yy;
 else
-    sol=(1 - xx)*xx*(1 - yy)*yy;
+    sol=tt*(1 - xx)*xx*(1 - yy)*yy;
 end
 
 return
