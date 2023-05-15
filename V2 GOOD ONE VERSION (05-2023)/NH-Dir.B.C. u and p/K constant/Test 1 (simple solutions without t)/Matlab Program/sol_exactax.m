@@ -2,9 +2,9 @@ function sol=sol_exactax(xx,yy,tt,comp)
 
 global perm
 
+%         p(xx,yy,tt)
 %       u(xx,yy,tt) = {u1(xx,yy,tt),u2(xx,yy,tt)}
 
-%         p(xx,yy,tt)
 
 %         z(xx,yy,tt)= {z1(xx,yy,tt),z2xx,yy,tt)}
 
