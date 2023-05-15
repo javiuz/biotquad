@@ -7,7 +7,7 @@ yy=(y(i,j)+y(i+1,j)+y(i+1,j+1)+y(i,j+1))/4;
 
 % p(xx,yy,tt)
 
-sol=(1 - xx)*xx*(1 - yy)*yy;
+sol=yy;
 
 return
 end
