@@ -5,7 +5,7 @@ global NN x y
 N=NN;
 
 % Initial solution of the pressure at t=0 
-p0 = @(x,y) (1 - x).*x.*(1 - y).*y;
+p0 = @(x,y) 10 + cos(pi.*y).*sin(pi.*x);
 p=zeros(N*N,1);
 
 for j=1:N
