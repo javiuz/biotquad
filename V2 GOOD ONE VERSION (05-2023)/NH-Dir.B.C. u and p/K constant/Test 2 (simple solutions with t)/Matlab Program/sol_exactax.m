@@ -12,17 +12,18 @@ global perm
 %               = r
 
  if comp==1         % Solución analítica de u1(xx,yy,tt)
-     sol=tt*(1 - xx)*xx*(1 - yy)*yy;
+     sol=exp(tt)*(xx^2 + xx^3*yy^4 + cos(1 - yy)*sin((1 - xx)*(1 - yy)));
  elseif comp==2     % Solución analítica de u2(xx,yy,tt)
-     sol=tt*(1 - xx)*xx*(1 - yy)*yy;
+     sol=exp(tt)*((1 - yy)^2 + (1 - xx)^4*(1 - yy)^3 + cos(xx*yy)*sin(xx));
  elseif comp==3     % Solución analítica de p(xx,yy,tt)
-     sol=tt*(1 - xx)*xx*(1 - yy)*yy;
+     sol=exp(tt)*(10 + cos(pi*yy)*sin(pi*xx));
  elseif comp==4     % Solución analítica de z1(xx,yy,tt)
-     sol=-(perm*tt*(-1 + 2*xx)*(-1 + yy)*yy);
+     sol=-(exp(tt)*perm*pi*cos(pi*xx)*cos(pi*yy));
  elseif comp==5     % Solución analítica de z2(xx,yy,tt)
-     sol=-(perm*tt*(-1 + xx)*xx*(-1 + 2*yy));
+     sol=exp(tt)*perm*pi*sin(pi*xx)*sin(pi*yy);
  else               % Solución analítica de gamma (1st row & 2nd column)
-     sol=(tt*(xx + (-1 + yy)*yy - 2*xx*yy^2 + xx^2*(-1 + 2*yy)))/2.;
+     sol=(exp(tt)*(4*(-1 + xx)^3*(-1 + yy)^3 + 4*xx^3*yy^3 + (-1 + xx)*cos(1 - yy)*cos((-1 + xx)*(-1 + yy)) -...
+          cos(xx)*cos(xx*yy) + sin(1 - yy)*sin((-1 + xx)*(-1 + yy)) + yy*sin(xx)*sin(xx*yy)))/2.;
  end
 
 return
