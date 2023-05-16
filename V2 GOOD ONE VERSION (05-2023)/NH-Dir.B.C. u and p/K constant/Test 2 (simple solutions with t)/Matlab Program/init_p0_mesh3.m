@@ -5,7 +5,7 @@ global NN x y
 N=NN;
 
 % Initial solution of the pressure at t=0 
-% p0 = @(x,y) (1 - x).*x.*(1 - y).*y;
+% p0 = @(x,y) 10 + cos(pi.*y).*sin(pi.*x);
 p=zeros(N*N,1);
 
 for j=1:N
@@ -23,11 +23,9 @@ for j=1:N
         y4=y(i,j+1);
 
         % Función a integrar en el elemento de referencia
-        p0t = @(x,y) (1 - (x1+(x2-x1).*x+(x4-x1).*y+(x3-x4-x2+x1).*x.*y)).*...
-                     (x1+(x2-x1).*x+(x4-x1).*y+(x3-x4-x2+x1).*x.*y).*...
-                     (1 - (y1+(y2-y1).*x+(y4-y1).*y+(y3-y4-y2+y1).*x.*y)).*...
-                     (y1+(y2-y1).*x+(y4-y1).*y+(y3-y4-y2+y1).*x.*y);
-            
+        p0t = @(x,y) 10 + cos(pi.*(y1+(y2-y1).*x+(y4-y1).*y+(y3-y4-y2+y1).*x.*y)).*...
+                          sin(pi.*(x1+(x2-x1).*x+(x4-x1).*y+(x3-x4-x2+x1).*x.*y));
+                    
         % Aproximación de la presión como la media de la presión en toda 
         % la celda (cuadrado unidad).
         p(ind1p) = integral2(p0t, 0, 1, 0, 1);
