@@ -4,8 +4,6 @@ global NN x y
 
 N=NN;
 
-% Initial solution of the pressure at t=0 
-p0 = @(x,y) (1 - x).*x.*(1 - y).*y;
 p=zeros(N*N,1);
 
 for j=1:N
@@ -22,21 +20,13 @@ for j=1:N
         x4=x(i,j+1);
         y4=y(i,j+1);
         
-        xcord=[x1,x2,x3,x4];
-        ycord=[y1,y2,y3,y4];
-        
-        % Límites de la celda rectangular
-        xmin=min(xcord);
-        ymin=min(ycord);
-        xmax=max(xcord);
-        ymax=max(ycord);
-        
         % Área total de la celda rectangular
         Ac=area_cuadrilatero(x1,y1,x2,y2,x3,y3,x4,y4);
         
         % Aproximación de la presión como la media de la presión en toda 
         % la celda
-        p(ind1p)=(1/Ac)*integral2(p0, xmin, xmax, ymin, ymax);
+        p(ind1p)=(1/Ac)*(sol_exactax(x1,y1,0,3)+sol_exactax(x2,y2,0,3)+...
+                         sol_exactax(x3,y3,0,3)+sol_exactax(x4,y4,0,3));
     end
 end
 return
