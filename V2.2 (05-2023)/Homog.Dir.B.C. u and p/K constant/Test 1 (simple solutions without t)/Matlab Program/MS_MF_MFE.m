@@ -44,10 +44,8 @@ perm=1;
 t=0;
 % Time step
 delta_t=1e-04;
-% delta_t=1;
 % Final time
 Tf=1e-03;
-% Tf=2;
 
 %  Matrices del sistema de Biot: A11, A12, A21 y A22
     % Asp y App las utilizaremos después
