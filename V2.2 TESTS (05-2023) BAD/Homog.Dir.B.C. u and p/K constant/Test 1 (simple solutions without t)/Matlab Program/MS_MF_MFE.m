@@ -60,7 +60,8 @@ Biot_matrix=[A11 A12;A21 A22];
 %% Initialize the pressure
 
 % p=init_p0_v1; % VERY BAD
-p=init_p0_v2;   % BAD 
+% p=init_p0_v2; % BAD 
+p=init_p0_v3;   
 
 %% solution of the elasticity system (sigma0):
 
