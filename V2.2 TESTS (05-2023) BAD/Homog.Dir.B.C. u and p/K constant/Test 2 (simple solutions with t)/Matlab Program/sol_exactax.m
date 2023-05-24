@@ -16,7 +16,8 @@ global perm
  elseif comp==2     % Solución analítica de u2(xx,yy,tt)
      sol=tt*(1 - xx)*xx*(1 - yy)*yy;
  elseif comp==3     % Solución analítica de p(xx,yy,tt)
-     sol=tt*(1 - xx)*xx*(1 - yy)*yy;
+%      sol=tt*(1 - xx)*xx*(1 - yy)*yy;
+     sol=tt.*(1 - xx).*xx.*(1 - yy).*yy;
  elseif comp==4     % Solución analítica de z1(xx,yy,tt)
      sol=-(perm*tt*(-1 + 2*xx)*(-1 + yy)*yy);
  elseif comp==5     % Solución analítica de z2(xx,yy,tt)
