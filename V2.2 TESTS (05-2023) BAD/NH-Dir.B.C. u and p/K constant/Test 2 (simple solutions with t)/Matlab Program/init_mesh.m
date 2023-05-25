@@ -145,7 +145,7 @@ elseif mesh==3 % Regular mesh O(h^2) parallelograms
     x=xx+0.03*cos(3*pi*xx).*cos(3*pi*yy);
     y=yy-0.04*cos(3*pi*xx).*cos(3*pi*yy);
 
-    refinement=5;
+    refinement=4;
 
     nf = Ni;
         for k = 1:refinement
