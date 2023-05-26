@@ -67,7 +67,7 @@ p=init_p0;
 f_indep=build_indep_f(t);        % Source term f
 
 % For non-homogeneous Dir. B.C.
-[gDu,~]=dir_bc_Pg(delta_t,t);   
+[gDu,gDp]=dir_bc_Pg(delta_t,t);   
     
     % Right-hand side of the Elasticity system
 indep_elas=f_indep + gDu -A12*p; 
