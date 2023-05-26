@@ -81,6 +81,22 @@ gamma=compute_gamma(u,p,t);  % Computed solution for the rotation term
         % stress
 [sigma,~,~,~,~]=compute_tensors(u,p,gamma,t);
 
+%% solution of the flux system (new p0 at t=0):
+
+% Source term of the MFMFE discretization at t=0
+q_indep=build_indep_q(t);        % Source term q
+
+% Non-homogeneous Dir. B.C previously calculated as gDp term.
+
+% Initial time terms affecting q
+gTp=Asp*sigma + App*p;
+
+% Right-hand side of the flux system
+indep_flux=delta_t*q_indep + gTp + gDp -A21*u;
+
+% We solve for the pressure in the flux system
+p=A22\indep_flux; 
+
 %% Initialize errors
 erroru_L2_inf=0;
 erroru_3_inf=erroru_L2_inf;
