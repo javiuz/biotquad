@@ -57,31 +57,39 @@ Asp=AspT';
 
 % Matriz del sistema reducido de Biot
 Biot_matrix=[A11 A12;A21 A22];
-% dBM=decomposition(Biot_matrix);
 
-%% Initialize the pressure
+%% Initialize the pressure and compatible initial data: Solution of the decoupled system %%
 
-p=init_p0_mesh0; % On the cartesian mesh
-% p=init_p0_mesh3; % On the O(h^2)-mesh
+% Matrix A22 in the decoupled system at t0=0.
+A22_t0=build_flux_matrix_t0(delta_t);
 
+% source terms of the decoupled system at t0=0.
+f0_indep=build_indep_f0(t);             % Source term f
+q0_indep=build_indep_q0(t);             % Source term q
 
-%% solution of the elasticity system (sigma0):
+    % For non-homogeneous Dir. B.C.
+[gDu0,~]=dir_bc_Pg(delta_t,t);  
+gDp0=dir_bc_PgP(delta_t,t);   
+f0_hat= f0_indep + gDu0; 
+q0_hat= delta_t*q0_indep + gDp0;
 
-% Source term of the MSMFE discretization at t=0
-f_indep=build_indep_f(t);        % Source term f
+    % Right-hand side of the decoupled system
+indep_term_t0=[f0_hat;q0_hat];
 
-% For non-homogeneous Dir. B.C.
-[gDu,~]=dir_bc_Pg(delta_t,t);   
+    % Mass matrix of the decoupled system
+A12_t0=zeros(2*N*N,N*N);
+A21_t0=A12_t0';
+Decoupled_matrix=[A11 A12_t0;A21_t0 A22_t0];
     
-    % Right-hand side of the Elasticity system
-indep_elas=f_indep + gDu -A12*p; 
+% Solution of the decoupled system for the displacement and pressure vectors
+sol_vec=Decoupled_matrix\indep_term_t0; 
 
-% We solve for the displacement in the elasticity system
-u=A11\indep_elas;
+u=sol_vec(1:2*N*N);
+p=sol_vec(2*N*N+1:3*N*N);
 
-%% Now we compute the rest of the elasticity variables at t=0:
+% Now we compute the rest of the elasticity variables at t=0:
         % rotation 
-gamma=compute_gamma(u,p,t);  % Computed solution for the rotation term
+gamma=compute_gamma(u,p,t);  
         % stress
 [sigma,~,~,~,~]=compute_tensors(u,p,gamma,t);
 
