@@ -1,6 +1,6 @@
 function M3=build_flux_matrix_t0(delta_t)
 
-global NN x y c0 
+global NN 
 
 N=NN;
 
