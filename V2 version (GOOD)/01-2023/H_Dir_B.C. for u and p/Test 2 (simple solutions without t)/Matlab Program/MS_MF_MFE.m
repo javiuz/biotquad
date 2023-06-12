@@ -69,8 +69,8 @@ for j=1:N
     for i=1:N
 %         ind2u=(i+(j-1)*N)*2;
 %         ind1u=ind2u-1;
-        ind1p=ind2u/2;
-%         ind1p=i+(j-1)*N;
+%         ind1p=ind2u/2;
+        ind1p=i+(j-1)*N;
         
         xx=(x(i,j)+x(i+1,j)+x(i+1,j+1)+x(i,j+1))/4;
         yy=(y(i,j)+y(i+1,j)+y(i+1,j+1)+y(i,j+1))/4;
