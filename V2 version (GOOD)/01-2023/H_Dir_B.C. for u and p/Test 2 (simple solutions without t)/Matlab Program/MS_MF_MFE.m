@@ -26,6 +26,7 @@ mu=1;
 c0=1e-05;
 % c0=0;
 % c0=1;
+% c0=1e-03;
 
 % Hydraulic conductivity: is inside the function 'kinv.m'
 % K=perm*[1 0;0 1]; with perm=1, 1e-03, 1e-06, 1e-09, 1e-12
